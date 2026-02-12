@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CO₂ Refrigerant Air Conditioner</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;900&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-snap-type:y mandatory;overflow-y:scroll;}
+body{
+  font-family:'Raleway',sans-serif;
+  background:linear-gradient(#02343F,#011b21);
+  background-attachment:fixed;
+  color:#F0EDCC;
+  line-height:1.5;
+  overflow-x:hidden;
+}
+
+nav{position:fixed;top:0;width:100%;display:flex;justify-content:center;backdrop-filter:blur(20px);background:rgba(2,52,63,0.8);padding:1.5vh 3vw;z-index:1000;border-bottom:1px solid rgba(240,237,204,0.1);opacity:0;pointer-events:none;transition:0.4s;}
+body.main-active nav{opacity:1;pointer-events:auto;}
+nav ul{display:flex;gap:4vw;list-style:none;font-size:1.8vw;font-weight:700;flex-wrap:wrap;justify-content:center;}
+nav ul li{cursor:pointer;}
+
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;}
+.hero h1{font-size:4vw;font-weight:900;margin-bottom:2vh;}
+.hero p{font-size:2vw;margin-bottom:6vh;}
+
+.portal-btn{width:90px;height:90px;border-radius:50%;border:none;background:#F0EDCC;color:#02343F;font-size:34px;cursor:pointer;}
+
+.main-site{display:none;}
+body.main-active .main-site{display:block;}
+
+.snap-card{min-height:100vh;padding:12vh 5vw;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;scroll-snap-align:start;}
+.section{display:flex;align-items:center;gap:5vw;width:100%;}
+.section.reverse{flex-direction:row-reverse;}
+.section-img{max-width:45vw;border-radius:1.5vw;}
+.section-text{max-width:50vw;text-align:left;}
+.section-text h2{font-size:3.5vw;margin-bottom:2vh;}
+.section-text p{font-size:1.8vw;}
+
+.intro img{width:18vw;margin-bottom:2vh;}
+.intro h1{font-size:4vw;margin:0.5vh 0;}
+.intro p{font-size:1.8vw;margin-top:2vh;}
+
+.challenge-title{font-size:2.5vw;margin-bottom:5vh;}
+
+.table-wrap{width:90%;max-width:1000px;margin-top:5vh;border-collapse:collapse;}
+table{width:100%;border-collapse:collapse;font-size:1.6vw;}
+th,td{padding:1.5vh 1vw;border:1px solid rgba(240,237,204,0.2);}
+tr:nth-child(even){background:rgba(240,237,204,0.05);} 
+tr:nth-child(odd){background:rgba(240,237,204,0.1);} 
+th{font-weight:900;}
+
+.fade-layer{position:fixed;inset:0;background:#02343F;opacity:0;pointer-events:none;z-index:2000;}
+.fade-in{animation:fadeIn 0.5s forwards;}
+.fade-out{animation:fadeOut 0.5s forwards;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes fadeOut{from{opacity:1;}to{opacity:0;}}
+
+@media(max-width:1000px){
+ nav ul{font-size:3.5vw;}
+ .section{flex-direction:column;text-align:center;}
+ .section.reverse{flex-direction:column;}
+ .section-img,.section-text{max-width:90vw;text-align:center;}
+ .hero h1{font-size:8vw;}
+ .hero p{font-size:4vw;}
+ .intro img{width:40vw;}
+ table{font-size:3vw;}
+
+ /* Phones */
+@media(max-width:600px){
+  .hero h1 { font-size:6vw; }
+  .hero p { font-size:3.5vw; }
+  .intro img { width:70vw; margin-bottom:1vh; }
+  .section-text h2 { font-size:5vw; margin-bottom:1vh; }
+  .section-text p { font-size:3.5vw; }
+  .section { flex-direction: column; gap:3vh; }
+  .snap-card { padding:6vh 5vw; }
+}
+
+/* Small Tablets / iPads */
+@media(max-width:900px) and (min-width:601px){
+  .hero h1 { font-size:5vw; }
+  .hero p { font-size:3vw; }
+  .intro img { width:50vw; }
+  .section-text h2 { font-size:4vw; }
+  .section-text p { font-size:2.2vw; }
+  .snap-card { padding:8vh 5vw; }
+}
+}
+</style>
+</head>
+<body>
+
+<div class="fade-layer" id="fade"></div>
+
+<nav>
+<ul>
+<li onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">Why?</li>
+<li onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How?</li>
+<li onclick="document.getElementById('but').scrollIntoView({behavior:'smooth'})">But?</li>
+<li onclick="document.getElementById('why-now').scrollIntoView({behavior:'smooth'})">Why Now?</li>
+<li onclick="document.getElementById('where').scrollIntoView({behavior:'smooth'})">Where?</li>
+<li onclick="document.getElementById('compare').scrollIntoView({behavior:'smooth'})">Compare</li>
+</ul>
+</nav>
+
+<section class="hero" id="hero">
+<h1>CO₂ Refrigerant Air Conditioner</h1>
+<p>GWP1: The New Standard</p>
+<button class="portal-btn" id="enter">✈</button>
+</section>
+
+<div class="main-site" id="mainSite">
+
+<section class="snap-card intro">
+<img src="images/hero-doodle.png">
+<h1 class="product">1 Product, 3 Benefits</h1>
+<p>Why is the CO₂ Refrigerant Air Conditioner worth your time?</p>
+</section>
+
+<section id="why" class="snap-card">
+<div class="section">
+<img src="images/nature1.png" class="section-img">
+<div class="section-text">
+<h2>Protect Nature</h2>
+<p>CO₂ (R744) has a Global Warming Potential (GWP) of 1, compared to up to 2,000 for common refrigerants.</p>
+</div>
+</div>
+
+<div class="section reverse">
+<img src="images/efficient.png" class="section-img">
+<div class="section-text">
+<h2>Efficient in Hot Climates</h2>
+<p>Optimized for tropical climates like Malaysia, maintaining efficiency even under extreme heat.</p>
+</div>
+</div>
+
+<div class="section">
+<img src="images/safety.png" class="section-img">
+<div class="section-text">
+<h2>Safe Refrigerant</h2>
+<p>CO2 is non-toxic and non-flammable, making it a safer alternative to traditional refrigerants.</p>
+</div>
+</div>
+</section>
+
+<section id="how" class="snap-card">
+<div class="section-text" style="max-width:70vw;text-align:center;">
+<h2>How it Works</h2>
+<p>A CO2 air conditioner uses carbon dioxide as the refrigerant instead of traditional synthetic gases. The CO₂ circulates in a closed high-pressure loop where it is compressed, cooled in a gas cooler, expanded through a valve, and then absorbs indoor heat before repeating the cycle.</p>
+</div>
+</section>
+
+<section id="but" class="snap-card">
+<div class="challenge-title">But what challenges are there when making the CO₂ Refrigerant Air Conditioner?</div>
+<div class="section">
+<img src="images/money.png" class="section-img">
+<div class="section-text">
+<h2>Costs More</h2>
+<p>CO₂ systems currently cost more to design and manufacture, but their long-term environmental benefits are substantial.</p>
+</div>
+</div>
+<div class="section reverse">
+<img src="images/design.png" class="section-img">
+<div class="section-text">
+<h2>Harder to Design</h2>
+<p>CO₂ systems can reach up to 5x higher pressure than traditional air conditioners.</p>
+</div>
+</div>
+</section>
+
+<section id="why-now" class="snap-card">
+<h2 style="margin-bottom:5vh;font-size:3.5vw;">Why Now?</h2>
+<div class="section">
+<img src="images/gcd.png" class="section-img">
+<div class="section-text">
+<h2>Global Cooling Demand Rising</h2>
+<p>Cooling demand is rapidly increasing due to urbanization and rising temperatures worldwide.</p>
+</div>
+</div>
+<div class="section reverse">
+<img src="images/heatwaves.png" class="section-img">
+<div class="section-text">
+<h2>Heat Waves Increasing</h2>
+<p>Extreme heat events are becoming more frequent, increasing the need for sustainable cooling solutions.</p>
+</div>
+</div>
+</section>
+
+<section id="where" class="snap-card">
+<h2 style="margin-bottom:5vh;font-size:3.5vw;">Where?</h2>
+<div class="section">
+<img src="images/building.png" class="section-img">
+<div class="section-text">
+<h2>High-rise Buildings</h2>
+<p>Efficient centralized cooling for dense urban environments.</p>
+</div>
+</div>
+<div class="section reverse">
+<img src="images/data.png" class="section-img">
+<div class="section-text">
+<h2>Data Centers</h2>
+<p>Reliable high-performance cooling for energy-intensive computing infrastructure.</p>
+</div>
+</div>
+<div class="section">
+<img src="images/agcs.png" class="section-img">
+<div class="section-text">
+<h2>Aircraft Ground Cooling</h2>
+<p>Sustainable cooling systems for aircraft during ground operations.</p>
+</div>
+</div>
+</section>
+
+<section id="compare" class="snap-card">
+<h2 style="margin-bottom:5vh;font-size:3.5vw;">CO₂ vs Conventional Systems</h2>
+<div class="table-wrap">
+<table>
+<tr><th>Category</th><th>Conventional Refrigerants</th><th>CO₂ (R744)</th></tr>
+<tr><td>Global Warming Potential (GWP)</td><td>1300–2000+</td><td><b>1</b></td></tr>
+<tr><td>Environmental Impact</td><td>High if leaked</td><td>Minimal</td></tr>
+<tr><td>Flammability</td><td>Can be flammable</td><td>Non-flammable</td></tr>
+<tr><td>Toxicity</td><td>Mild toxicity</td><td>Non-toxic</td></tr>
+<tr><td>Operating Pressure</td><td>Moderate</td><td>High (Up to 5×)</td></tr>
+<tr><td>Climate Suitability</td><td>Moderate</td><td>Excellent in hot climates</td></tr>
+<tr><td>Regulatory Future</td><td>Being phased down</td><td>Future-proof</td></tr>
+</table>
+</div>
+</section>
+
+</div>
+
+<script>
+const enterBtn=document.getElementById('enter');
+const fade=document.getElementById('fade');
+const hero=document.getElementById('hero');
+const main=document.getElementById('mainSite');
+let state='hero';
+let transitioning=false;
+
+document.documentElement.style.overflowY='hidden';
+
+function forward(){
+ if(transitioning||state==='main')return;
+ transitioning=true;
+ fade.classList.remove('fade-out');
+ fade.classList.add('fade-in');
+ setTimeout(()=>{
+  hero.style.display='none';
+  document.body.classList.add('main-active');
+  main.style.display='block';
+  document.documentElement.style.overflowY='scroll';
+ },700);
+ setTimeout(()=>{
+  fade.classList.remove('fade-in');
+  fade.classList.add('fade-out');
+ },900);
+ setTimeout(()=>{
+  state='main';
+  transitioning=false;
+ },1400);
+}
+
+function reverse(){
+ if(transitioning||state==='hero')return;
+ transitioning=true;
+ fade.classList.remove('fade-out');
+ fade.classList.add('fade-in');
+ setTimeout(()=>{
+  document.body.classList.remove('main-active');
+  main.style.display='none';
+  hero.style.display='flex';
+  document.documentElement.style.overflowY='hidden';
+  window.scrollTo(0,0);
+ },700);
+ setTimeout(()=>{
+  fade.classList.remove('fade-in');
+  fade.classList.add('fade-out');
+ },900);
+ setTimeout(()=>{
+  state='hero';
+  transitioning=false;
+ },1400);
+}
+
+enterBtn.addEventListener('click',forward);
+window.addEventListener('scroll',()=>{
+ if(state==='main' && window.scrollY<=0){reverse();}
+});
+</script>
+
+</body>
+</html>
