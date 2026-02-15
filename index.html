@@ -11,7 +11,8 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-snap-type:y mandatory;overflow-y:scroll;}
+::-webkit-scrollbar{display:none;}
+html{scroll-snap-type:y mandatory;overflow-y:scroll;-ms-overflow-style:none;scrollbar-width:none;}
 body{
   font-family:'Raleway',sans-serif;
   background:linear-gradient(#02343F,#011b21);
@@ -21,83 +22,301 @@ body{
   overflow-x:hidden;
 }
 
-nav{position:fixed;top:0;width:100%;display:flex;justify-content:center;backdrop-filter:blur(20px);background:rgba(2,52,63,0.8);padding:1.5vh 3vw;z-index:1000;border-bottom:1px solid rgba(240,237,204,0.1);opacity:0;pointer-events:none;transition:0.4s;}
+body.main-active{
+  background:#111111;
+  background-image:
+    linear-gradient(#151514 1px, transparent 1px),
+    linear-gradient(90deg, #151514 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, rgba(2,52,62,0.3) 0%, transparent 50%);
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+  background-position: 0 0, 0 0, center center;
+  background-attachment: fixed;
+}
+
+nav{position:fixed;top:0;width:100%;display:flex;justify-content:center;backdrop-filter:blur(20px);background:rgba(17,17,17,0.8);padding:1.5vh 3vw;z-index:1000;border-bottom:1px solid rgba(240,237,204,0.1);opacity:0;pointer-events:none;transition:0.4s;}
 body.main-active nav{opacity:1;pointer-events:auto;}
 nav ul{display:flex;gap:4vw;list-style:none;font-size:1.8vw;font-weight:700;flex-wrap:wrap;justify-content:center;}
-nav ul li{cursor:pointer;}
+nav ul li{cursor:pointer;transition:0.3s;}
+nav ul li:hover{color:#02343F;transform:scale(1.1);}
 
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;}
 .hero h1{font-size:4vw;font-weight:900;margin-bottom:2vh;}
 .hero p{font-size:2vw;margin-bottom:6vh;}
 
-.portal-btn{width:90px;height:90px;border-radius:50%;border:none;background:#F0EDCC;color:#02343F;font-size:34px;cursor:pointer;}
+.portal-btn{width:90px;height:90px;border-radius:50%;border:none;background:#F0EDCC;color:#02343F;font-size:34px;cursor:pointer;transition:0.3s;}
+.portal-btn:hover{transform:scale(1.1);}
 
 .main-site{display:none;}
 body.main-active .main-site{display:block;}
 
 .snap-card{min-height:100vh;padding:12vh 5vw;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;scroll-snap-align:start;}
-.section{display:flex;align-items:center;gap:5vw;width:100%;}
-.section.reverse{flex-direction:row-reverse;}
-.section-img{max-width:45vw;border-radius:1.5vw;}
-.section-text{max-width:50vw;text-align:left;}
-.section-text h2{font-size:3.5vw;margin-bottom:2vh;}
-.section-text p{font-size:1.8vw;}
 
 .intro img{width:18vw;margin-bottom:2vh;}
 .intro h1{font-size:4vw;margin:0.5vh 0;}
 .intro p{font-size:1.8vw;margin-top:2vh;}
 
-.challenge-title{font-size:2.5vw;margin-bottom:5vh;}
+.cards-container{display:flex;gap:3vw;flex-wrap:wrap;justify-content:center;width:100%;max-width:1200px;}
 
-.table-wrap{width:90%;max-width:1000px;margin-top:5vh;border-collapse:collapse;}
-table{width:100%;border-collapse:collapse;font-size:1.6vw;}
-th,td{padding:1.5vh 1vw;border:1px solid rgba(240,237,204,0.2);}
-tr:nth-child(even){background:rgba(240,237,204,0.05);} 
-tr:nth-child(odd){background:rgba(240,237,204,0.1);} 
-th{font-weight:900;}
+.plan {
+  border-radius: 16px;
+  box-shadow: 0 30px 30px -25px rgba(2, 52, 62, 0.4);
+  padding: 10px;
+  background-color: #fff;
+  color: #697e91;
+  max-width: 320px;
+  flex:1;
+  min-width:280px;
+}
+
+.plan .inner {
+  align-items: center;
+  padding: 20px;
+  padding-top: 40px;
+  background-color: #ecf0ff;
+  border-radius: 12px;
+  position: relative;
+}
+
+.plan .pricing {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #bed6fb;
+  border-radius: 99em 0 0 99em;
+  display: flex;
+  align-items: center;
+  padding: 0.625em 0.75em;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #425475;
+}
+
+.plan .pricing img{
+  width:40px;
+  height:40px;
+  object-fit:contain;
+}
+
+.plan .title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #425675;
+  margin-top:1rem;
+}
+
+.plan .info {
+  margin-top: 0.75rem;
+  line-height:1.6;
+}
+
+.plan .action {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-top:1.5rem;
+}
+
+.plan .button {
+  background-color: #6558d3;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1.125rem;
+  text-align: center;
+  border: 0;
+  outline: 0;
+  width: 100%;
+  padding: 0.625em 0.75em;
+  text-decoration: none;
+  transition:0.3s;
+  cursor:pointer;
+}
+
+.plan .button:hover,
+.plan .button:focus {
+  background-color: #4133B7;
+}
+
+#how .section-text{max-width:70vw;text-align:center;}
+#how .section-text h2{font-size:3.5vw;margin-bottom:2vh;}
+#how .section-text p{font-size:1.8vw;}
+#how .word{opacity:0;display:inline-block;}
+
+#but{background:#ffffff;color:#333;}
+.challenge-card{
+  background:linear-gradient(135deg, #02343F 0%, #011b21 100%);
+  border-radius:2vw;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  margin:3vh 0;
+  max-width:1100px;
+  width:90%;
+  box-shadow:0 20px 40px rgba(0,0,0,0.3);
+}
+.challenge-card.reverse{flex-direction:row-reverse;}
+.challenge-card-img{
+  width:60%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:4vh;
+}
+.challenge-card-img img{
+  max-width:100%;
+  max-height:400px;
+  object-fit:contain;
+}
+.challenge-card-text{
+  width:40%;
+  padding:4vh;
+  color:#F0EDCC;
+}
+.challenge-card-text h2{font-size:2.5vw;margin-bottom:2vh;}
+.challenge-card-text p{font-size:1.5vw;line-height:1.8;}
+
+#where{position:relative;min-height:300vh;}
+.where-container{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.where-circle{
+  width:400px;
+  height:400px;
+  border-radius:50%;
+  background:linear-gradient(135deg, #02343F 0%, #011b21 100%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 30px 60px rgba(0,0,0,0.5);
+  position:relative;
+}
+.where-content{
+  position:absolute;
+  opacity:0;
+  text-align:center;
+  padding:3vw;
+}
+.where-content img{
+  width:80px;
+  height:80px;
+  margin-bottom:2vh;
+  object-fit:contain;
+}
+.where-content h2{
+  font-size:2.5vw;
+  margin-bottom:1vh;
+}
+.where-content p{
+  font-size:1.3vw;
+}
+
+.compare-section{
+  background:transparent;
+  color:#F0EDCC;
+}
+.compare-table{
+  width:90%;
+  max-width:1200px;
+  border-collapse:collapse;
+  background:rgba(17,17,17,0.8);
+  border-radius:1vw;
+  overflow:hidden;
+  box-shadow:0 20px 40px rgba(0,0,0,0.3);
+}
+.compare-table th{
+  background:#02343F;
+  padding:2vh 2vw;
+  font-size:1.8vw;
+  font-weight:900;
+  text-align:left;
+  border-bottom:2px solid #F0EDCC;
+}
+.compare-table th:first-child{
+  border-radius:1vw 0 0 0;
+}
+.compare-table th:last-child{
+  border-radius:0 1vw 0 0;
+}
+.compare-table td{
+  padding:1.5vh 2vw;
+  font-size:1.4vw;
+  border-bottom:1px solid rgba(240,237,204,0.1);
+}
+.compare-table tr:last-child td{
+  border-bottom:none;
+}
+.compare-table tr:nth-child(even){
+  background:rgba(2,52,63,0.1);
+}
+.compare-table tr:hover{
+  background:rgba(2,52,63,0.2);
+}
+.compare-table td:nth-child(3){
+  font-weight:700;
+  color:#6ee7b7;
+}
+
+.flash-text{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:3vw;
+  font-weight:900;
+  text-align:center;
+  z-index:2500;
+  opacity:0;
+  color:#F0EDCC;
+  pointer-events:none;
+  white-space:nowrap;
+}
 
 .fade-layer{position:fixed;inset:0;background:#02343F;opacity:0;pointer-events:none;z-index:2000;}
-.fade-in{animation:fadeIn 0.5s forwards;}
-.fade-out{animation:fadeOut 0.5s forwards;}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-@keyframes fadeOut{from{opacity:1;}to{opacity:0;}}
 
 @media(max-width:1000px){
  nav ul{font-size:3.5vw;}
- .section{flex-direction:column;text-align:center;}
- .section.reverse{flex-direction:column;}
- .section-img,.section-text{max-width:90vw;text-align:center;}
  .hero h1{font-size:8vw;}
  .hero p{font-size:4vw;}
  .intro img{width:40vw;}
- table{font-size:3vw;}
+ .cards-container{flex-direction:column;align-items:center;}
+ .plan{max-width:90vw;}
+ .challenge-card{flex-direction:column !important;}
+ .challenge-card-img,.challenge-card-text{width:100%;}
+ .where-circle{width:300px;height:300px;}
+ .compare-table th,.compare-table td{font-size:2.5vw;}
+}
 
- /* Phones */
 @media(max-width:600px){
   .hero h1 { font-size:6vw; }
   .hero p { font-size:3.5vw; }
   .intro img { width:70vw; margin-bottom:1vh; }
-  .section-text h2 { font-size:5vw; margin-bottom:1vh; }
-  .section-text p { font-size:3.5vw; }
-  .section { flex-direction: column; gap:3vh; }
   .snap-card { padding:6vh 5vw; }
+  .where-circle{width:250px;height:250px;}
+  .where-content h2{font-size:5vw;}
+  .where-content p{font-size:3vw;}
 }
 
-/* Small Tablets / iPads */
 @media(max-width:900px) and (min-width:601px){
   .hero h1 { font-size:5vw; }
   .hero p { font-size:3vw; }
   .intro img { width:50vw; }
-  .section-text h2 { font-size:4vw; }
-  .section-text p { font-size:2.2vw; }
   .snap-card { padding:8vh 5vw; }
-}
 }
 </style>
 </head>
 <body>
 
 <div class="fade-layer" id="fade"></div>
+<div class="flash-text" id="flash1">CO₂ Refrigerant Air Conditioner</div>
+<div class="flash-text" id="flash2">BIICC 2026<br>Kong Hau Yi & Shui Wen Qi</div>
 
 <nav>
 <ul>
@@ -125,120 +344,168 @@ th{font-weight:900;}
 </section>
 
 <section id="why" class="snap-card">
-<div class="section">
-<img src="images/nature1.png" class="section-img">
-<div class="section-text">
-<h2>Protect Nature</h2>
-<p>CO₂ (R744) has a Global Warming Potential (GWP) of 1, compared to up to 2,000 for common refrigerants.</p>
-</div>
+<div class="cards-container">
+<div class="plan">
+  <div class="inner">
+    <span class="pricing">
+      <img src="images/nature1.png" alt="Nature">
+    </span>
+    <p class="title">Protect Nature</p>
+    <p class="info">CO₂ (R744) has a Global Warming Potential (GWP) of 1, compared to up to 2,000 for common refrigerants.</p>
+    <div class="action">
+      <a class="button" href="https://en.wikipedia.org/wiki/Global_warming_potential" target="_blank">
+        Learn More
+      </a>
+    </div>
+  </div>
 </div>
 
-<div class="section reverse">
-<img src="images/efficient.png" class="section-img">
-<div class="section-text">
-<h2>Efficient in Hot Climates</h2>
-<p>Optimized for tropical climates like Malaysia, maintaining efficiency even under extreme heat.</p>
-</div>
+<div class="plan">
+  <div class="inner">
+    <span class="pricing">
+      <img src="images/efficient.png" alt="Efficiency">
+    </span>
+    <p class="title">Efficient in Hot Climates</p>
+    <p class="info">Optimized for tropical climates like Malaysia, maintaining efficiency even under extreme heat.</p>
+    <div class="action">
+      <a class="button" href="https://www.sciencedirect.com/topics/engineering/transcritical-co2" target="_blank">
+        Learn More
+      </a>
+    </div>
+  </div>
 </div>
 
-<div class="section">
-<img src="images/safety.png" class="section-img">
-<div class="section-text">
-<h2>Safe Refrigerant</h2>
-<p>CO2 is non-toxic and non-flammable, making it a safer alternative to traditional refrigerants.</p>
+<div class="plan">
+  <div class="inner">
+    <span class="pricing">
+      <img src="images/safety.png" alt="Safety">
+    </span>
+    <p class="title">Safe Refrigerant</p>
+    <p class="info">CO₂ is non-toxic and non-flammable, making it a safer alternative to traditional refrigerants.</p>
+    <div class="action">
+      <a class="button" href="https://www.ashrae.org/technical-resources/standards-and-guidelines/ashrae-refrigerant-safety" target="_blank">
+        Learn More
+      </a>
+    </div>
+  </div>
 </div>
 </div>
 </section>
 
 <section id="how" class="snap-card">
-<div class="section-text" style="max-width:70vw;text-align:center;">
+<div class="section-text">
 <h2>How it Works</h2>
-<p>A CO2 air conditioner uses carbon dioxide as the refrigerant instead of traditional synthetic gases. The CO₂ circulates in a closed high-pressure loop where it is compressed, cooled in a gas cooler, expanded through a valve, and then absorbs indoor heat before repeating the cycle.</p>
+<p id="howText"></p>
 </div>
 </section>
 
 <section id="but" class="snap-card">
-<div class="challenge-title">But what challenges are there when making the CO₂ Refrigerant Air Conditioner?</div>
-<div class="section">
-<img src="images/money.png" class="section-img">
-<div class="section-text">
-<h2>Costs More</h2>
-<p>CO₂ systems currently cost more to design and manufacture, but their long-term environmental benefits are substantial.</p>
+<h2 style="margin-bottom:5vh;font-size:3.5vw;color:#333;">Challenges</h2>
+
+<div class="challenge-card">
+  <div class="challenge-card-img">
+    <img src="images/money.png" alt="Cost">
+  </div>
+  <div class="challenge-card-text">
+    <h2>Costs More</h2>
+    <p>CO₂ systems currently cost more to design and manufacture, but their long-term environmental benefits are substantial.</p>
+  </div>
 </div>
-</div>
-<div class="section reverse">
-<img src="images/design.png" class="section-img">
-<div class="section-text">
-<h2>Harder to Design</h2>
-<p>CO₂ systems can reach up to 5x higher pressure than traditional air conditioners.</p>
-</div>
+
+<div class="challenge-card reverse">
+  <div class="challenge-card-img">
+    <img src="images/design.png" alt="Design">
+  </div>
+  <div class="challenge-card-text">
+    <h2>Harder to Design</h2>
+    <p>CO₂ systems can reach up to 5x higher pressure than traditional air conditioners.</p>
+  </div>
 </div>
 </section>
 
 <section id="why-now" class="snap-card">
-<h2 style="margin-bottom:5vh;font-size:3.5vw;">Why Now?</h2>
-<div class="section">
-<img src="images/gcd.png" class="section-img">
-<div class="section-text">
-<h2>Global Cooling Demand Rising</h2>
-<p>Cooling demand is rapidly increasing due to urbanization and rising temperatures worldwide.</p>
+<div class="cards-container">
+<div class="plan">
+  <div class="inner">
+    <span class="pricing">
+      <img src="images/gcd.png" alt="Global Cooling">
+    </span>
+    <p class="title">Global Cooling Demand Rising</p>
+    <p class="info">Cooling demand is rapidly increasing due to urbanization and rising temperatures worldwide.</p>
+    <div class="action">
+      <a class="button" href="https://www.iea.org/reports/the-future-of-cooling" target="_blank">
+        Learn More
+      </a>
+    </div>
+  </div>
 </div>
-</div>
-<div class="section reverse">
-<img src="images/heatwaves.png" class="section-img">
-<div class="section-text">
-<h2>Heat Waves Increasing</h2>
-<p>Extreme heat events are becoming more frequent, increasing the need for sustainable cooling solutions.</p>
+
+<div class="plan">
+  <div class="inner">
+    <span class="pricing">
+      <img src="images/heatwaves.png" alt="Heatwaves">
+    </span>
+    <p class="title">Heat Waves Increasing</p>
+    <p class="info">Extreme heat events are becoming more frequent, increasing the need for sustainable cooling solutions.</p>
+    <div class="action">
+      <a class="button" href="https://climate.nasa.gov/explore/ask-nasa-climate/3151/too-hot-to-handle-how-climate-change-may-make-some-places-too-hot-to-live/" target="_blank">
+        Learn More
+      </a>
+    </div>
+  </div>
 </div>
 </div>
 </section>
 
-<section id="where" class="snap-card">
-<h2 style="margin-bottom:5vh;font-size:3.5vw;">Where?</h2>
-<div class="section">
-<img src="images/building.png" class="section-img">
-<div class="section-text">
-<h2>High-rise Buildings</h2>
-<p>Efficient centralized cooling for dense urban environments.</p>
-</div>
-</div>
-<div class="section reverse">
-<img src="images/data.png" class="section-img">
-<div class="section-text">
-<h2>Data Centers</h2>
-<p>Reliable high-performance cooling for energy-intensive computing infrastructure.</p>
-</div>
-</div>
-<div class="section">
-<img src="images/agcs.png" class="section-img">
-<div class="section-text">
-<h2>Aircraft Ground Cooling</h2>
-<p>Sustainable cooling systems for aircraft during ground operations.</p>
-</div>
+<section id="where">
+<div class="where-container">
+  <div class="where-circle">
+    <div class="where-content" data-index="0">
+      <img src="images/building.png" alt="Buildings">
+      <h2>High-rise Buildings</h2>
+      <p>Efficient centralized cooling for dense urban environments.</p>
+    </div>
+    <div class="where-content" data-index="1">
+      <img src="images/data.png" alt="Data Centers">
+      <h2>Data Centers</h2>
+      <p>Reliable high-performance cooling for energy-intensive computing infrastructure.</p>
+    </div>
+    <div class="where-content" data-index="2">
+      <img src="images/agcs.png" alt="Aircraft">
+      <h2>Aircraft Ground Cooling</h2>
+      <p>Sustainable cooling systems for aircraft during ground operations.</p>
+    </div>
+  </div>
 </div>
 </section>
 
-<section id="compare" class="snap-card">
+<section id="compare" class="snap-card compare-section">
 <h2 style="margin-bottom:5vh;font-size:3.5vw;">CO₂ vs Conventional Systems</h2>
-<div class="table-wrap">
-<table>
+<table class="compare-table">
+<thead>
 <tr><th>Category</th><th>Conventional Refrigerants</th><th>CO₂ (R744)</th></tr>
-<tr><td>Global Warming Potential (GWP)</td><td>1300–2000+</td><td><b>1</b></td></tr>
+</thead>
+<tbody>
+<tr><td>Global Warming Potential</td><td>1300–2000+</td><td>1</td></tr>
 <tr><td>Environmental Impact</td><td>High if leaked</td><td>Minimal</td></tr>
 <tr><td>Flammability</td><td>Can be flammable</td><td>Non-flammable</td></tr>
 <tr><td>Toxicity</td><td>Mild toxicity</td><td>Non-toxic</td></tr>
 <tr><td>Operating Pressure</td><td>Moderate</td><td>High (Up to 5×)</td></tr>
 <tr><td>Climate Suitability</td><td>Moderate</td><td>Excellent in hot climates</td></tr>
 <tr><td>Regulatory Future</td><td>Being phased down</td><td>Future-proof</td></tr>
+</tbody>
 </table>
-</div>
 </section>
 
 </div>
 
 <script>
+gsap.registerPlugin(ScrollTrigger);
+
 const enterBtn=document.getElementById('enter');
 const fade=document.getElementById('fade');
+const flash1=document.getElementById('flash1');
+const flash2=document.getElementById('flash2');
 const hero=document.getElementById('hero');
 const main=document.getElementById('mainSite');
 let state='hero';
@@ -249,29 +516,54 @@ document.documentElement.style.overflowY='hidden';
 function forward(){
  if(transitioning||state==='main')return;
  transitioning=true;
- fade.classList.remove('fade-out');
- fade.classList.add('fade-in');
+
+ fade.style.transition='opacity 0.5s';
+ fade.style.opacity='1';
+ fade.style.pointerEvents='auto';
+
+ setTimeout(()=>{
+  flash1.style.transition='opacity 0.1s';
+  flash1.style.opacity='1';
+ },600);
+
+ setTimeout(()=>{
+  flash1.style.opacity='0';
+  flash2.style.transition='opacity 0.1s';
+  flash2.style.opacity='1';
+ },700);
+
+ setTimeout(()=>{
+  flash2.style.opacity='0';
+  fade.style.background='#02343e';
+ },800);
+
  setTimeout(()=>{
   hero.style.display='none';
   document.body.classList.add('main-active');
   main.style.display='block';
   document.documentElement.style.overflowY='scroll';
- },700);
+  fade.style.background='#02343F';
+  initAnimations();
+ },1000);
+
  setTimeout(()=>{
-  fade.classList.remove('fade-in');
-  fade.classList.add('fade-out');
- },900);
+  fade.style.opacity='0';
+ },1100);
+
  setTimeout(()=>{
   state='main';
   transitioning=false;
- },1400);
+  fade.style.pointerEvents='none';
+ },1600);
 }
 
 function reverse(){
  if(transitioning||state==='hero')return;
  transitioning=true;
- fade.classList.remove('fade-out');
- fade.classList.add('fade-in');
+ fade.style.transition='opacity 0.5s';
+ fade.style.opacity='1';
+ fade.style.pointerEvents='auto';
+
  setTimeout(()=>{
   document.body.classList.remove('main-active');
   main.style.display='none';
@@ -279,14 +571,56 @@ function reverse(){
   document.documentElement.style.overflowY='hidden';
   window.scrollTo(0,0);
  },700);
+
  setTimeout(()=>{
-  fade.classList.remove('fade-in');
-  fade.classList.add('fade-out');
+  fade.style.opacity='0';
  },900);
+
  setTimeout(()=>{
   state='hero';
   transitioning=false;
+  fade.style.pointerEvents='none';
  },1400);
+}
+
+function initAnimations(){
+  const text = "A CO2 air conditioner uses carbon dioxide as the refrigerant instead of traditional synthetic gases. The CO₂ circulates in a closed high-pressure loop where it is compressed, cooled in a gas cooler, expanded through a valve, and then absorbs indoor heat before repeating the cycle.";
+  const words = text.split(' ');
+  const container = document.getElementById('howText');
+
+  container.innerHTML = words.map(word => `<span class="word">${word} </span>`).join('');
+
+  gsap.to('.word', {
+    opacity: 1,
+    duration: 0.03,
+    stagger: 0.05,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#how',
+      start: 'top center',
+      end: 'bottom center',
+      toggleActions: 'play none none reverse'
+    }
+  });
+
+  const whereContents = document.querySelectorAll('.where-content');
+  whereContents.forEach((content, index) => {
+    ScrollTrigger.create({
+      trigger: '#where',
+      start: () => `top+=${index * 33.33}% top`,
+      end: () => `top+=${(index + 1) * 33.33}% top`,
+      onEnter: () => {
+        whereContents.forEach(c => gsap.to(c, {opacity: 0, duration: 0.3}));
+        gsap.to(content, {opacity: 1, duration: 0.5});
+      },
+      onEnterBack: () => {
+        whereContents.forEach(c => gsap.to(c, {opacity: 0, duration: 0.3}));
+        gsap.to(content, {opacity: 1, duration: 0.5});
+      }
+    });
+  });
+
+  gsap.to(whereContents[0], {opacity: 1, duration: 0.5, delay: 0.2});
 }
 
 enterBtn.addEventListener('click',forward);
