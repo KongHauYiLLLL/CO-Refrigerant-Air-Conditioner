@@ -55,24 +55,26 @@ body.main-active .main-site{display:block;}
 .intro h1{font-size:4vw;margin:0.5vh 0;}
 .intro p{font-size:1.8vw;margin-top:2vh;}
 
-.cards-container{display:flex;gap:3vw;flex-wrap:wrap;justify-content:center;width:100%;max-width:1200px;}
+.cards-container{display:flex;gap:3vw;flex-wrap:wrap;justify-content:center;width:100%;max-width:1400px;}
+
+#why .cards-container,#why-now .cards-container{gap:4vw;}
 
 .plan {
   border-radius: 16px;
   box-shadow: 0 30px 30px -25px rgba(2, 52, 62, 0.4);
   padding: 10px;
-  background-color: #fff;
-  color: #697e91;
-  max-width: 320px;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  max-width: 360px;
   flex:1;
-  min-width:280px;
+  min-width:300px;
 }
 
 .plan .inner {
   align-items: center;
   padding: 20px;
   padding-top: 40px;
-  background-color: #ecf0ff;
+  background-color: #252525;
   border-radius: 12px;
   position: relative;
 }
@@ -100,13 +102,14 @@ body.main-active .main-site{display:block;}
 .plan .title {
   font-weight: 600;
   font-size: 1.25rem;
-  color: #425675;
+  color: #F0EDCC;
   margin-top:1rem;
 }
 
 .plan .info {
   margin-top: 0.75rem;
   line-height:1.6;
+  color: #b0b0b0;
 }
 
 .plan .action {
@@ -143,7 +146,7 @@ body.main-active .main-site{display:block;}
 #how .section-text p{font-size:1.8vw;}
 #how .word{opacity:0;display:inline-block;}
 
-#but{background:#ffffff;color:#333;}
+#but{background:#3ecf8e;color:#1a1a1a;}
 .challenge-card{
   background:linear-gradient(135deg, #02343F 0%, #011b21 100%);
   border-radius:2vw;
@@ -179,12 +182,15 @@ body.main-active .main-site{display:block;}
 
 #where{position:relative;min-height:300vh;}
 .where-container{
-  position:sticky;
-  top:0;
-  height:100vh;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  height:auto;
   display:flex;
   align-items:center;
   justify-content:center;
+  z-index:100;
 }
 .where-circle{
   width:400px;
@@ -315,7 +321,6 @@ body.main-active .main-site{display:block;}
 <body>
 
 <div class="fade-layer" id="fade"></div>
-<div class="flash-text" id="flash1">CO₂ Refrigerant Air Conditioner</div>
 <div class="flash-text" id="flash2">BIICC 2026<br>Kong Hau Yi & Shui Wen Qi</div>
 
 <nav>
@@ -504,7 +509,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 const enterBtn=document.getElementById('enter');
 const fade=document.getElementById('fade');
-const flash1=document.getElementById('flash1');
 const flash2=document.getElementById('flash2');
 const hero=document.getElementById('hero');
 const main=document.getElementById('mainSite');
@@ -522,20 +526,14 @@ function forward(){
  fade.style.pointerEvents='auto';
 
  setTimeout(()=>{
-  flash1.style.transition='opacity 0.1s';
-  flash1.style.opacity='1';
- },600);
-
- setTimeout(()=>{
-  flash1.style.opacity='0';
   flash2.style.transition='opacity 0.1s';
   flash2.style.opacity='1';
- },700);
+ },600);
 
  setTimeout(()=>{
   flash2.style.opacity='0';
   fade.style.background='#02343e';
- },800);
+ },900);
 
  setTimeout(()=>{
   hero.style.display='none';
@@ -588,7 +586,7 @@ function initAnimations(){
   const words = text.split(' ');
   const container = document.getElementById('howText');
 
-  container.innerHTML = words.map(word => `<span class="word">${word} </span>`).join('');
+  container.innerHTML = words.map(word => `<span class="word">${word}</span> `).join('');
 
   gsap.to('.word', {
     opacity: 1,
