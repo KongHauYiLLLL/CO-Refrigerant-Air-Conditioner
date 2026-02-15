@@ -83,14 +83,15 @@ body.main-active .main-site{display:block;}
   position: absolute;
   top: 0;
   right: 0;
-  background-color: #bed6fb;
+  background-color: #1f1f1f;
   border-radius: 99em 0 0 99em;
   display: flex;
   align-items: center;
   padding: 0.625em 0.75em;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #425475;
+  color: #F0EDCC;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 .plan .pricing img{
@@ -146,7 +147,7 @@ body.main-active .main-site{display:block;}
 #how .section-text p{font-size:1.8vw;}
 #how .word{opacity:0;display:inline-block;}
 
-#but{background:#3ecf8e;color:#1a1a1a;}
+#but{background:transparent;color:#F0EDCC;}
 .challenge-card{
   background:linear-gradient(135deg, #02343F 0%, #011b21 100%);
   border-radius:2vw;
@@ -180,18 +181,18 @@ body.main-active .main-site{display:block;}
 .challenge-card-text h2{font-size:2.5vw;margin-bottom:2vh;}
 .challenge-card-text p{font-size:1.5vw;line-height:1.8;}
 
-#where{position:relative;min-height:300vh;}
-.where-container{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  height:auto;
+#where{
+  position:relative;
+  height:300vh;
+}
+
+.where-wrapper{
+  height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:100;
 }
+
 .where-circle{
   width:400px;
   height:400px;
@@ -204,18 +205,21 @@ body.main-active .main-site{display:block;}
   box-shadow:0 30px 60px rgba(0,0,0,0.5);
   position:relative;
 }
+
 .where-content{
   position:absolute;
   opacity:0;
   text-align:center;
   padding:3vw;
 }
+
 .where-content img{
   width:80px;
   height:80px;
   margin-bottom:2vh;
   object-fit:contain;
 }
+
 .where-content h2{
   font-size:2.5vw;
   margin-bottom:1vh;
@@ -405,7 +409,7 @@ body.main-active .main-site{display:block;}
 </section>
 
 <section id="but" class="snap-card">
-<h2 style="margin-bottom:5vh;font-size:3.5vw;color:#333;">Challenges</h2>
+<h2 style="margin-bottom:5vh;font-size:3.5vw;color:#ffff;">Challenges</h2>
 
 <div class="challenge-card">
   <div class="challenge-card-img">
@@ -463,26 +467,29 @@ body.main-active .main-site{display:block;}
 </section>
 
 <section id="where">
-<div class="where-container">
-  <div class="where-circle">
-    <div class="where-content" data-index="0">
-      <img src="images/building.png" alt="Buildings">
-      <h2>High-rise Buildings</h2>
-      <p>Efficient centralized cooling for dense urban environments.</p>
-    </div>
-    <div class="where-content" data-index="1">
-      <img src="images/data.png" alt="Data Centers">
-      <h2>Data Centers</h2>
-      <p>Reliable high-performance cooling for energy-intensive computing infrastructure.</p>
-    </div>
-    <div class="where-content" data-index="2">
-      <img src="images/agcs.png" alt="Aircraft">
-      <h2>Aircraft Ground Cooling</h2>
-      <p>Sustainable cooling systems for aircraft during ground operations.</p>
+  <div class="where-wrapper">
+    <div class="where-circle">
+      <div class="where-content" data-index="0">
+        <img src="images/building.png" alt="Buildings">
+        <h2>High-rise Buildings</h2>
+        <p>Efficient centralized cooling for dense urban environments.</p>
+      </div>
+
+      <div class="where-content" data-index="1">
+        <img src="images/data.png" alt="Data Centers">
+        <h2>Data Centers</h2>
+        <p>Reliable high-performance cooling for energy-intensive computing infrastructure.</p>
+      </div>
+
+      <div class="where-content" data-index="2">
+        <img src="images/agcs.png" alt="Aircraft">
+        <h2>Aircraft Ground Cooling</h2>
+        <p>Sustainable cooling systems for aircraft during ground operations.</p>
+      </div>
     </div>
   </div>
-</div>
 </section>
+
 
 <section id="compare" class="snap-card compare-section">
 <h2 style="margin-bottom:5vh;font-size:3.5vw;">CO₂ vs Conventional Systems</h2>
@@ -602,23 +609,33 @@ function initAnimations(){
   });
 
   const whereContents = document.querySelectorAll('.where-content');
-  whereContents.forEach((content, index) => {
-    ScrollTrigger.create({
-      trigger: '#where',
-      start: () => `top+=${index * 33.33}% top`,
-      end: () => `top+=${(index + 1) * 33.33}% top`,
-      onEnter: () => {
-        whereContents.forEach(c => gsap.to(c, {opacity: 0, duration: 0.3}));
-        gsap.to(content, {opacity: 1, duration: 0.5});
-      },
-      onEnterBack: () => {
-        whereContents.forEach(c => gsap.to(c, {opacity: 0, duration: 0.3}));
-        gsap.to(content, {opacity: 1, duration: 0.5});
-      }
-    });
-  });
 
-  gsap.to(whereContents[0], {opacity: 1, duration: 0.5, delay: 0.2});
+// Pin the circle ONLY during the where section
+ScrollTrigger.create({
+  trigger: "#where",
+  start: "top top",
+  end: "bottom bottom",
+  pin: ".where-wrapper",
+  scrub: true
+});
+
+// Timeline to fade between contents
+let tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: "#where",
+    start: "top top",
+    end: "bottom bottom",
+    scrub: true
+  }
+});
+
+whereContents.forEach((content, index) => {
+  tl.to(whereContents, { opacity: 0, duration: 0.1 }, index)
+    .to(content, { opacity: 1, duration: 0.5 }, index);
+});
+
+// Show first by default
+gsap.set(whereContents[0], { opacity: 1 });
 }
 
 enterBtn.addEventListener('click',forward);
