@@ -150,6 +150,57 @@ body.main-active .main-site{display:block;}
 #how .section-text p{font-size:1.8vw;}
 #how .word{opacity:0;display:inline-block;}
 
+#phase1{background:transparent;color:#F0EDCC;}
+
+.engineering-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:3vw;
+  width:90%;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.engineering-card{
+  background:linear-gradient(135deg, #02343F 0%, #011b21 100%);
+  border-radius:1.5vw;
+  padding:3vw;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  box-shadow:0 15px 35px rgba(0,0,0,0.3);
+  transition:all 0.3s ease;
+  opacity:0;
+}
+
+.engineering-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 25px 50px rgba(2,52,63,0.5);
+}
+
+.engineering-card-icon{
+  font-size:4vw;
+  margin-bottom:2vh;
+  width:80px;
+  height:80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.engineering-card h3{
+  font-size:1.8vw;
+  margin-bottom:1.5vh;
+  font-weight:700;
+}
+
+.engineering-card p{
+  font-size:1.3vw;
+  line-height:1.6;
+  color:#ccc;
+}
+
 #but{background:transparent;color:#F0EDCC;}
 .challenge-card{
   background:linear-gradient(135deg, #02343F 0%, #011b21 100%);
@@ -305,6 +356,10 @@ body.main-active .main-site{display:block;}
  .challenge-card-img,.challenge-card-text{width:100%;}
  .where-circle{width:300px;height:300px;}
  .compare-table th,.compare-table td{font-size:2.5vw;}
+ .engineering-grid{gap:2vw;}
+ .engineering-card-icon{font-size:3vw;}
+ .engineering-card h3{font-size:2vw;}
+ .engineering-card p{font-size:1.5vw;}
 }
 
 @media(max-width:600px){
@@ -315,6 +370,10 @@ body.main-active .main-site{display:block;}
   .where-circle{width:250px;height:250px;}
   .where-content h2{font-size:5vw;}
   .where-content p{font-size:3vw;}
+  .engineering-grid{grid-template-columns:1fr;}
+  .engineering-card-icon{font-size:2.5vw;}
+  .engineering-card h3{font-size:1.5vw;}
+  .engineering-card p{font-size:1.2vw;}
 }
 
 @media(max-width:900px) and (min-width:601px){
@@ -334,6 +393,7 @@ body.main-active .main-site{display:block;}
 <ul>
 <li onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">Why?</li>
 <li onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How?</li>
+<li onclick="document.getElementById('phase1').scrollIntoView({behavior:'smooth'})">Phase 1</li>
 <li onclick="document.getElementById('but').scrollIntoView({behavior:'smooth'})">But?</li>
 <li onclick="document.getElementById('why-now').scrollIntoView({behavior:'smooth'})">Why Now?</li>
 <li onclick="document.getElementById('where').scrollIntoView({behavior:'smooth'})">Where?</li>
@@ -408,6 +468,27 @@ body.main-active .main-site{display:block;}
 <div class="section-text">
 <h2>How it Works</h2>
 <p id="howText"></p>
+</div>
+</section>
+
+<section id="phase1" class="snap-card">
+<h2 style="margin-bottom:5vh;font-size:3.5vw;">Engineering Challenges</h2>
+<div class="engineering-grid">
+<div class="engineering-card">
+<div class="engineering-card-icon">⚙️</div>
+<h3>High Pressure</h3>
+<p>Reinforced parts and robust design needed to handle up to 5x higher operating pressures.</p>
+</div>
+<div class="engineering-card">
+<div class="engineering-card-icon">📐</div>
+<h3>Complex Design</h3>
+<p>Requires careful engineering and precise thermal management for optimal performance.</p>
+</div>
+<div class="engineering-card">
+<div class="engineering-card-icon">💰</div>
+<h3>Higher Cost</h3>
+<p>Slightly higher upfront cost, but long-term environmental savings are substantial.</p>
+</div>
 </div>
 </section>
 
@@ -607,6 +688,18 @@ function initAnimations(){
       trigger: '#how',
       start: 'top center',
       end: 'bottom center',
+      toggleActions: 'play none none reverse'
+    }
+  });
+
+  gsap.to('.engineering-card', {
+    opacity: 1,
+    duration: 0.6,
+    stagger: 0.2,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: '#phase1',
+      start: 'top center',
       toggleActions: 'play none none reverse'
     }
   });
