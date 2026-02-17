@@ -201,40 +201,6 @@ body.main-active .main-site{display:block;}
   color:#ccc;
 }
 
-#but{background:transparent;color:#F0EDCC;}
-.challenge-card{
-  background:linear-gradient(135deg, #02343F 0%, #011b21 100%);
-  border-radius:2vw;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  margin:3vh 0;
-  max-width:1100px;
-  width:90%;
-  box-shadow:0 20px 40px rgba(0,0,0,0.3);
-}
-.challenge-card.reverse{flex-direction:row-reverse;}
-.challenge-card-img{
-  width:60%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:4vh;
-}
-.challenge-card-img img{
-  max-width:100%;
-  max-height:400px;
-  object-fit:contain;
-}
-.challenge-card-text{
-  width:40%;
-  padding:4vh;
-  color:#F0EDCC;
-}
-.challenge-card-text h2{font-size:2.5vw;margin-bottom:2vh;}
-.challenge-card-text p{font-size:1.5vw;line-height:1.8;}
-
 #where{
   position:relative;
   height:300vh;
@@ -352,8 +318,6 @@ body.main-active .main-site{display:block;}
  .intro img{width:40vw;}
  .cards-container{flex-direction:column;align-items:center;}
  .plan{max-width:90vw;}
- .challenge-card{flex-direction:column !important;}
- .challenge-card-img,.challenge-card-text{width:100%;}
  .where-circle{width:300px;height:300px;}
  .compare-table th,.compare-table td{font-size:2.5vw;}
  .engineering-grid{gap:2vw;}
@@ -393,8 +357,7 @@ body.main-active .main-site{display:block;}
 <ul>
 <li onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">Why?</li>
 <li onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How?</li>
-<li onclick="document.getElementById('phase1').scrollIntoView({behavior:'smooth'})">Phase 1</li>
-<li onclick="document.getElementById('but').scrollIntoView({behavior:'smooth'})">But?</li>
+<li onclick="document.getElementById('phase1').scrollIntoView({behavior:'smooth'})">Challenges</li>
 <li onclick="document.getElementById('why-now').scrollIntoView({behavior:'smooth'})">Why Now?</li>
 <li onclick="document.getElementById('where').scrollIntoView({behavior:'smooth'})">Where?</li>
 <li onclick="document.getElementById('compare').scrollIntoView({behavior:'smooth'})">Compare</li>
@@ -489,30 +452,6 @@ body.main-active .main-site{display:block;}
 <h3>Higher Cost</h3>
 <p>Slightly higher upfront cost, but long-term environmental savings are substantial.</p>
 </div>
-</div>
-</section>
-
-<section id="but" class="snap-card">
-<h2 style="margin-bottom:5vh;font-size:3.5vw;color:#ffff;">Challenges</h2>
-
-<div class="challenge-card">
-  <div class="challenge-card-img">
-    <img src="images/money.png" alt="Cost">
-  </div>
-  <div class="challenge-card-text">
-    <h2>Costs More</h2>
-    <p>CO₂ systems currently cost more to design and manufacture, but their long-term environmental benefits are substantial.</p>
-  </div>
-</div>
-
-<div class="challenge-card reverse">
-  <div class="challenge-card-img">
-    <img src="images/design.png" alt="Design">
-  </div>
-  <div class="challenge-card-text">
-    <h2>Harder to Design</h2>
-    <p>CO₂ systems can reach up to 5x higher pressure than traditional air conditioners.</p>
-  </div>
 </div>
 </section>
 
