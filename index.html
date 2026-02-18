@@ -180,11 +180,11 @@ body.main-active .main-site{display:block;}
 
 #where{
   position:relative;
-  height:300vh;
+  height:auto;
 }
 
 .where-wrapper{
-  height:100vh;
+  height:auto;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -201,13 +201,31 @@ body.main-active .main-site{display:block;}
   justify-content:center;
   box-shadow:0 30px 60px rgba(0,0,0,0.5);
   position:relative;
+  display:none;
 }
 
 .where-content{
-  position:absolute;
-  opacity:0;
+  position:static;
+  opacity:1;
   text-align:center;
   padding:3vw;
+  background: linear-gradient(135deg, rgba(2,52,62,0.4) 0%, rgba(1,27,33,0.4) 100%);
+  border: 1px solid rgba(110,231,183,0.2);
+  border-radius: 16px;
+  max-width: 360px;
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.where-content:hover {
+  border-color: rgba(110,231,183,0.5);
+  transform: translateY(-8px);
+  background: linear-gradient(135deg, rgba(2,52,62,0.6) 0%, rgba(1,27,33,0.6) 100%);
 }
 
 .where-content img{
@@ -218,11 +236,16 @@ body.main-active .main-site{display:block;}
 }
 
 .where-content h2{
-  font-size:2.5vw;
+  font-size:1.5vw;
   margin-bottom:1vh;
+  font-weight: 700;
+  color: #F0EDCC;
 }
+
 .where-content p{
-  font-size:1.3vw;
+  font-size:1.1vw;
+  line-height: 1.6;
+  color:#b0b0b0;
 }
 
 .compare-section{
@@ -502,26 +525,25 @@ body.main-active .main-site{display:block;}
 </div>
 </section>
 
-<section id="where">
-  <div class="where-wrapper">
-    <div class="where-circle">
-      <div class="where-content" data-index="0">
-        <img src="images/building.png" alt="Buildings">
-        <h2>High-rise Buildings</h2>
-        <p>Efficient centralized cooling for dense urban environments.</p>
-      </div>
+<section id="where" class="snap-card">
+  <h2 style="margin-bottom:5vh;font-size:3.5vw;">Where?</h2>
+  <div class="cards-container">
+    <div class="where-content" data-index="0">
+      <img src="images/building.png" alt="Buildings">
+      <h2>High-rise Buildings</h2>
+      <p>Efficient centralized cooling for dense urban environments.</p>
+    </div>
 
-      <div class="where-content" data-index="1">
-        <img src="images/data.png" alt="Data Centers">
-        <h2>Data Centers</h2>
-        <p>Reliable high-performance cooling for energy-intensive computing infrastructure.</p>
-      </div>
+    <div class="where-content" data-index="1">
+      <img src="images/data.png" alt="Data Centers">
+      <h2>Data Centers</h2>
+      <p>Reliable high-performance cooling for energy-intensive computing infrastructure.</p>
+    </div>
 
-      <div class="where-content" data-index="2">
-        <img src="images/agcs.png" alt="Aircraft">
-        <h2>Aircraft Ground Cooling</h2>
-        <p>Sustainable cooling systems for aircraft during ground operations.</p>
-      </div>
+    <div class="where-content" data-index="2">
+      <img src="images/agcs.png" alt="Aircraft">
+      <h2>Aircraft Ground Cooling</h2>
+      <p>Sustainable cooling systems for aircraft during ground operations.</p>
     </div>
   </div>
 </section>
@@ -739,6 +761,18 @@ gsap.globalTimeline.clear();
       trigger: '#phase1',
       start: 'top center',
       toggleActions: 'play none none reverse'
+    }
+  });
+
+  gsap.to('.where-content',{
+    opacity:1,
+    duration:0.5,
+    stagger:0.15,
+    ease:'power2.out',
+    scrollTrigger:{
+      trigger:'#where',
+      start:'top center',
+      toggleActions:'play none none reverse'
     }
   });
 
