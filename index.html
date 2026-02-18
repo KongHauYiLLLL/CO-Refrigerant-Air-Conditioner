@@ -764,19 +764,9 @@ gsap.globalTimeline.clear();
     }
   });
 
-  gsap.to('.where-content',{
-    opacity:1,
-    duration:0.5,
-    stagger:0.15,
-    ease:'power2.out',
-    scrollTrigger:{
-      trigger:'#where',
-      start:'top center',
-      toggleActions:'play none none reverse'
-    }
-  });
-
   const whereContents = document.querySelectorAll('.where-content');
+
+  gsap.set(whereContents, { opacity: 1 });
 
   // account for the fixed top banner so the pin start/end align with viewport
   const banner = document.querySelector('.top-banner');
@@ -792,21 +782,7 @@ gsap.globalTimeline.clear();
     scrub: true
   });
 
-  let tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: "#where",
-      start: startPos,
-      end: endPos,
-      scrub: true
-    }
-  });
 
-  whereContents.forEach((content, index) => {
-    tl.to(whereContents, { opacity: 0, duration: 0.1 }, index)
-      .to(content, { opacity: 1, duration: 0.5 }, index);
-  });
-
-  gsap.set(whereContents[0], { opacity: 1 });
 }
 
 enterBtn.addEventListener('click',forward);
