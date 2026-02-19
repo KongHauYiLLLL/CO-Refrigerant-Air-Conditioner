@@ -16,7 +16,13 @@
 :root{--banner-height:48px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 ::-webkit-scrollbar{display:none;}
-html{scroll-snap-type:y mandatory;overflow-y:scroll;-ms-overflow-style:none;scrollbar-width:none;}
+html{
+  scroll-snap-type:y mandatory;
+  overflow-y:scroll;
+  -ms-overflow-style:none;
+  scrollbar-width:none;
+  scroll-behavior: smooth;
+}
 body{
   font-family:'Raleway',sans-serif;
   background:linear-gradient(#02343F,#011b21);
@@ -24,7 +30,205 @@ body{
   color:#F0EDCC;
   line-height:1.5;
   overflow-x:hidden;
-  padding-top:calc(var(--banner-height) + 6vh); /* reserve space for banner + nav */
+  padding-top:calc(var(--banner-height) + 6vh);
+}
+
+/* responsive text sizing with clamp */
+h1 { font-size: clamp(1.5rem, 4vw, 3.5rem); }
+h2 { font-size: clamp(1.3rem, 3.5vw, 3rem); }
+h3 { font-size: clamp(1.1rem, 2vw, 2rem); }
+p { font-size: clamp(0.9rem, 1.8vw, 1.3rem); }
+
+/* mobile card adjustments */
+@media(max-width:768px){
+  /* make banner thinner but text larger on small screens */
+  :root{ --banner-height:40px; }
+  .top-banner{
+    height:var(--banner-height);
+    font-size:clamp(11px,3.2vw,15px);
+    padding:0 3vw;
+    line-height:1.3;
+  }
+
+  /* adjust body padding for mobile */
+  body {
+    padding-top: calc(var(--banner-height) + 4vh);
+  }
+
+  /* fully remove icon blocks from layout */
+  .card-icon, .engineering-card-icon, .cycle-icon {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* emojis on both sides */
+  .card-title::before { content: attr(data-emoji); margin-right: 0.4em; font-size: 1.1em; }
+  .card-title::after  { content: attr(data-emoji); margin-left: 0.4em; font-size: 1.1em; }
+
+  .engineering-card h3::before { content: attr(data-emoji); margin-right: 0.4em; font-size: 1.1em; }
+  .engineering-card h3::after  { content: attr(data-emoji); margin-left: 0.4em; font-size: 1.1em; }
+
+  .cycle-label::before { content: attr(data-emoji); margin-right: 0.4em; font-size: 1.1em; }
+  .cycle-label::after  { content: attr(data-emoji); margin-left: 0.4em; font-size: 1.1em; }
+
+  .where-content .card-title::before { content: attr(data-emoji); margin-right: 0.4em; font-size: 1.1em; }
+  .where-content .card-title::after  { content: attr(data-emoji); margin-left: 0.4em; font-size: 1.1em; }
+
+  /* Fixed padding instead of vh-based */
+  .snap-card {
+    padding: 4rem 1.5rem;
+    min-height: auto;
+  }
+
+  .cards-container {
+    gap: 4vw;
+    padding: 0 2vw;
+  }
+  .card {
+    padding: 5vw;
+    max-width: 100%;
+    min-width: 0;
+    border-radius: 16px;
+    margin: 0 auto;
+  }
+  .card-title {
+    font-size: clamp(22px,7vw,28px);
+    font-weight: 700;
+    margin-bottom: 1.5vh;
+  }
+  .card-info {
+    font-size: clamp(18px,5vw,22px);
+    line-height: 1.6;
+  }
+
+  .where-content {
+    padding: 5vw;
+    max-width: 100%;
+  }
+  .where-content .card-title {
+    font-size: clamp(22px,7vw,28px);
+    margin-bottom: 1.5vh;
+  }
+  .where-content p {
+    font-size: clamp(18px,5vw,22px);
+    line-height: 1.6;
+  }
+
+  .hero {
+    padding: 0 5vw;
+  }
+  .hero h1{
+    font-size: clamp(28px,9vw,48px);
+    margin-bottom: 2vh;
+  }
+  .hero p {
+    font-size: clamp(16px,5vw,22px);
+    margin-bottom: 4vh;
+  }
+  .portal-btn {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+
+  nav {
+    padding: 1.2vh 3vw;
+  }
+  nav ul {
+    gap: 4vw;
+    font-size: clamp(14px,4vw,18px);
+  }
+
+  .engineering-grid {
+    gap: 4vw;
+    grid-template-columns: 1fr;
+    padding: 0 2vw;
+  }
+  .engineering-card {
+    padding: 5vw;
+    max-width: 100%;
+  }
+  .engineering-card h3 {
+    font-size: clamp(22px,7vw,28px);
+    margin-bottom: 1.5vh;
+  }
+  .engineering-card p {
+    font-size: clamp(18px,5vw,22px);
+    line-height: 1.6;
+  }
+
+  .cycle-container {
+    gap: 3vw;
+    padding: 0 2vw;
+  }
+  .cycle-label {
+    font-size: clamp(16px,4.5vw,22px);
+    text-align: center;
+  }
+  .cycle-arrow {
+    font-size: clamp(20px,4.5vw,26px);
+    margin: 0 1vw;
+  }
+
+  #why h2, #why-now h2, #phase1 h2, #how-visual h2, #where h2, #compare h2 {
+    font-size: clamp(24px,7vw,36px) !important;
+    margin-bottom: 3vh !important;
+    padding: 0 3vw;
+  }
+
+  #how .section-text {
+    max-width: 90vw;
+    padding: 0 3vw;
+  }
+  #how .section-text h2 {
+    font-size: clamp(24px,7vw,36px);
+    margin-bottom: 2vh;
+  }
+  #how .section-text p {
+    font-size: clamp(18px,5vw,22px);
+    line-height: 1.6;
+  }
+
+  /* Table horizontal scroll on mobile */
+  .compare-section {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0;
+  }
+
+  .compare-table {
+    min-width: 600px;
+    font-size: 14px;
+    width: 100%;
+    display: table;
+    table-layout: auto;
+    margin: 0 auto;
+  }
+
+  .compare-table th {
+    font-size: clamp(16px,4vw,20px);
+    padding: 12px 10px;
+    word-break: break-word;
+  }
+
+  .compare-table td {
+    font-size: clamp(14px,4vw,18px);
+    padding: 12px 10px;
+    word-break: break-word;
+  }
+
+  .flash-text {
+    font-size: clamp(20px,6vw,32px);
+    padding: 0 5vw;
+    white-space: normal;
+  }
+
+  .card, .engineering-card, .where-content {
+    transition-duration: 0.2s;
+  }
 }
 
 /* top banner */
@@ -41,35 +245,121 @@ body{
   color:#F0EDCC;
   text-align:center;
   padding:0 2vw;
-  font-size:1.1vw;
+  font-size: clamp(12px, 3vw, 16px);
   font-weight:700;
   z-index:1100;
-  border-bottom:1px solid rgba(240,237,204,0.1);
+  border-bottom:1px solid rgba(240,237,204,0.2);
   white-space:nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 
 /* shift nav below banner */
 nav{position:fixed;top:var(--banner-height);width:100%;display:flex;justify-content:center;backdrop-filter:blur(20px);background:rgba(17,17,17,0.8);padding:1.5vh 3vw;z-index:1000;border-bottom:1px solid rgba(240,237,204,0.1);opacity:0;pointer-events:none;transition:0.4s;}
 body.main-active nav{opacity:1;pointer-events:auto;}
 nav ul{display:flex;gap:4vw;list-style:none;font-size:1.8vw;font-weight:700;flex-wrap:wrap;justify-content:center;}
-nav ul li{cursor:pointer;transition:0.3s;}
-nav ul li:hover{color:#00ffe1;transform:scale(1.1);}
+nav ul li{
+  cursor:pointer;
+  transition:all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  position:relative;
+}
+nav ul li:hover{
+  color:#00ffe1;
+  transform:scale(1.1);
+}
+nav ul li::after{
+  content:'';
+  position:absolute;
+  bottom:-4px;
+  left:50%;
+  width:0;
+  height:2px;
+  background:#00ffe1;
+  transform:translateX(-50%);
+  transition:width 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+}
+nav ul li:hover::after{
+  width:100%;
+}
 
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;}
-.hero h1{font-size:4vw;font-weight:900;margin-bottom:2vh;}
-.hero p{font-size:2vw;margin-bottom:6vh;}
+.hero h1{
+  font-size: clamp(28px, 6vw, 48px);
+  font-weight:900;
+  margin-bottom:2vh;
+  letter-spacing:-0.02em;
+}
+.hero p{
+  font-size: clamp(16px, 2vw, 28px);
+  margin-bottom:6vh;
+  font-weight:300;
+  letter-spacing:0.5px;
+}
 
-.portal-btn{width:90px;height:90px;border-radius:50%;border:none;background:#F0EDCC;color:#02343F;font-size:34px;cursor:pointer;transition:0.3s;}
-.portal-btn:hover{transform:scale(1.1);}
+.portal-btn{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  border:none;
+  background:#F0EDCC;
+  color:#02343F;
+  font-size:34px;
+  cursor:pointer;
+  transition:all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  font-weight:700;
+  box-shadow: 0 8px 24px rgba(240,237,204,0.3);
+  position: relative;
+  overflow: hidden;
+}
+.portal-btn:hover{
+  transform:scale(1.15);
+  box-shadow: 0 12px 32px rgba(240,237,204,0.5);
+}
+.portal-btn:active {
+  transform: scale(1.08);
+  transition-duration: 0.1s;
+}
+
+.portal-btn:focus {
+  outline: 3px solid #6ee7b7;
+  outline-offset: 4px;
+}
+
+a:focus, button:focus {
+  outline: 3px solid #6ee7b7;
+  outline-offset: 2px;
+}
+
+.compare-table td:focus, .compare-table th:focus {
+  outline: 2px solid #6ee7b7;
+}
 
 .main-site{display:none;}
 body.main-active .main-site{display:block;}
 
 .snap-card{min-height:100vh;padding:12vh 5vw;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;scroll-snap-align:start;}
 
-.intro img{width:18vw;margin-bottom:2vh;opacity:0;}
-.intro h1{font-size:4vw;margin:0.5vh 0;opacity:0;}
-.intro p{font-size:1.8vw;margin-top:2vh;opacity:0;}
+.intro img{
+  width:18vw;
+  margin-bottom:2vh;
+  opacity:0;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.intro h1{
+  font-size:4vw;
+  margin:0.5vh 0;
+  opacity:0;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  letter-spacing: -0.02em;
+}
+
+.intro p{
+  font-size:1.8vw;
+  margin-top:2vh;
+  opacity:0;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  letter-spacing: 0.3px;
+}
 
 .cards-container{display:flex;gap:3vw;flex-wrap:wrap;justify-content:center;width:100%;max-width:1400px;}
 
@@ -88,14 +378,32 @@ body.main-active .main-site{display:block;}
   align-items: center;
   text-align: center;
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
   opacity: 0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: radial-gradient(circle at 50% 0%, rgba(110,231,183,0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  pointer-events: none;
 }
 
 .card:hover {
   border-color: rgba(110,231,183,0.5);
-  transform: translateY(-8px);
+  transform: translateY(-12px);
   background: linear-gradient(135deg, rgba(2,52,62,0.6) 0%, rgba(1,27,33,0.6) 100%);
+  box-shadow: 0 16px 48px rgba(110,231,183,0.15);
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 .card-icon {
@@ -110,13 +418,13 @@ body.main-active .main-site{display:block;}
 
 .card-title {
   font-weight: 700;
-  font-size: 1.5vw;
+  font-size: clamp(18px, 1.5vw, 24px);
   color: #F0EDCC;
   margin-bottom: 1vh;
 }
 
 .card-info {
-  font-size: 1.1vw;
+  font-size: clamp(14px, 1.1vw, 18px);
   line-height: 1.6;
   color: #b0b0b0;
 }
@@ -147,13 +455,32 @@ body.main-active .main-site{display:block;}
   align-items:center;
   text-align:center;
   backdrop-filter: blur(10px);
-  transition:all 0.3s ease;
+  transition:all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
   opacity:0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.engineering-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5vw;
+  background: radial-gradient(circle at 50% 0%, rgba(110,231,183,0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  pointer-events: none;
 }
 
 .engineering-card:hover{
-  transform:translateY(-8px);
+  transform:translateY(-12px);
   border-color: rgba(110,231,183,0.5);
+  box-shadow: 0 16px 48px rgba(110,231,183,0.15);
+  background:linear-gradient(135deg, rgba(2,52,62,0.6) 0%, rgba(1,27,33,0.6) 100%);
+}
+
+.engineering-card:hover::before {
+  opacity: 1;
 }
 
 .engineering-card-icon{
@@ -167,13 +494,13 @@ body.main-active .main-site{display:block;}
 }
 
 .engineering-card h3{
-  font-size:1.8vw;
+  font-size: clamp(18px, 1.8vw, 28px);
   margin-bottom:1.5vh;
   font-weight:700;
 }
 
 .engineering-card p{
-  font-size:1.3vw;
+  font-size: clamp(14px, 1.3vw, 18px);
   line-height:1.6;
   color:#ccc;
 }
@@ -219,13 +546,31 @@ body.main-active .main-site{display:block;}
   flex-direction: column;
   align-items: center;
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.where-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: radial-gradient(circle at 50% 0%, rgba(110,231,183,0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  pointer-events: none;
 }
 
 .where-content:hover {
   border-color: rgba(110,231,183,0.5);
-  transform: translateY(-8px);
+  transform: translateY(-12px);
   background: linear-gradient(135deg, rgba(2,52,62,0.6) 0%, rgba(1,27,33,0.6) 100%);
+  box-shadow: 0 16px 48px rgba(110,231,183,0.15);
+}
+
+.where-content:hover::before {
+  opacity: 1;
 }
 
 .where-content img{
@@ -236,14 +581,14 @@ body.main-active .main-site{display:block;}
 }
 
 .where-content h2{
-  font-size:1.5vw;
+  font-size: clamp(18px, 1.5vw, 24px);
   margin-bottom:1vh;
   font-weight: 700;
   color: #F0EDCC;
 }
 
 .where-content p{
-  font-size:1.1vw;
+  font-size: clamp(14px, 1.1vw, 18px);
   line-height: 1.6;
   color:#b0b0b0;
 }
@@ -259,12 +604,12 @@ body.main-active .main-site{display:block;}
   background:rgba(17,17,17,0.8);
   border-radius:1vw;
   overflow:hidden;
-  box-shadow:0 20px 40px rgba(0,0,0,0.3);
+  box-shadow:0 20px 48px rgba(110,231,183,0.1), 0 4px 12px rgba(0,0,0,0.3);
 }
 .compare-table th{
   background:#02343F;
   padding:2vh 2vw;
-  font-size:1.8vw;
+  font-size: clamp(16px, 1.8vw, 24px);
   font-weight:900;
   text-align:left;
   border-bottom:2px solid #F0EDCC;
@@ -277,7 +622,7 @@ body.main-active .main-site{display:block;}
 }
 .compare-table td{
   padding:1.5vh 2vw;
-  font-size:clamp(16px, 1.4vw, 22px);
+  font-size: clamp(14px, 1.4vw, 20px);
   border-bottom:1px solid rgba(240,237,204,0.1);
 }
 .compare-table tr:last-child td{
@@ -287,8 +632,14 @@ body.main-active .main-site{display:block;}
   background:rgba(2,52,63,0.1);
 }
 .compare-table tr:hover{
-  background:rgba(2,52,63,0.2);
+  background:rgba(2,52,63,0.3);
+  transition: background 0.2s cubic-bezier(0.23, 1, 0.320, 1);
 }
+
+.compare-table tr:hover td {
+  color: #F0EDCC;
+}
+
 .compare-table td:nth-child(3){
   font-weight:700;
   color:#6ee7b7;
@@ -311,6 +662,7 @@ body.main-active .main-site{display:block;}
   align-items:center;
   gap:1vh;
   opacity:0;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
 .cycle-icon{
@@ -323,12 +675,31 @@ body.main-active .main-site{display:block;}
   background:rgba(2,52,63,0.3);
   border-radius:50%;
   border:2px solid rgba(110,231,183,0.3);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  box-shadow: 0 4px 16px rgba(110,231,183,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cycle-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(110,231,183,0.2) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
 .cycle-step:hover .cycle-icon {
   border-color: rgba(110,231,183,0.8);
   background:rgba(2,52,63,0.5);
+  box-shadow: 0 8px 24px rgba(110,231,183,0.25);
+  transform: scale(1.1);
+}
+
+.cycle-step:hover .cycle-icon::after {
+  opacity: 1;
 }
 
 .cycle-label{
@@ -360,6 +731,48 @@ body.main-active .main-site{display:block;}
 
 .fade-layer{position:fixed;inset:0;background:#02343F;opacity:0;pointer-events:none;z-index:2000;}
 
+footer {
+  background: linear-gradient(135deg, rgba(2,52,62,0.6) 0%, rgba(1,27,33,0.6) 100%);
+  border-top: 1px solid rgba(110,231,183,0.3);
+  padding: 4rem 2rem;
+  text-align: center;
+  margin-top: 6rem;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(110,231,183,0.5) 50%, transparent 100%);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-content p {
+  margin: 0.5rem 0;
+  color: #d0d0d0;
+  font-size: clamp(14px, 1.2vw, 18px);
+  line-height: 1.7;
+  letter-spacing: 0.2px;
+}
+
+.footer-content p:first-child {
+  font-size: clamp(16px, 1.4vw, 20px);
+  font-weight: 700;
+  color: #F0EDCC;
+  margin-bottom: 1rem;
+}
+
 @media(max-width:1000px){
  nav ul{font-size:3.5vw;}
  .hero h1{font-size:8vw;}
@@ -377,7 +790,7 @@ body.main-active .main-site{display:block;}
  .cycle-label{font-size:2vw;}
 }
 
-@media(max-width:600px){
+@media(max-width:768px){
   .hero h1 { font-size:6vw; }
   .hero p { font-size:3.5vw; }
   .intro img { width:70vw; margin-bottom:1vh; }
@@ -396,7 +809,7 @@ body.main-active .main-site{display:block;}
   .compare-table th,.compare-table td{font-size:1.2vw;padding:1vh 1vw;}
 }
 
-@media(max-width:900px) and (min-width:601px){
+@media(max-width:900px) and (min-width:769px){
   .hero h1 { font-size:5vw; }
   .hero p { font-size:3vw; }
   .intro img { width:50vw; }
@@ -405,6 +818,8 @@ body.main-active .main-site{display:block;}
 </style>
 </head>
 <body>
+
+<a href="#main-content" style="position:absolute;top:-40px;left:0;background:#6ee7b7;color:#02343F;padding:8px 16px;z-index:10000;font-weight:700;border-radius:0 0 4px 0;">Skip to main content</a>
 
 <div class="top-banner">🍌 BIICC 2026!!! CO₂ Refrigerant Air Conditioner: Kong Hau Yi & Shui Wen Qi 🍌</div>
 
@@ -435,22 +850,20 @@ body.main-active .main-site{display:block;}
 <div class="cards-container">
 <div class="card">
   <div class="card-icon">🌍</div>
-  <p class="card-title">Protect Nature</p>
-  <p class="card-info">CO₂ (R744) has a Global Warming Potential (GWP) of 1, compared to up to 2,000 for common refrigerants.</p>
+  <h2 class="card-title" data-emoji="🌍">Protect Nature</h2>
+  <p>CO₂ (R744) has a Global Warming Potential (GWP) of 1, compared to up to 2,000 for common refrigerants.</p>
 </div>
 
 <div class="card">
   <div class="card-icon">⚡</div>
-  <p class="card-title">Optimized for Tropical Conditions
-
-  </p>
-  <p class="card-info">Optimized for tropical climates like Malaysia, maintaining efficiency even under extreme heat.</p>
+  <h2 class="card-title" data-emoji="⚡">Optimized for Tropical Conditions</h2>
+  <p>Optimized for tropical climates like Malaysia, maintaining efficiency even under extreme heat.</p>
 </div>
 
 <div class="card">
   <div class="card-icon">🛡️</div>
-  <p class="card-title">Safe Refrigerant</p>
-  <p class="card-info">CO₂ is non-toxic and non-flammable, making it a safer alternative to traditional refrigerants.</p>
+  <h2 class="card-title" data-emoji="🛡️">Safe Refrigerant</h2>
+  <p>CO₂ is non-toxic and non-flammable, making it a safer alternative to traditional refrigerants.</p>
 </div>
 </div>
 </section>
@@ -467,22 +880,22 @@ body.main-active .main-site{display:block;}
 <div class="cycle-container">
 <div class="cycle-step">
 <div class="cycle-icon">🔧</div>
-<p class="cycle-label">Compress</p>
+<h3 class="cycle-label" data-emoji="🔧">Compress</h3>
 </div>
 <div class="cycle-arrow">→</div>
 <div class="cycle-step">
 <div class="cycle-icon">❄️</div>
-<p class="cycle-label">Cool</p>
+<h3 class="cycle-label" data-emoji="❄️">Cool</h3>
 </div>
 <div class="cycle-arrow">→</div>
 <div class="cycle-step">
 <div class="cycle-icon">💨</div>
-<p class="cycle-label">Expand</p>
+<h3 class="cycle-label" data-emoji="💨">Expand</h3>
 </div>
 <div class="cycle-arrow">→</div>
 <div class="cycle-step">
 <div class="cycle-icon">🌡️</div>
-<p class="cycle-label">Absorb</p>
+<h3 class="cycle-label" data-emoji="🌡️">Absorb</h3>
 </div>
 </div>
 </section>
@@ -492,17 +905,17 @@ body.main-active .main-site{display:block;}
 <div class="engineering-grid">
 <div class="engineering-card">
 <div class="engineering-card-icon">⚙️</div>
-<h3>High Pressure</h3>
+<h2 class="card-title" data-emoji="⚙️">High Pressure</h2>
 <p>Operates at up to 5× the pressure of conventional systems, requiring reinforced components.</p>
 </div>
 <div class="engineering-card">
 <div class="engineering-card-icon">📐</div>
-<h3>Complex Design</h3>
+<h2 class="card-title" data-emoji="📐">Complex Design</h2>
 <p>Requires careful engineering and precise thermal management for optimal performance.</p>
 </div>
 <div class="engineering-card">
 <div class="engineering-card-icon">💰</div>
-<h3>Higher Cost</h3>
+<h2 class="card-title" data-emoji="💰">Higher Cost</h2>
 <p>Slightly higher upfront cost, but long-term environmental savings are substantial.</p>
 </div>
 </div>
@@ -513,14 +926,14 @@ body.main-active .main-site{display:block;}
 <div class="cards-container">
 <div class="card">
   <div class="card-icon">🌡️</div>
-  <p class="card-title">Global Cooling Demand Rising</p>
-  <p class="card-info">Cooling demand is rapidly increasing due to urbanization and rising temperatures worldwide.</p>
+  <h2 class="card-title" data-emoji="🌡️">Global Cooling Demand Rising</h2>
+  <p>Cooling demand is rapidly increasing due to urbanization and rising temperatures worldwide.</p>
 </div>
 
 <div class="card">
   <div class="card-icon">🔥</div>
-  <p class="card-title">Heat Waves Increasing</p>
-  <p class="card-info">Extreme heat events are becoming more frequent, increasing the need for sustainable cooling solutions.</p>
+  <h2 class="card-title" data-emoji="🔥">Heat Waves Increasing</h2>
+  <p>Extreme heat events are becoming more frequent, increasing the need for sustainable cooling solutions.</p>
 </div>
 </div>
 </section>
@@ -528,21 +941,21 @@ body.main-active .main-site{display:block;}
 <section id="where" class="snap-card">
   <h2 style="margin-bottom:5vh;font-size:3.5vw;">Where?</h2>
   <div class="cards-container">
-    <div class="where-content" data-index="0">
-      <img src="images/building.png" alt="Buildings">
-      <h2>High-rise Buildings</h2>
+    <div class="where-content">
+      <div class="card-icon">🏢</div>
+      <h2 class="card-title" data-emoji="🏢">High-rise Buildings</h2>
       <p>Efficient centralized cooling for dense urban environments.</p>
     </div>
 
     <div class="where-content" data-index="1">
-      <img src="images/data.png" alt="Data Centers">
-      <h2>Data Centers</h2>
+      <div class="card-icon">🖥️</div>
+      <h2 class="card-title" data-emoji="🖥️">Data Centers</h2>
       <p>Reliable high-performance cooling for energy-intensive computing infrastructure.</p>
     </div>
 
     <div class="where-content" data-index="2">
-      <img src="images/agcs.png" alt="Aircraft">
-      <h2>Aircraft Ground Cooling</h2>
+      <div class="card-icon">✈️</div>
+      <h2 class="card-title" data-emoji="✈️">Aircraft Ground Cooling</h2>
       <p>Sustainable cooling systems for aircraft during ground operations.</p>
     </div>
   </div>
@@ -595,6 +1008,14 @@ body.main-active .main-site{display:block;}
 </section>
 
 </div>
+
+<footer role="contentinfo">
+  <div class="footer-content">
+    <p>CO₂ Refrigerant Air Conditioner</p>
+    <p>A sustainable cooling solution optimized for tropical climates</p>
+    <p style="margin-top: 1.5rem; font-size: clamp(12px, 1rem, 16px); color: #999;">Kong Hau Yi & Shui Wen Qi | BIICC 2026</p>
+  </div>
+</footer>
 
 <script>
 gsap.registerPlugin(ScrollTrigger);
@@ -675,8 +1096,13 @@ function reverse(){
 
 function initAnimations(){
 
+  // Optimize for mobile: reduce animation density and refresh events
+  if (window.innerWidth < 768) {
+    ScrollTrigger.config({ autoRefreshEvents: "visibilitychange,DOMContentLoaded,load" });
+  }
+
   ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-gsap.globalTimeline.clear();
+  gsap.globalTimeline.clear();
 
   gsap.to('.intro img, .intro h1, .intro p', {
     opacity: 1,
@@ -708,7 +1134,6 @@ gsap.globalTimeline.clear();
     start: "top 70%"
   }
 });
-
 
   const text = "A CO2 air conditioner uses carbon dioxide as the refrigerant instead of traditional synthetic gases. The CO₂ circulates in a closed high-pressure loop where it is compressed, cooled in a gas cooler, expanded through a valve, and then absorbs indoor heat before repeating the cycle.";
   const words = text.split(' ');
@@ -781,8 +1206,6 @@ gsap.globalTimeline.clear();
     pin: ".where-wrapper",
     scrub: true
   });
-
-
 }
 
 enterBtn.addEventListener('click',forward);
