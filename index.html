@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CO₂ Refrigerant Air Conditioner</title>
+<title>CO₂ Refrigerant Air Conditioner | BIICC 2026</title>
+<meta name="description" content="Sustainable CO₂ refrigerant air conditioning technology optimized for tropical climates. GWP1: The New Standard.">
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;900&display=swap" rel="stylesheet">
 <script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -13,35 +14,118 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <style>
-:root{--banner-height:48px;}
-*{margin:0;padding:0;box-sizing:border-box;}
-::-webkit-scrollbar{display:none;}
+:root{
+  --banner-height:48px;
+  --accent:#6ee7b7;
+  --bg-dark:#02343F;
+  --bg-darker:#011b21;
+  --text:#F0EDCC;
+  --text-muted:#d0d0d0;
+  --text-subtle:#a0a0a0;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+  .particle-system {
+    display: none !important;
+  }
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+::-webkit-scrollbar{
+  width: 8px;
+  background: var(--bg-darker);
+}
+
+::-webkit-scrollbar-thumb{
+  background: var(--accent);
+  border-radius: 4px;
+}
+
 html{
   scroll-snap-type:y mandatory;
   overflow-y:scroll;
   -ms-overflow-style:none;
-  scrollbar-width:none;
-  scroll-behavior: smooth;
-}
-body{
-  font-family:'Raleway',sans-serif;
-  background:linear-gradient(#02343F,#011b21);
-  background-attachment:fixed;
-  color:#F0EDCC;
-  line-height:1.5;
-  overflow-x:hidden;
-  padding-top:calc(var(--banner-height) + 6vh);
+  scrollbar-width:thin;
+  scrollbar-color: var(--accent) var(--bg-darker);
+  scroll-behavior:smooth;
 }
 
-/* responsive text sizing with clamp */
+body{
+  font-family:'Raleway',sans-serif;
+  background:linear-gradient(var(--bg-dark),var(--bg-darker));
+  background-attachment:fixed;
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+  padding-top:calc(var(--banner-height) + 6vh);
+  position: relative;
+}
+
+/* Subtle grain texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.025;
+  z-index: 9998;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Progress bar without glow */
+.progress-bar{
+  position:fixed;
+  top:var(--banner-height);
+  left:0;
+  width:0%;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent),#00ffe1);
+  z-index:9999;
+  transition:width 0.1s linear;
+}
+
+/* Skip link improvement */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--accent);
+  color: var(--bg-dark);
+  padding: 8px 16px;
+  z-index: 10000;
+  font-weight: 700;
+  border-radius: 0 0 4px 0;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
 h1 { font-size: clamp(1.5rem, 4vw, 3.5rem); }
 h2 { font-size: clamp(1.3rem, 3.5vw, 3rem); }
 h3 { font-size: clamp(1.1rem, 2vw, 2rem); }
 p { font-size: clamp(0.9rem, 1.8vw, 1.3rem); }
 
-/* mobile card adjustments */
 @media(max-width:768px){
-  /* make banner thinner but text larger on small screens */
   :root{ --banner-height:40px; }
   .top-banner{
     height:var(--banner-height);
@@ -49,189 +133,61 @@ p { font-size: clamp(0.9rem, 1.8vw, 1.3rem); }
     padding:0 3vw;
     line-height:1.3;
   }
+  body { padding-top: calc(var(--banner-height) + 4vh); }
+  .card-icon, .engineering-card-icon, .cycle-icon { display: none !important; }
 
-  /* adjust body padding for mobile */
-  body {
-    padding-top: calc(var(--banner-height) + 4vh);
-  }
+  .card-title::before, .card-title::after { content: attr(data-emoji); margin: 0 0.4em; font-size: 1.1em; }
+  .engineering-card h3::before, .engineering-card h3::after { content: attr(data-emoji); margin: 0 0.4em; font-size: 1.1em; }
+  .cycle-label::before, .cycle-label::after { content: attr(data-emoji); margin: 0 0.4em; font-size: 1.1em; }
 
-  /* fully remove icon blocks from layout */
-  .card-icon, .engineering-card-icon, .cycle-icon {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
+  .snap-card { padding: 4rem 1.5rem; min-height: auto; }
+  .cards-container { gap: 4vw; padding: 0 2vw; }
+  .card { padding: 5vw; max-width: 100%; border-radius: 16px; margin: 0 auto; }
+  .card-title { font-size: clamp(22px,7vw,28px); margin-bottom: 1.5vh; }
+  .card-info { font-size: clamp(18px,5vw,22px); line-height: 1.6; }
 
-  /* emojis on both sides */
-  .card-title::before { content: attr(data-emoji); margin-right: 0.4em; font-size: 1.1em; }
-  .card-title::after  { content: attr(data-emoji); margin-left: 0.4em; font-size: 1.1em; }
+  .where-content { padding: 5vw; max-width: 100%; }
+  .where-content .card-title { font-size: clamp(22px,7vw,28px); }
+  .where-content p { font-size: clamp(18px,5vw,22px); line-height: 1.6; }
 
-  .engineering-card h3::before { content: attr(data-emoji); margin-right: 0.4em; font-size: 1.1em; }
-  .engineering-card h3::after  { content: attr(data-emoji); margin-left: 0.4em; font-size: 1.1em; }
+  .hero { padding: 0 5vw; }
+  .hero h1{ font-size: clamp(28px,9vw,48px); margin-bottom: 2vh; }
+  .hero p { font-size: clamp(16px,5vw,22px); margin-bottom: 4vh; }
+  .portal-btn { width: 80px; height: 80px; font-size: 32px; }
 
-  .cycle-label::before { content: attr(data-emoji); margin-right: 0.4em; font-size: 1.1em; }
-  .cycle-label::after  { content: attr(data-emoji); margin-left: 0.4em; font-size: 1.1em; }
+  nav { padding: 1.2vh 3vw; }
+  nav ul { gap: 4vw; font-size: clamp(14px,4vw,18px); }
 
-  .where-content .card-title::before { content: attr(data-emoji); margin-right: 0.4em; font-size: 1.1em; }
-  .where-content .card-title::after  { content: attr(data-emoji); margin-left: 0.4em; font-size: 1.1em; }
+  .engineering-grid { gap: 4vw; grid-template-columns: 1fr; padding: 0 2vw; }
+  .engineering-card { padding: 5vw; max-width: 100%; }
+  .engineering-card h3 { font-size: clamp(22px,7vw,28px); }
+  .engineering-card p { font-size: clamp(18px,5vw,22px); line-height: 1.6; }
 
-  /* Fixed padding instead of vh-based */
-  .snap-card {
-    padding: 4rem 1.5rem;
-    min-height: auto;
-  }
+  .cycle-container { gap: 3vw; padding: 0 2vw; }
+  .cycle-label { font-size: clamp(16px,4.5vw,22px); }
+  .cycle-arrow { font-size: clamp(20px,4.5vw,26px); }
 
-  .cards-container {
-    gap: 4vw;
-    padding: 0 2vw;
-  }
-  .card {
-    padding: 5vw;
-    max-width: 100%;
-    min-width: 0;
-    border-radius: 16px;
-    margin: 0 auto;
-  }
-  .card-title {
-    font-size: clamp(22px,7vw,28px);
-    font-weight: 700;
-    margin-bottom: 1.5vh;
-  }
-  .card-info {
-    font-size: clamp(18px,5vw,22px);
-    line-height: 1.6;
-  }
-
-  .where-content {
-    padding: 5vw;
-    max-width: 100%;
-  }
-  .where-content .card-title {
-    font-size: clamp(22px,7vw,28px);
-    margin-bottom: 1.5vh;
-  }
-  .where-content p {
-    font-size: clamp(18px,5vw,22px);
-    line-height: 1.6;
-  }
-
-  .hero {
-    padding: 0 5vw;
-  }
-  .hero h1{
-    font-size: clamp(28px,9vw,48px);
-    margin-bottom: 2vh;
-  }
-  .hero p {
-    font-size: clamp(16px,5vw,22px);
-    margin-bottom: 4vh;
-  }
-  .portal-btn {
-    width: 80px;
-    height: 80px;
-    font-size: 32px;
-  }
-
-  nav {
-    padding: 1.2vh 3vw;
-  }
-  nav ul {
-    gap: 4vw;
-    font-size: clamp(14px,4vw,18px);
-  }
-
-  .engineering-grid {
-    gap: 4vw;
-    grid-template-columns: 1fr;
-    padding: 0 2vw;
-  }
-  .engineering-card {
-    padding: 5vw;
-    max-width: 100%;
-  }
-  .engineering-card h3 {
-    font-size: clamp(22px,7vw,28px);
-    margin-bottom: 1.5vh;
-  }
-  .engineering-card p {
-    font-size: clamp(18px,5vw,22px);
-    line-height: 1.6;
-  }
-
-  .cycle-container {
-    gap: 3vw;
-    padding: 0 2vw;
-  }
-  .cycle-label {
-    font-size: clamp(16px,4.5vw,22px);
-    text-align: center;
-  }
-  .cycle-arrow {
-    font-size: clamp(20px,4.5vw,26px);
-    margin: 0 1vw;
-  }
-
-  #why h2, #why-now h2, #phase1 h2, #how-visual h2, #where h2, #compare h2 {
+  #why h2, #why-now h2, #phase1 h2, #how-visual h2, #where h2, #compare h2, #impact h2 {
     font-size: clamp(24px,7vw,36px) !important;
     margin-bottom: 3vh !important;
     padding: 0 3vw;
   }
 
-  #how .section-text {
-    max-width: 90vw;
-    padding: 0 3vw;
-  }
-  #how .section-text h2 {
-    font-size: clamp(24px,7vw,36px);
-    margin-bottom: 2vh;
-  }
-  #how .section-text p {
-    font-size: clamp(18px,5vw,22px);
-    line-height: 1.6;
-  }
+  #how .section-text { max-width: 90vw; padding: 0 3vw; }
+  #how .section-text h2 { font-size: clamp(24px,7vw,36px); }
+  #how .section-text p { font-size: clamp(18px,5vw,22px); line-height: 1.6; }
 
-  /* Table horizontal scroll on mobile */
-  .compare-section {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 0;
-  }
+  .compare-section { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0; }
+  .compare-table { min-width: 600px; font-size: 14px; width: 100%; }
+  .compare-table th { font-size: clamp(16px,4vw,20px); padding: 12px 10px; }
+  .compare-table td { font-size: clamp(14px,4vw,18px); padding: 12px 10px; }
 
-  .compare-table {
-    min-width: 600px;
-    font-size: 14px;
-    width: 100%;
-    display: table;
-    table-layout: auto;
-    margin: 0 auto;
-  }
-
-  .compare-table th {
-    font-size: clamp(16px,4vw,20px);
-    padding: 12px 10px;
-    word-break: break-word;
-  }
-
-  .compare-table td {
-    font-size: clamp(14px,4vw,18px);
-    padding: 12px 10px;
-    word-break: break-word;
-  }
-
-  .flash-text {
-    font-size: clamp(20px,6vw,32px);
-    padding: 0 5vw;
-    white-space: normal;
-  }
-
-  .card, .engineering-card, .where-content {
-    transition-duration: 0.2s;
-  }
+  .flash-text { font-size: clamp(20px,6vw,32px); padding: 0 5vw; white-space: normal; }
+  
+  .section-dots { display: none; }
+  .stats-grid { grid-template-columns: 1fr !important; }
 }
 
-/* top banner */
 .top-banner{
   position:fixed;
   top:0;
@@ -241,8 +197,8 @@ p { font-size: clamp(0.9rem, 1.8vw, 1.3rem); }
   display:flex;
   align-items:center;
   justify-content:center;
-  background:linear-gradient(90deg, #02343F, #011b21);
-  color:#F0EDCC;
+  background:linear-gradient(90deg, var(--bg-dark), var(--bg-darker));
+  color:var(--text);
   text-align:center;
   padding:0 2vw;
   font-size: clamp(12px, 3vw, 16px);
@@ -253,55 +209,101 @@ p { font-size: clamp(0.9rem, 1.8vw, 1.3rem); }
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 
-/* shift nav below banner */
+/* Section navigation dots - HIDDEN IN HERO */
+.section-dots {
+  position: fixed;
+  right: 2vw;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+body.main-active .section-dots {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(240,237,204,0.3);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.dot:hover, .dot.active {
+  background: var(--accent);
+  border-color: var(--text);
+  transform: scale(1.2);
+}
+
+.dot[aria-label] {
+  position: relative;
+}
+
+.dot::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  background: rgba(2,52,62,0.9);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+  border: 1px solid rgba(110,231,183,0.3);
+}
+
+.dot:hover::after {
+  transform: translateY(-50%) scale(1);
+  opacity: 1;
+}
+
 nav{position:fixed;top:var(--banner-height);width:100%;display:flex;justify-content:center;backdrop-filter:blur(20px);background:rgba(17,17,17,0.8);padding:1.5vh 3vw;z-index:1000;border-bottom:1px solid rgba(240,237,204,0.1);opacity:0;pointer-events:none;transition:0.4s;}
 body.main-active nav{opacity:1;pointer-events:auto;}
 nav ul{display:flex;gap:4vw;list-style:none;font-size:1.8vw;font-weight:700;flex-wrap:wrap;justify-content:center;}
-nav ul li{
-  cursor:pointer;
-  transition:all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-  position:relative;
-}
-nav ul li:hover{
-  color:#00ffe1;
-  transform:scale(1.1);
-}
-nav ul li::after{
-  content:'';
+nav ul li{cursor:pointer;transition:all 0.3s cubic-bezier(0.23, 1, 0.320, 1);position:relative;padding: 4px 0;}
+nav ul li:hover{color:#00ffe1;transform:scale(1.1);}
+nav ul li::after{content:'';position:absolute;bottom:-4px;left:50%;width:0;height:2px;background:#00ffe1;transform:translateX(-50%);transition:width 0.3s cubic-bezier(0.23, 1, 0.320, 1);}
+nav ul li:hover::after{width:100%;}
+
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;position:relative;}
+
+#particle-canvas{
   position:absolute;
-  bottom:-4px;
-  left:50%;
-  width:0;
-  height:2px;
-  background:#00ffe1;
-  transform:translateX(-50%);
-  transition:width 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-}
-nav ul li:hover::after{
+  top:0;
+  left:0;
   width:100%;
+  height:100%;
+  z-index:0;
+  pointer-events:none;
 }
 
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;}
-.hero h1{
-  font-size: clamp(28px, 6vw, 48px);
-  font-weight:900;
-  margin-bottom:2vh;
-  letter-spacing:-0.02em;
-}
-.hero p{
-  font-size: clamp(16px, 2vw, 28px);
-  margin-bottom:6vh;
-  font-weight:300;
-  letter-spacing:0.5px;
-}
+.hero-content{position:relative;z-index:1;}
+
+.hero h1{font-size: clamp(28px, 6vw, 48px);font-weight:900;margin-bottom:2vh;letter-spacing:-0.02em;}
+.hero p{font-size: clamp(16px, 2vw, 28px);margin-bottom:6vh;font-weight:300;letter-spacing:0.5px;}
 
 .portal-btn{
   width:90px;
   height:90px;
   border-radius:50%;
   border:none;
-  background:#F0EDCC;
-  color:#02343F;
+  background:var(--text);
+  color:var(--bg-dark);
   font-size:34px;
   cursor:pointer;
   transition:all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
@@ -310,56 +312,30 @@ nav ul li:hover::after{
   position: relative;
   overflow: hidden;
 }
-.portal-btn:hover{
-  transform:scale(1.15);
-  box-shadow: 0 12px 32px rgba(240,237,204,0.5);
-}
-.portal-btn:active {
-  transform: scale(1.08);
-  transition-duration: 0.1s;
-}
 
-.portal-btn:focus {
-  outline: 3px solid #6ee7b7;
-  outline-offset: 4px;
-}
+.portal-btn:hover{transform:scale(1.15);box-shadow: 0 12px 32px rgba(240,237,204,0.5);}
+.portal-btn:active {transform: scale(1.08);transition-duration: 0.1s;}
+.portal-btn:focus {outline: 3px solid var(--accent);outline-offset: 4px;}
 
-a:focus, button:focus {
-  outline: 3px solid #6ee7b7;
-  outline-offset: 2px;
-}
-
-.compare-table td:focus, .compare-table th:focus {
-  outline: 2px solid #6ee7b7;
-}
+a:focus, button:focus {outline: 3px solid var(--accent);outline-offset: 2px;}
 
 .main-site{display:none;}
 body.main-active .main-site{display:block;}
 
-.snap-card{min-height:100vh;padding:12vh 5vw;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;scroll-snap-align:start;}
-
-.intro img{
-  width:18vw;
-  margin-bottom:2vh;
-  opacity:0;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+.snap-card{
+  min-height:100vh;
+  padding: calc(12vh + var(--banner-height)) 5vw 12vh 5vw;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  scroll-snap-align:start;
 }
 
-.intro h1{
-  font-size:4vw;
-  margin:0.5vh 0;
-  opacity:0;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-  letter-spacing: -0.02em;
-}
-
-.intro p{
-  font-size:1.8vw;
-  margin-top:2vh;
-  opacity:0;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-  letter-spacing: 0.3px;
-}
+.intro img{width:18vw;margin-bottom:2vh;opacity:0;transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);}
+.intro h1{font-size:4vw;margin:0.5vh 0;opacity:0;transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);letter-spacing: -0.02em;}
+.intro p{font-size:1.8vw;margin-top:2vh;opacity:0;transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);letter-spacing: 0.3px;}
 
 .cards-container{display:flex;gap:3vw;flex-wrap:wrap;justify-content:center;width:100%;max-width:1400px;}
 
@@ -402,9 +378,7 @@ body.main-active .main-site{display:block;}
   box-shadow: 0 16px 48px rgba(110,231,183,0.15);
 }
 
-.card:hover::before {
-  opacity: 1;
-}
+.card:hover::before { opacity: 1; }
 
 .card-icon {
   font-size: 3.5vw;
@@ -416,25 +390,71 @@ body.main-active .main-site{display:block;}
   justify-content: center;
 }
 
-.card-title {
-  font-weight: 700;
-  font-size: clamp(18px, 1.5vw, 24px);
-  color: #F0EDCC;
-  margin-bottom: 1vh;
-}
-
-.card-info {
-  font-size: clamp(14px, 1.1vw, 18px);
-  line-height: 1.6;
-  color: #b0b0b0;
-}
+.card-title { font-weight: 700; font-size: clamp(18px, 1.5vw, 24px); color: var(--text); margin-bottom: 1vh; }
+.card-info { font-size: clamp(14px, 1.1vw, 18px); line-height: 1.6; color: var(--text-subtle); }
 
 #how .section-text{max-width:70vw;text-align:center;opacity:0;}
 #how .section-text h2{font-size:3.5vw;margin-bottom:2vh;}
 #how .section-text p{font-size:1.8vw;}
 #how .word{opacity:0;display:inline-block;}
 
-#phase1{background:transparent;color:#F0EDCC;}
+.cycle-diagram {
+  width: 100%;
+  max-width: 600px;
+  height: 350px;
+  margin: 4vh auto 0;
+  position: relative;
+}
+
+.cycle-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cycle-path {
+  fill: none;
+  stroke: rgba(110,231,183,0.3);
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.cycle-path-active {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+.cycle-node {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, rgba(2,52,62,0.8), rgba(1,27,33,0.8));
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: 0 4px 20px rgba(110,231,183,0.3);
+  z-index: 10;
+}
+
+.cycle-label-diagram {
+  position: absolute;
+  font-size: clamp(12px, 1.2vw, 16px);
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  background: rgba(2,52,62,0.8);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(110,231,183,0.3);
+}
+
+#phase1{background:transparent;color:var(--text);}
 
 .engineering-grid{
   display:grid;
@@ -479,9 +499,7 @@ body.main-active .main-site{display:block;}
   background:linear-gradient(135deg, rgba(2,52,62,0.6) 0%, rgba(1,27,33,0.6) 100%);
 }
 
-.engineering-card:hover::before {
-  opacity: 1;
-}
+.engineering-card:hover::before { opacity: 1; }
 
 .engineering-card-icon{
   font-size:4vw;
@@ -493,21 +511,67 @@ body.main-active .main-site{display:block;}
   justify-content:center;
 }
 
-.engineering-card h3{
-  font-size: clamp(18px, 1.8vw, 28px);
-  margin-bottom:1.5vh;
-  font-weight:700;
+.engineering-card h3{font-size: clamp(18px, 1.8vw, 28px);margin-bottom:1.5vh;font-weight:700;}
+.engineering-card p{font-size: clamp(14px, 1.3vw, 18px);line-height:1.6;color:var(--text-subtle);}
+
+/* Impact Section */
+#impact {
+  background: transparent;
+  color: var(--text);
 }
 
-.engineering-card p{
-  font-size: clamp(14px, 1.3vw, 18px);
-  line-height:1.6;
-  color:#ccc;
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 3vw;
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-#where{
+.stat-card {
+  background: linear-gradient(135deg, rgba(2,52,62,0.4) 0%, rgba(1,27,33,0.4) 100%);
+  border: 1px solid rgba(110,231,183,0.2);
+  border-radius: 16px;
+  padding: 2.5vw;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.stat-card:hover {
+  border-color: rgba(110,231,183,0.5);
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(110,231,183,0.15);
+}
+
+.stat-number {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  color: var(--accent);
+  display: block;
+  line-height: 1;
+  margin-bottom: 1vh;
+}
+
+.stat-label {
+  font-size: clamp(14px, 1.2vw, 18px);
+  color: var(--text-subtle);
+  font-weight: 600;
+}
+
+.stat-context {
+  font-size: clamp(12px, 1vw, 14px);
+  color: var(--text-muted);
+  margin-top: 0.5vh;
+}
+
+#where {
   position:relative;
   height:auto;
+  min-height: 100vh;
 }
 
 .where-wrapper{
@@ -515,20 +579,6 @@ body.main-active .main-site{display:block;}
   display:flex;
   align-items:center;
   justify-content:center;
-}
-
-.where-circle{
-  width:400px;
-  height:400px;
-  border-radius:50%;
-  background:linear-gradient(135deg, #02343F 0%, #011b21 100%);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 30px 60px rgba(0,0,0,0.5);
-  position:relative;
-  display:none;
 }
 
 .where-content{
@@ -569,9 +619,7 @@ body.main-active .main-site{display:block;}
   box-shadow: 0 16px 48px rgba(110,231,183,0.15);
 }
 
-.where-content:hover::before {
-  opacity: 1;
-}
+.where-content:hover::before { opacity: 1; }
 
 .where-content img{
   width:80px;
@@ -584,19 +632,61 @@ body.main-active .main-site{display:block;}
   font-size: clamp(18px, 1.5vw, 24px);
   margin-bottom:1vh;
   font-weight: 700;
-  color: #F0EDCC;
+  color: var(--text);
 }
 
 .where-content p{
   font-size: clamp(14px, 1.1vw, 18px);
   line-height: 1.6;
-  color:#b0b0b0;
+  color:var(--text-subtle);
 }
 
+/* Interactive Comparison */
 .compare-section{
   background:transparent;
-  color:#F0EDCC;
+  color:var(--text);
 }
+
+.compare-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.compare-tab {
+  padding: 0.8rem 1.5rem;
+  background: rgba(2,52,62,0.4);
+  border: 1px solid rgba(110,231,183,0.2);
+  border-radius: 30px;
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: clamp(14px, 1.2vw, 16px);
+}
+
+.compare-tab:hover, .compare-tab.active {
+  background: var(--accent);
+  color: var(--bg-dark);
+  border-color: var(--accent);
+}
+
+.compare-content {
+  display: none;
+}
+
+.compare-content.active {
+  display: block;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .compare-table{
   width:90%;
   max-width:1200px;
@@ -606,113 +696,32 @@ body.main-active .main-site{display:block;}
   overflow:hidden;
   box-shadow:0 20px 48px rgba(110,231,183,0.1), 0 4px 12px rgba(0,0,0,0.3);
 }
+
 .compare-table th{
-  background:#02343F;
+  background:var(--bg-dark);
   padding:2vh 2vw;
   font-size: clamp(16px, 1.8vw, 24px);
   font-weight:900;
   text-align:left;
-  border-bottom:2px solid #F0EDCC;
+  border-bottom:2px solid var(--text);
 }
-.compare-table th:first-child{
-  border-radius:1vw 0 0 0;
-}
-.compare-table th:last-child{
-  border-radius:0 1vw 0 0;
-}
+
+.compare-table th:first-child{border-radius:1vw 0 0 0;}
+.compare-table th:last-child{border-radius:0 1vw 0 0;}
+
 .compare-table td{
   padding:1.5vh 2vw;
   font-size: clamp(14px, 1.4vw, 20px);
   border-bottom:1px solid rgba(240,237,204,0.1);
 }
-.compare-table tr:last-child td{
-  border-bottom:none;
-}
-.compare-table tr:nth-child(even){
-  background:rgba(2,52,63,0.1);
-}
-.compare-table tr:hover{
-  background:rgba(2,52,63,0.3);
-  transition: background 0.2s cubic-bezier(0.23, 1, 0.320, 1);
-}
 
-.compare-table tr:hover td {
-  color: #F0EDCC;
-}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table tr:nth-child(even){background:rgba(2,52,63,0.1);}
+.compare-table tr:hover{background:rgba(2,52,63,0.3);transition: background 0.2s cubic-bezier(0.23, 1, 0.320, 1);}
+.compare-table tr:hover td {color: var(--text);}
+.compare-table td:nth-child(3){font-weight:700;color:var(--accent);}
 
-.compare-table td:nth-child(3){
-  font-weight:700;
-  color:#6ee7b7;
-}
-
-.cycle-container{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:2vw;
-  flex-wrap:wrap;
-  width:90%;
-  max-width:900px;
-  margin:0 auto;
-}
-
-.cycle-step{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:1vh;
-  opacity:0;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-}
-
-.cycle-icon{
-  font-size:5vw;
-  width:100px;
-  height:100px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(2,52,63,0.3);
-  border-radius:50%;
-  border:2px solid rgba(110,231,183,0.3);
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-  box-shadow: 0 4px 16px rgba(110,231,183,0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-.cycle-icon::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(110,231,183,0.2) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-}
-
-.cycle-step:hover .cycle-icon {
-  border-color: rgba(110,231,183,0.8);
-  background:rgba(2,52,63,0.5);
-  box-shadow: 0 8px 24px rgba(110,231,183,0.25);
-  transform: scale(1.1);
-}
-
-.cycle-step:hover .cycle-icon::after {
-  opacity: 1;
-}
-
-.cycle-label{
-  font-size:1.8vw;
-  font-weight:700;
-  color:#F0EDCC;
-}
-
-.cycle-arrow{
-  font-size:3vw;
-  color:#6ee7b7;
-  margin:0 0.5vw;
-}
+.compare-icon { font-size: 1.2em; margin-left: 0.5em; }
 
 .flash-text{
   position:fixed;
@@ -724,12 +733,59 @@ body.main-active .main-site{display:block;}
   text-align:center;
   z-index:2500;
   opacity:0;
-  color:#F0EDCC;
+  color:var(--text);
   pointer-events:none;
   white-space:nowrap;
 }
 
-.fade-layer{position:fixed;inset:0;background:#02343F;opacity:0;pointer-events:none;z-index:2000;}
+.fade-layer{position:fixed;inset:0;background:var(--bg-dark);opacity:0;pointer-events:none;z-index:2000;}
+
+/* Sources section */
+.sources {
+  margin-top: 4vh;
+  padding: 2vh 2vw;
+  background: rgba(2,52,62,0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(110,231,183,0.1);
+  max-width: 800px;
+}
+
+.sources h4 {
+  font-size: clamp(14px, 1.2vw, 18px);
+  margin-bottom: 1vh;
+  color: var(--accent);
+}
+
+.sources ul {
+  list-style: none;
+  text-align: left;
+  font-size: clamp(12px, 1vw, 14px);
+  color: var(--text-subtle);
+}
+
+.sources li {
+  margin-bottom: 0.5vh;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.sources li::before {
+  content: "•";
+  color: var(--accent);
+  position: absolute;
+  left: 0;
+}
+
+.sources a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.sources a:hover {
+  border-bottom-color: var(--accent);
+}
 
 footer {
   background: linear-gradient(135deg, rgba(2,52,62,0.6) 0%, rgba(1,27,33,0.6) 100%);
@@ -751,27 +807,9 @@ footer::before {
   background: linear-gradient(90deg, transparent 0%, rgba(110,231,183,0.5) 50%, transparent 100%);
 }
 
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-.footer-content p {
-  margin: 0.5rem 0;
-  color: #d0d0d0;
-  font-size: clamp(14px, 1.2vw, 18px);
-  line-height: 1.7;
-  letter-spacing: 0.2px;
-}
-
-.footer-content p:first-child {
-  font-size: clamp(16px, 1.4vw, 20px);
-  font-weight: 700;
-  color: #F0EDCC;
-  margin-bottom: 1rem;
-}
+.footer-content { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+.footer-content p { margin: 0.5rem 0; color: var(--text-muted); font-size: clamp(14px, 1.2vw, 18px); line-height: 1.7; letter-spacing: 0.2px; }
+.footer-content p:first-child { font-size: clamp(16px, 1.4vw, 20px); font-weight: 700; color: var(--text); margin-bottom: 1rem; }
 
 @media(max-width:1000px){
  nav ul{font-size:3.5vw;}
@@ -780,231 +818,295 @@ footer::before {
  .intro img{width:40vw;}
  .cards-container{flex-direction:column;align-items:center;}
  .card{max-width:90vw;}
- .where-circle{width:300px;height:300px;}
  .compare-table th,.compare-table td{font-size:2.5vw;}
  .engineering-grid{gap:2vw;}
  .engineering-card-icon{font-size:3vw;}
  .engineering-card h3{font-size:2vw;}
  .engineering-card p{font-size:1.5vw;}
- .cycle-icon{font-size:4vw;width:80px;height:80px;}
- .cycle-label{font-size:2vw;}
+ .cycle-diagram { height: 300px; }
+ .cycle-node { width: 60px; height: 60px; font-size: 1.5rem; }
 }
 
 @media(max-width:768px){
   .hero h1 { font-size:6vw; }
   .hero p { font-size:3.5vw; }
   .intro img { width:70vw; margin-bottom:1vh; }
-  .snap-card { padding:6vh 5vw; }
-  .where-circle{width:250px;height:250px;}
-  .where-content h2{font-size:5vw;}
-  .where-content p{font-size:3vw;}
-  .engineering-grid{grid-template-columns:1fr;}
-  .engineering-card-icon{font-size:2.5vw;}
-  .engineering-card h3{font-size:1.5vw;}
-  .engineering-card p{font-size:1.2vw;}
-  .cycle-container{gap:1vw;}
-  .cycle-icon{font-size:3vw;width:70px;height:70px;}
-  .cycle-label{font-size:1.5vw;}
-  .cycle-arrow{font-size:2vw;}
+  .snap-card { padding: calc(6vh + var(--banner-height)) 5vw 6vh 5vw; }
   .compare-table th,.compare-table td{font-size:1.2vw;padding:1vh 1vw;}
+  .cycle-diagram { height: 250px; max-width: 90vw; }
+  .cycle-node { width: 50px; height: 50px; font-size: 1.2rem; }
+  .cycle-label-diagram { font-size: 11px; padding: 2px 8px; }
+  .stats-grid { grid-template-columns: 1fr; gap: 4vw; }
+  .stat-card { padding: 5vw; }
+  .compare-tabs { flex-direction: column; align-items: center; }
+  .compare-tab { width: 80%; text-align: center; }
 }
 
 @media(max-width:900px) and (min-width:769px){
   .hero h1 { font-size:5vw; }
   .hero p { font-size:3vw; }
   .intro img { width:50vw; }
-  .snap-card { padding:8vh 5vw; }
+  .snap-card { padding: calc(8vh + var(--banner-height)) 5vw 8vh 5vw; }
 }
 </style>
+<base target="_blank">
 </head>
 <body>
 
-<a href="#main-content" style="position:absolute;top:-40px;left:0;background:#6ee7b7;color:#02343F;padding:8px 16px;z-index:10000;font-weight:700;border-radius:0 0 4px 0;">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
-<div class="top-banner">🍌 BIICC 2026!!! CO₂ Refrigerant Air Conditioner: Kong Hau Yi & Shui Wen Qi 🍌</div>
+<div class="progress-bar" id="progressBar" role="progressbar" aria-label="Reading progress"></div>
+
+<div class="top-banner" role="banner">🍌 BIICC 2026!!! CO₂ Refrigerant Air Conditioner: Kong Hau Yi & Shui Wen Qi 🍌</div>
+
+<!-- Section Navigation Dots - HIDDEN IN HERO, VISIBLE AFTER -->
+<div class="section-dots" role="navigation" aria-label="Section navigation">
+  <div class="dot active" data-section="why" data-label="Why?" role="button" tabindex="0" aria-label="Go to Why section"></div>
+  <div class="dot" data-section="how" data-label="How?" role="button" tabindex="0" aria-label="Go to How section"></div>
+  <div class="dot" data-section="phase1" data-label="Challenges" role="button" tabindex="0" aria-label="Go to Challenges section"></div>
+  <div class="dot" data-section="impact" data-label="Impact" role="button" tabindex="0" aria-label="Go to Impact section"></div>
+  <div class="dot" data-section="why-now" data-label="Why Now?" role="button" tabindex="0" aria-label="Go to Why Now section"></div>
+  <div class="dot" data-section="where" data-label="Where?" role="button" tabindex="0" aria-label="Go to Where section"></div>
+  <div class="dot" data-section="compare" data-label="Compare" role="button" tabindex="0" aria-label="Go to Compare section"></div>
+</div>
 
 <div class="fade-layer" id="fade"></div>
 <div class="flash-text" id="flash2">BIICC 2026<br>Kong Hau Yi & Shui Wen Qi</div>
 
-<nav>
+<nav role="navigation" aria-label="Main navigation">
 <ul>
-<li onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">Why?</li>
-<li onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How?</li>
-<li onclick="document.getElementById('phase1').scrollIntoView({behavior:'smooth'})">Challenges</li>
-<li onclick="document.getElementById('why-now').scrollIntoView({behavior:'smooth'})">Why Now?</li>
-<li onclick="document.getElementById('where').scrollIntoView({behavior:'smooth'})">Where?</li>
-<li onclick="document.getElementById('compare').scrollIntoView({behavior:'smooth'})">Compare</li>
+<li onclick="scrollToSection('why')" tabindex="0" role="button">Why?</li>
+<li onclick="scrollToSection('how')" tabindex="0" role="button">How?</li>
+<li onclick="scrollToSection('phase1')" tabindex="0" role="button">Challenges</li>
+<li onclick="scrollToSection('impact')" tabindex="0" role="button">Impact</li>
+<li onclick="scrollToSection('why-now')" tabindex="0" role="button">Why Now?</li>
+<li onclick="scrollToSection('where')" tabindex="0" role="button">Where?</li>
+<li onclick="scrollToSection('compare')" tabindex="0" role="button">Compare</li>
 </ul>
 </nav>
 
-<section class="hero" id="hero">
+<section class="hero" id="hero" aria-label="Hero section">
+<canvas id="particle-canvas" class="particle-system" aria-hidden="true"></canvas>
+<div class="hero-content">
 <h1>CO₂ Refrigerant Air Conditioner</h1>
 <p>GWP1: The New Standard</p>
-<button class="portal-btn" id="enter">❄</button>
+<button class="portal-btn" id="enter" aria-label="Enter presentation">❄</button>
+</div>
 </section>
 
 <div class="main-site" id="mainSite">
 
-<section id="why" class="snap-card">
-<h2 style="margin-bottom:5vh;font-size:3.5vw;">Why CO₂ Refrigerant?</h2>
+<section id="why" class="snap-card" aria-labelledby="why-heading">
+<h2 id="why-heading" style="margin-bottom:5vh;font-size:3.5vw;">Why CO₂ Refrigerant?</h2>
 <div class="cards-container">
 <div class="card">
-  <div class="card-icon">🌍</div>
+  <div class="card-icon" aria-hidden="true">🌍</div>
   <h2 class="card-title" data-emoji="🌍">Protect Nature</h2>
-  <p>CO₂ (R744) has a Global Warming Potential (GWP) of 1, compared to up to 2,000 for common refrigerants.</p>
+  <p class="card-info">CO₂ (R744) has a Global Warming Potential (GWP) of 1, compared to up to 2,000 for common refrigerants.</p>
 </div>
 
 <div class="card">
-  <div class="card-icon">⚡</div>
+  <div class="card-icon" aria-hidden="true">⚡</div>
   <h2 class="card-title" data-emoji="⚡">Optimized for Tropical Conditions</h2>
-  <p>Optimized for tropical climates like Malaysia, maintaining efficiency even under extreme heat.</p>
+  <p class="card-info">Optimized for tropical climates like Malaysia, maintaining efficiency even under extreme heat.</p>
 </div>
 
 <div class="card">
-  <div class="card-icon">🛡️</div>
+  <div class="card-icon" aria-hidden="true">🛡️</div>
   <h2 class="card-title" data-emoji="🛡️">Safe Refrigerant</h2>
-  <p>CO₂ is non-toxic and non-flammable, making it a safer alternative to traditional refrigerants.</p>
+  <p class="card-info">CO₂ is non-toxic and non-flammable, making it a safer alternative to traditional refrigerants.</p>
 </div>
 </div>
 </section>
 
-<section id="how" class="snap-card">
+<section id="how" class="snap-card" aria-labelledby="how-heading">
 <div class="section-text">
-<h2>How it Works</h2>
+<h2 id="how-heading">How it Works</h2>
 <p id="howText"></p>
 </div>
-</section>
+<div class="cycle-diagram" id="cycleDiagram" role="img" aria-label="Refrigeration cycle diagram showing compression, cooling, expansion, and heat absorption">
+  <svg class="cycle-svg" viewBox="0 0 600 350">
+    <path class="cycle-path" d="M 300 80 Q 480 80 480 175 Q 480 270 300 270 Q 120 270 120 175 Q 120 80 300 80" />
+    <path class="cycle-path-active" id="cyclePathActive" d="M 300 80 Q 480 80 480 175 Q 480 270 300 270 Q 120 270 120 175 Q 120 80 300 80" />
+  </svg>
+  <div class="cycle-node" style="top: 45px; left: 50%; transform: translateX(-50%);" aria-hidden="true">🔧</div>
+  <div class="cycle-label-diagram" style="top: 10px; left: 50%; transform: translateX(-50%);">Compress</div>
 
-<section id="how-visual" class="snap-card">
-<h2 style="margin-bottom:5vh;font-size:3.5vw;">The Cycle</h2>
-<div class="cycle-container">
-<div class="cycle-step">
-<div class="cycle-icon">🔧</div>
-<h3 class="cycle-label" data-emoji="🔧">Compress</h3>
-</div>
-<div class="cycle-arrow">→</div>
-<div class="cycle-step">
-<div class="cycle-icon">❄️</div>
-<h3 class="cycle-label" data-emoji="❄️">Cool</h3>
-</div>
-<div class="cycle-arrow">→</div>
-<div class="cycle-step">
-<div class="cycle-icon">💨</div>
-<h3 class="cycle-label" data-emoji="💨">Expand</h3>
-</div>
-<div class="cycle-arrow">→</div>
-<div class="cycle-step">
-<div class="cycle-icon">🌡️</div>
-<h3 class="cycle-label" data-emoji="🌡️">Absorb</h3>
-</div>
+  <div class="cycle-node" style="top: 50%; right: 25px; transform: translateY(-50%);" aria-hidden="true">❄️</div>
+  <div class="cycle-label-diagram" style="top: 50%; right: -10px; transform: translateY(-50%);">Cool</div>
+
+  <div class="cycle-node" style="bottom: 45px; left: 50%; transform: translateX(-50%);" aria-hidden="true">💨</div>
+  <div class="cycle-label-diagram" style="bottom: 10px; left: 50%; transform: translateX(-50%);">Expand</div>
+
+  <div class="cycle-node" style="top: 50%; left: 25px; transform: translateY(-50%);" aria-hidden="true">🌡️</div>
+  <div class="cycle-label-diagram" style="top: 50%; left: -10px; transform: translateY(-50%);">Absorb</div>
 </div>
 </section>
 
-<section id="phase1" class="snap-card">
-<h2 style="margin-bottom:5vh;font-size:3.5vw;">Engineering Challenges</h2>
+<section id="phase1" class="snap-card" aria-labelledby="challenges-heading">
+<h2 id="challenges-heading" style="margin-bottom:5vh;font-size:3.5vw;">Engineering Challenges</h2>
 <div class="engineering-grid">
 <div class="engineering-card">
-<div class="engineering-card-icon">⚙️</div>
-<h2 class="card-title" data-emoji="⚙️">High Pressure</h2>
+<div class="engineering-card-icon" aria-hidden="true">⚙️</div>
+<h3 class="card-title" data-emoji="⚙️">High Pressure</h3>
 <p>Operates at up to 5× the pressure of conventional systems, requiring reinforced components.</p>
 </div>
 <div class="engineering-card">
-<div class="engineering-card-icon">📐</div>
-<h2 class="card-title" data-emoji="📐">Complex Design</h2>
+<div class="engineering-card-icon" aria-hidden="true">📐</div>
+<h3 class="card-title" data-emoji="📐">Complex Design</h3>
 <p>Requires careful engineering and precise thermal management for optimal performance.</p>
 </div>
 <div class="engineering-card">
-<div class="engineering-card-icon">💰</div>
-<h2 class="card-title" data-emoji="💰">Higher Cost</h2>
+<div class="engineering-card-icon" aria-hidden="true">💰</div>
+<h3 class="card-title" data-emoji="💰">Higher Cost</h3>
 <p>Slightly higher upfront cost, but long-term environmental savings are substantial.</p>
 </div>
 </div>
 </section>
 
-<section id="why-now" class="snap-card">
-<h2 style="margin-bottom:5vh;font-size:3.5vw;">Why Now?</h2>
+<!-- Impact Section with Animated Stats -->
+<section id="impact" class="snap-card" aria-labelledby="impact-heading">
+<h2 id="impact-heading" style="margin-bottom:5vh;font-size:3.5vw;">Environmental Impact</h2>
+<div class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-number" data-target="99.9">0</span>
+    <span class="stat-label">% GWP Reduction</span>
+    <p class="stat-context">Compared to R-134a refrigerant</p>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number" data-target="0">0</span>
+    <span class="stat-label">Ozone Depletion</span>
+    <p class="stat-context">Zero ODP (Ozone Depletion Potential)</p>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number" data-target="50">0</span>
+    <span class="stat-label">Year Lifespan</span>
+    <p class="stat-context">Sustainable long-term solution</p>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number" data-target="2050">0</span>
+    <span class="stat-label">Net Zero Target</span>
+    <p class="stat-context">Aligned with global climate goals</p>
+  </div>
+</div>
+<div class="sources">
+  <h4>Sources & References</h4>
+  <ul>
+    <li>IPCC Sixth Assessment Report (2021) - Global Warming Potential values</li>
+    <li>UNEP OzonAction - Refrigerant transition guidelines</li>
+    <li>ASHRAE Handbook - HVAC Systems and Equipment (2020)</li>
+    <li><a href="https://www.iea.org/reports/the-future-of-cooling" target="_blank" rel="noopener noreferrer">IEA Future of Cooling Report 2018</a></li>
+  </ul>
+</div>
+</section>
+
+<section id="why-now" class="snap-card" aria-labelledby="why-now-heading">
+<h2 id="why-now-heading" style="margin-bottom:5vh;font-size:3.5vw;">Why Now?</h2>
 <div class="cards-container">
 <div class="card">
-  <div class="card-icon">🌡️</div>
+  <div class="card-icon" aria-hidden="true">🌡️</div>
   <h2 class="card-title" data-emoji="🌡️">Global Cooling Demand Rising</h2>
-  <p>Cooling demand is rapidly increasing due to urbanization and rising temperatures worldwide.</p>
+  <p class="card-info">Cooling demand is rapidly increasing due to urbanization and rising temperatures worldwide.</p>
 </div>
 
 <div class="card">
-  <div class="card-icon">🔥</div>
+  <div class="card-icon" aria-hidden="true">🔥</div>
   <h2 class="card-title" data-emoji="🔥">Heat Waves Increasing</h2>
-  <p>Extreme heat events are becoming more frequent, increasing the need for sustainable cooling solutions.</p>
+  <p class="card-info">Extreme heat events are becoming more frequent, increasing the need for sustainable cooling solutions.</p>
 </div>
 </div>
 </section>
 
-<section id="where" class="snap-card">
-  <h2 style="margin-bottom:5vh;font-size:3.5vw;">Where?</h2>
+<section id="where" class="snap-card" aria-labelledby="where-heading">
+  <h2 id="where-heading" style="margin-bottom:5vh;font-size:3.5vw;">Where?</h2>
   <div class="cards-container">
     <div class="where-content">
-      <div class="card-icon">🏢</div>
+      <div class="card-icon" aria-hidden="true">🏢</div>
       <h2 class="card-title" data-emoji="🏢">High-rise Buildings</h2>
       <p>Efficient centralized cooling for dense urban environments.</p>
     </div>
 
     <div class="where-content" data-index="1">
-      <div class="card-icon">🖥️</div>
+      <div class="card-icon" aria-hidden="true">🖥️</div>
       <h2 class="card-title" data-emoji="🖥️">Data Centers</h2>
       <p>Reliable high-performance cooling for energy-intensive computing infrastructure.</p>
     </div>
 
     <div class="where-content" data-index="2">
-      <div class="card-icon">✈️</div>
+      <div class="card-icon" aria-hidden="true">✈️</div>
       <h2 class="card-title" data-emoji="✈️">Aircraft Ground Cooling</h2>
       <p>Sustainable cooling systems for aircraft during ground operations.</p>
     </div>
   </div>
 </section>
 
-<section id="compare" class="snap-card compare-section">
-<h2 style="margin-bottom:5vh;font-size:3.5vw;">CO₂ vs Conventional Systems</h2>
+<section id="compare" class="snap-card compare-section" aria-labelledby="compare-heading">
+<h2 id="compare-heading" style="margin-bottom:5vh;font-size:3.5vw;">CO₂ vs Conventional Systems</h2>
+
+<div class="compare-tabs" role="tablist" aria-label="Comparison views">
+  <button class="compare-tab active" onclick="switchCompare('table')" role="tab" aria-selected="true" aria-controls="table-view" id="tab-table">Table View</button>
+  <button class="compare-tab" onclick="switchCompare('cards')" role="tab" aria-selected="false" aria-controls="cards-view" id="tab-cards">Card View</button>
+</div>
+
+<div id="table-view" class="compare-content active" role="tabpanel" aria-labelledby="tab-table">
 <table class="compare-table">
 <thead>
-<tr><th>Category</th><th>Conventional Refrigerants</th><th>CO₂ (R744)</th></tr>
+<tr><th scope="col">Category</th><th scope="col">Conventional Refrigerants</th><th scope="col">CO₂ (R744)</th></tr>
 </thead>
 <tbody>
 <tr>
 <td>Global Warming Potential</td>
-<td>1300–2000+ <span class="compare-icon">⚠️</span></td>
-<td>1 <span class="compare-icon">✅</span></td>
+<td>1300–2000+ <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>1 <span class="compare-icon" aria-label="Good">✅</span></td>
 </tr>
 <tr>
 <td>Environmental Impact</td>
-<td>High if leaked <span class="compare-icon">⚠️</span></td>
-<td>Minimal <span class="compare-icon">✅</span></td>
+<td>High if leaked <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>Minimal <span class="compare-icon" aria-label="Good">✅</span></td>
 </tr>
 <tr>
 <td>Flammability</td>
-<td>Can be flammable <span class="compare-icon">⚠️</span></td>
-<td>Non-flammable <span class="compare-icon">✅</span></td>
+<td>Can be flammable <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>Non-flammable <span class="compare-icon" aria-label="Good">✅</span></td>
 </tr>
 <tr>
 <td>Toxicity</td>
-<td>Mild toxicity <span class="compare-icon">⚠️</span></td>
-<td>Non-toxic <span class="compare-icon">✅</span></td>
+<td>Mild toxicity <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>Non-toxic <span class="compare-icon" aria-label="Good">✅</span></td>
 </tr>
 <tr>
 <td>Operating Pressure</td>
-<td>Moderate <span class="compare-icon">✅</span></td>
-<td>High (5×) <span class="compare-icon">⚠️</span></td>
+<td>Moderate <span class="compare-icon" aria-label="Good">✅</span></td>
+<td>High (5×) <span class="compare-icon" aria-label="Warning">⚠️</span></td>
 </tr>
 <tr>
 <td>Climate Suitability</td>
-<td>Moderate <span class="compare-icon">⚠️</span></td>
-<td>Excellent <span class="compare-icon">✅</span></td>
+<td>Moderate <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>Excellent <span class="compare-icon" aria-label="Good">✅</span></td>
 </tr>
 <tr>
 <td>Regulatory Future</td>
-<td>Being phased down <span class="compare-icon">⚠️</span></td>
-<td>Future-proof <span class="compare-icon">✅</span></td>
+<td>Being phased down <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>Future-proof <span class="compare-icon" aria-label="Good">✅</span></td>
 </tr>
 </tbody>
 </table>
+</div>
+
+<div id="cards-view" class="compare-content" role="tabpanel" aria-labelledby="tab-cards" hidden>
+  <div class="cards-container" style="margin-top: 4vh;">
+    <div class="card" style="border-color: rgba(255,100,100,0.3);">
+      <div class="card-icon" aria-hidden="true">🏭</div>
+      <h3 class="card-title">Conventional</h3>
+      <p class="card-info">High GWP • Moderate efficiency • Being phased out • Safety concerns</p>
+    </div>
+    <div class="card" style="border-color: var(--accent);">
+      <div class="card-icon" aria-hidden="true">🌿</div>
+      <h3 class="card-title">CO₂ (R744)</h3>
+      <p class="card-info">GWP of 1 • High efficiency • Future-proof • Non-toxic & safe</p>
+    </div>
+  </div>
+</div>
 </section>
 
 </div>
@@ -1018,6 +1120,192 @@ footer::before {
 </footer>
 
 <script>
+// Particle System - Reduced particles & opacity, no glow
+class ParticleSystem {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.particles = [];
+    this.resize();
+    this.init();
+    this.animate();
+    window.addEventListener('resize', () => this.resize());
+    
+    // Respect reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+  }
+
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  }
+
+  init() {
+    const particleCount = window.innerWidth < 768 ? 15 : 30;
+    for (let i = 0; i < particleCount; i++) {
+      this.particles.push({
+        x: Math.random() * this.canvas.width,
+        y: Math.random() * this.canvas.height,
+        size: Math.random() * 4 + 2,
+        speedX: (Math.random() - 0.5) * 0.3,
+        speedY: (Math.random() - 0.5) * 0.3,
+        opacity: (Math.random() * 0.2 + 0.1) * 0.5,
+        pulse: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  animate() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.particles.forEach(p => {
+      p.x += p.speedX;
+      p.y += p.speedY;
+      p.pulse += 0.02;
+
+      if (p.x < -10) p.x = this.canvas.width + 10;
+      if (p.x > this.canvas.width + 10) p.x = -10;
+      if (p.y < -10) p.y = this.canvas.height + 10;
+      if (p.y > this.canvas.height + 10) p.y = -10;
+
+      const pulseOpacity = (p.opacity + Math.sin(p.pulse) * 0.05) * 0.5;
+
+      this.ctx.beginPath();
+      this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      this.ctx.fillStyle = `rgba(110, 231, 183, ${Math.max(0.05, pulseOpacity)})`;
+      this.ctx.fill();
+    });
+
+    requestAnimationFrame(() => this.animate());
+  }
+}
+
+const particleCanvas = document.getElementById('particle-canvas');
+if (particleCanvas) new ParticleSystem(particleCanvas);
+
+// Progress Bar
+function updateProgressBar() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  const progressBar = document.getElementById('progressBar');
+  progressBar.style.width = progress + '%';
+  progressBar.setAttribute('aria-valuenow', Math.round(progress));
+}
+
+window.addEventListener('scroll', updateProgressBar);
+
+// Section Dots Navigation
+const sections = ['why', 'how', 'phase1', 'impact', 'why-now', 'where', 'compare'];
+const dots = document.querySelectorAll('.dot');
+
+function updateActiveDot() {
+  const scrollPos = window.scrollY + window.innerHeight / 2;
+  
+  sections.forEach((section, index) => {
+    const el = document.getElementById(section);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const bottom = top + rect.height;
+      
+      if (scrollPos >= top && scrollPos <= bottom) {
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[index]) dots[index].classList.add('active');
+      }
+    }
+  });
+}
+
+dots.forEach((dot, index) => {
+  dot.addEventListener('click', () => {
+    scrollToSection(sections[index]);
+  });
+  
+  dot.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      scrollToSection(sections[index]);
+    }
+  });
+});
+
+window.addEventListener('scroll', updateActiveDot);
+
+// Smooth scroll function
+function scrollToSection(id) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+    history.pushState(null, null, `#${id}`);
+  }
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (state !== 'main') return;
+
+  const current = sections.findIndex(id => {
+    const el = document.getElementById(id);
+    if (!el) return false;
+    const rect = el.getBoundingClientRect();
+    return rect.top <= 100 && rect.bottom > 100;
+  });
+
+  if (e.key === 'ArrowDown' && current < sections.length - 1) {
+    e.preventDefault();
+    scrollToSection(sections[current + 1]);
+  } else if (e.key === 'ArrowUp' && current > 0) {
+    e.preventDefault();
+    scrollToSection(sections[current - 1]);
+  }
+});
+
+// Animated Counter Function
+function animateCounter(element, target, duration = 2000) {
+  let start = 0;
+  const increment = target / (duration / 16);
+  
+  function update() {
+    start += increment;
+    if (start < target) {
+      element.textContent = Math.floor(start);
+      requestAnimationFrame(update);
+    } else {
+      element.textContent = target;
+    }
+  }
+  
+  update();
+}
+
+// Comparison Tab Switcher
+function switchCompare(view) {
+  const tabs = document.querySelectorAll('.compare-tab');
+  const contents = document.querySelectorAll('.compare-content');
+  
+  tabs.forEach(tab => {
+    tab.classList.remove('active');
+    tab.setAttribute('aria-selected', 'false');
+  });
+  
+  contents.forEach(content => {
+    content.classList.remove('active');
+    content.hidden = true;
+  });
+  
+  event.target.classList.add('active');
+  event.target.setAttribute('aria-selected', 'true');
+  
+  const selectedContent = document.getElementById(`${view}-view`);
+  selectedContent.classList.add('active');
+  selectedContent.hidden = false;
+}
+
 gsap.registerPlugin(ScrollTrigger);
 
 const enterBtn=document.getElementById('enter');
@@ -1053,7 +1341,7 @@ function forward(){
   document.body.classList.add('main-active');
   main.style.display='block';
   document.documentElement.style.overflowY='scroll';
-  fade.style.background='#02343F';
+  fade.style.background='var(--bg-dark)';
   initAnimations();
  },1000);
 
@@ -1068,35 +1356,7 @@ function forward(){
  },1600);
 }
 
-function reverse(){
- if(transitioning||state==='hero')return;
- transitioning=true;
- fade.style.transition='opacity 0.5s';
- fade.style.opacity='1';
- fade.style.pointerEvents='auto';
-
- setTimeout(()=>{
-  document.body.classList.remove('main-active');
-  main.style.display='none';
-  hero.style.display='flex';
-  document.documentElement.style.overflowY='hidden';
-  window.scrollTo(0,0);
- },700);
-
- setTimeout(()=>{
-  fade.style.opacity='0';
- },900);
-
- setTimeout(()=>{
-  state='hero';
-  transitioning=false;
-  fade.style.pointerEvents='none';
- },1400);
-}
-
 function initAnimations(){
-
-  // Optimize for mobile: reduce animation density and refresh events
   if (window.innerWidth < 768) {
     ScrollTrigger.config({ autoRefreshEvents: "visibilitychange,DOMContentLoaded,load" });
   }
@@ -1104,13 +1364,7 @@ function initAnimations(){
   ScrollTrigger.getAll().forEach(trigger => trigger.kill());
   gsap.globalTimeline.clear();
 
-  gsap.to('.intro img, .intro h1, .intro p', {
-    opacity: 1,
-    duration: 0.6,
-    ease: 'power2.out',
-    stagger: 0.1
-  });
-
+  // Cards animation
   gsap.to('.card',{
     opacity:1,
     duration:0.5,
@@ -1123,19 +1377,8 @@ function initAnimations(){
     }
   });
 
-  gsap.from("#compare + .snap-card h2", {
-  y: 80,
-  opacity: 0,
-  duration: 1,
-  stagger: 0.2,
-  ease: "power3.out",
-  scrollTrigger: {
-    trigger: "#compare + .snap-card",
-    start: "top 70%"
-  }
-});
-
-  const text = "A CO2 air conditioner uses carbon dioxide as the refrigerant instead of traditional synthetic gases. The CO₂ circulates in a closed high-pressure loop where it is compressed, cooled in a gas cooler, expanded through a valve, and then absorbs indoor heat before repeating the cycle.";
+  // How it works text animation
+  const text = "A CO₂ air conditioner uses carbon dioxide as the refrigerant instead of traditional synthetic gases. The CO₂ circulates in a closed high-pressure loop where it is compressed, cooled in a gas cooler, expanded through a valve, and then absorbs indoor heat before repeating the cycle.";
   const words = text.split(' ');
   const container = document.getElementById('howText');
 
@@ -1165,18 +1408,20 @@ function initAnimations(){
     }
   });
 
-  gsap.to('.cycle-step',{
-    opacity:1,
-    duration:0.5,
-    stagger:0.15,
-    ease:'power2.out',
-    scrollTrigger:{
-      trigger:'#how-visual',
-      start:'top center',
-      toggleActions:'play none none reverse'
+  // Cycle diagram animation
+  gsap.to('#cyclePathActive', {
+    strokeDashoffset: 0,
+    duration: 3,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#how',
+      start: 'top center',
+      end: 'bottom center',
+      scrub: 1
     }
   });
 
+  // Engineering cards
   gsap.to('.engineering-card', {
     opacity: 1,
     duration: 0.6,
@@ -1185,33 +1430,106 @@ function initAnimations(){
     scrollTrigger: {
       trigger: '#phase1',
       start: 'top center',
+      toggleActions:'play none none reverse'
+    }
+  });
+
+  // Stats animation
+  gsap.to('.stat-card', {
+    opacity: 1,
+    y: 0,
+    duration: 0.6,
+    stagger: 0.15,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: '#impact',
+      start: 'top center',
+      toggleActions: 'play none none reverse',
+      onEnter: () => {
+        document.querySelectorAll('.stat-number').forEach(stat => {
+          const target = parseFloat(stat.getAttribute('data-target'));
+          animateCounter(stat, target);
+        });
+      }
+    }
+  });
+
+  // Where cards animation
+  gsap.to('.where-content', {
+    opacity: 1,
+    y: 0,
+    duration: 0.6,
+    stagger: 0.15,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: '#where',
+      start: 'top center',
       toggleActions: 'play none none reverse'
     }
   });
 
-  const whereContents = document.querySelectorAll('.where-content');
-
-  gsap.set(whereContents, { opacity: 1 });
-
-  // account for the fixed top banner so the pin start/end align with viewport
-  const banner = document.querySelector('.top-banner');
-  const bannerHeight = banner ? banner.offsetHeight : 0;
-  const startPos = `top top+=${bannerHeight}`;
-  const endPos = `bottom bottom+=${bannerHeight}`;
-
-  ScrollTrigger.create({
-    trigger: "#where",
-    start: startPos,
-    end: endPos,
-    pin: ".where-wrapper",
-    scrub: true
+  // Compare table animation
+  gsap.from('.compare-table', {
+    y: 50,
+    opacity: 0,
+    duration: 0.8,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: '#compare',
+      start: 'top center',
+      toggleActions: 'play none none reverse'
+    }
   });
 }
 
 enterBtn.addEventListener('click',forward);
+
+let scrollTimeout;
 window.addEventListener('scroll',()=>{
- if(state==='main' && window.scrollY<=0){reverse();}
+  if(state==='main'){
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      if(window.scrollY<=0){reverse();}
+    }, 100);
+  }
 });
+
+function reverse(){
+ if(transitioning||state==='hero')return;
+ transitioning=true;
+ fade.style.transition='opacity 0.5s';
+ fade.style.opacity='1';
+ fade.style.pointerEvents='auto';
+
+ setTimeout(()=>{
+  document.body.classList.remove('main-active');
+  main.style.display='none';
+  hero.style.display='flex';
+  document.documentElement.style.overflowY='hidden';
+  window.scrollTo(0,0);
+ },700);
+
+ setTimeout(()=>{
+  fade.style.opacity='0';
+ },900);
+
+ setTimeout(()=>{
+  state='hero';
+  transitioning=false;
+  fade.style.pointerEvents='none';
+ },1400);
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    gsap.globalTimeline.pause();
+  } else {
+    gsap.globalTimeline.resume();
+  }
+});
+
+// Initialize dots on load
+updateActiveDot();
 </script>
 
 </body>
