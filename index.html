@@ -857,7 +857,7 @@ footer::before {
 
 <div class="progress-bar" id="progressBar" role="progressbar" aria-label="Reading progress"></div>
 
-<div class="top-banner" role="banner">🍌 BIICC 2026!!! CO₂ Refrigerant Air Conditioner: Kong Hau Yi & Shui Wen Qi 🍌</div>
+<div class="top-banner" role="banner">🍌 BIICC 2026!!! CO₂ Refrigerant Air Conditioner: Kong Hau Yi, Shui Wen Qi & Jordan 🍌</div>
 
 <!-- Section Navigation Dots - HIDDEN IN HERO, VISIBLE AFTER -->
 <div class="section-dots" role="navigation" aria-label="Section navigation">
@@ -907,8 +907,8 @@ footer::before {
 
 <div class="card">
   <div class="card-icon" aria-hidden="true">⚡</div>
-  <h2 class="card-title" data-emoji="⚡">Optimized for Tropical Conditions</h2>
-  <p class="card-info">Optimized for tropical climates like Malaysia, maintaining efficiency even under extreme heat.</p>
+  <h2 class="card-title" data-emoji="⚡">Optimized for Heat Recovery and Colder Climates</h2>
+  <p class="card-info">Optimized for Colder Climates, and excellent for Heat Recovery in Industrialization & Commercialization.</p>
 </div>
 
 <div class="card">
@@ -930,16 +930,16 @@ footer::before {
     <path class="cycle-path-active" id="cyclePathActive" d="M 300 80 Q 480 80 480 175 Q 480 270 300 270 Q 120 270 120 175 Q 120 80 300 80" />
   </svg>
   <div class="cycle-node" style="top: 45px; left: 50%; transform: translateX(-50%);" aria-hidden="true">🔧</div>
-  <div class="cycle-label-diagram" style="top: 10px; left: 50%; transform: translateX(-50%);">Compress</div>
+  <div class="cycle-label-diagram" style="top: 5px; left: 50%; transform: translateX(-50%);">Compress</div>
 
   <div class="cycle-node" style="top: 50%; right: 25px; transform: translateY(-50%);" aria-hidden="true">❄️</div>
-  <div class="cycle-label-diagram" style="top: 50%; right: -10px; transform: translateY(-50%);">Cool</div>
+  <div class="cycle-label-diagram" style="top: 50%; right: -50px; transform: translateY(-50%);">Cool</div>
 
   <div class="cycle-node" style="bottom: 45px; left: 50%; transform: translateX(-50%);" aria-hidden="true">💨</div>
-  <div class="cycle-label-diagram" style="bottom: 10px; left: 50%; transform: translateX(-50%);">Expand</div>
+  <div class="cycle-label-diagram" style="bottom: 5px; left: 50%; transform: translateX(-50%);">Expand</div>
 
   <div class="cycle-node" style="top: 50%; left: 25px; transform: translateY(-50%);" aria-hidden="true">🌡️</div>
-  <div class="cycle-label-diagram" style="top: 50%; left: -10px; transform: translateY(-50%);">Absorb</div>
+  <div class="cycle-label-diagram" style="top: 50%; left: -70px; transform: translateY(-50%);">Absorb</div>
 </div>
 </section>
 
@@ -1042,7 +1042,7 @@ footer::before {
 
 <section id="compare" class="snap-card compare-section" aria-labelledby="compare-heading">
 <h2 id="compare-heading" style="margin-bottom:5vh;font-size:3.5vw;">CO₂ vs Conventional Systems</h2>
-
+<!-- Card view removed -->
 <div class="compare-tabs" role="tablist" aria-label="Comparison views">
   <button class="compare-tab active" onclick="switchCompare('table')" role="tab" aria-selected="true" aria-controls="table-view" id="tab-table">Table View</button>
   <button class="compare-tab" onclick="switchCompare('cards')" role="tab" aria-selected="false" aria-controls="cards-view" id="tab-cards">Card View</button>
@@ -1115,7 +1115,7 @@ footer::before {
   <div class="footer-content">
     <p>CO₂ Refrigerant Air Conditioner</p>
     <p>A sustainable cooling solution optimized for tropical climates</p>
-    <p style="margin-top: 1.5rem; font-size: clamp(12px, 1rem, 16px); color: #999;">Kong Hau Yi & Shui Wen Qi | BIICC 2026</p>
+    <p style="margin-top: 1.5rem; font-size: clamp(12px, 1rem, 16px); color: #999;">Kong Hau Yi, Shui Wen Qi & Jordan| BIICC 2026</p>
   </div>
 </footer>
 
@@ -1318,6 +1318,38 @@ let transitioning=false;
 
 document.documentElement.style.overflowY='hidden';
 
+// Store references to animations for cleanup
+let animations = [];
+
+function resetAllElements() {
+  // Reset all animated elements to visible state
+  gsap.set('.card', { opacity: 1, clearProps: 'all' });
+  gsap.set('.section-text', { opacity: 1, clearProps: 'all' });
+  gsap.set('.word', { opacity: 1, clearProps: 'all' });
+  gsap.set('.engineering-card', { opacity: 1, clearProps: 'all' });
+  gsap.set('.stat-card', { opacity: 1, y: 0, clearProps: 'all' });
+  gsap.set('.where-content', { opacity: 1, y: 0, clearProps: 'all' });
+  gsap.set('.compare-table', { opacity: 1, y: 0, clearProps: 'all' });
+  gsap.set('#cyclePathActive', { strokeDashoffset: 1000 });
+  
+  // Reset stat numbers
+  document.querySelectorAll('.stat-number').forEach(stat => {
+    stat.textContent = '0';
+  });
+}
+
+function cleanupAnimations() {
+  // Kill all ScrollTrigger instances
+  ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+  
+  // Kill all GSAP animations
+  animations.forEach(anim => anim.kill());
+  animations = [];
+  
+  // Clear global timeline
+  gsap.globalTimeline.clear();
+}
+
 function forward(){
  if(transitioning||state==='main')return;
  transitioning=true;
@@ -1342,7 +1374,18 @@ function forward(){
   main.style.display='block';
   document.documentElement.style.overflowY='scroll';
   fade.style.background='var(--bg-dark)';
+  
+  // Clean up any existing animations first
+  cleanupAnimations();
+  
+  // Reset elements before initializing new animations
+  resetAllElements();
+  
+  // Initialize animations
   initAnimations();
+  
+  // Refresh ScrollTrigger after DOM is updated
+  ScrollTrigger.refresh();
  },1000);
 
  setTimeout(()=>{
@@ -1361,21 +1404,23 @@ function initAnimations(){
     ScrollTrigger.config({ autoRefreshEvents: "visibilitychange,DOMContentLoaded,load" });
   }
 
-  ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-  gsap.globalTimeline.clear();
-
   // Cards animation
-  gsap.to('.card',{
-    opacity:1,
-    duration:0.5,
-    stagger:0.15,
-    ease:'power2.out',
-    scrollTrigger:{
-      trigger:'#why',
-      start:'top center',
-      toggleActions:'play none none reverse'
+  const cardsAnim = gsap.fromTo('.card', 
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      stagger: 0.15,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '#why',
+        start: 'top center',
+        toggleActions: 'play none none reverse'
+      }
     }
-  });
+  );
+  animations.push(cardsAnim);
 
   // How it works text animation
   const text = "A CO₂ air conditioner uses carbon dioxide as the refrigerant instead of traditional synthetic gases. The CO₂ circulates in a closed high-pressure loop where it is compressed, cooled in a gas cooler, expanded through a valve, and then absorbs indoor heat before repeating the cycle.";
@@ -1384,32 +1429,40 @@ function initAnimations(){
 
   container.innerHTML = words.map(word => `<span class="word">${word}</span> `).join('');
 
-  gsap.to('.section-text', {
-    opacity: 1,
-    duration: 0.6,
-    ease: 'power2.out',
-    scrollTrigger: {
-      trigger: '#how',
-      start: 'top center',
-      toggleActions: 'play none none reverse'
+  const sectionTextAnim = gsap.fromTo('.section-text',
+    { opacity: 0 },
+    {
+      opacity: 1,
+      duration: 0.6,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '#how',
+        start: 'top center',
+        toggleActions: 'play none none reverse'
+      }
     }
-  });
+  );
+  animations.push(sectionTextAnim);
 
-  gsap.to('.word', {
-    opacity: 1,
-    duration: 0.02,
-    stagger: 0.03,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#how',
-      start: 'top center',
-      end: 'bottom center',
-      toggleActions: 'play none none reverse'
+  const wordsAnim = gsap.fromTo('.word',
+    { opacity: 0 },
+    {
+      opacity: 1,
+      duration: 0.02,
+      stagger: 0.03,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#how',
+        start: 'top center',
+        end: 'bottom center',
+        toggleActions: 'play none none reverse'
+      }
     }
-  });
+  );
+  animations.push(wordsAnim);
 
   // Cycle diagram animation
-  gsap.to('#cyclePathActive', {
+  const cycleAnim = gsap.to('#cyclePathActive', {
     strokeDashoffset: 0,
     duration: 3,
     ease: 'none',
@@ -1420,66 +1473,84 @@ function initAnimations(){
       scrub: 1
     }
   });
+  animations.push(cycleAnim);
 
   // Engineering cards
-  gsap.to('.engineering-card', {
-    opacity: 1,
-    duration: 0.6,
-    stagger: 0.2,
-    ease: 'power2.out',
-    scrollTrigger: {
-      trigger: '#phase1',
-      start: 'top center',
-      toggleActions:'play none none reverse'
-    }
-  });
-
-  // Stats animation
-  gsap.to('.stat-card', {
-    opacity: 1,
-    y: 0,
-    duration: 0.6,
-    stagger: 0.15,
-    ease: 'power2.out',
-    scrollTrigger: {
-      trigger: '#impact',
-      start: 'top center',
-      toggleActions: 'play none none reverse',
-      onEnter: () => {
-        document.querySelectorAll('.stat-number').forEach(stat => {
-          const target = parseFloat(stat.getAttribute('data-target'));
-          animateCounter(stat, target);
-        });
+  const engAnim = gsap.fromTo('.engineering-card',
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.2,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '#phase1',
+        start: 'top center',
+        toggleActions: 'play none none reverse'
       }
     }
-  });
+  );
+  animations.push(engAnim);
+
+  // Stats animation
+  const statsAnim = gsap.fromTo('.stat-card',
+    { opacity: 0, y: 20 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.15,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '#impact',
+        start: 'top center',
+        toggleActions: 'play none none reverse',
+        onEnter: () => {
+          document.querySelectorAll('.stat-number').forEach(stat => {
+            const target = parseFloat(stat.getAttribute('data-target'));
+            animateCounter(stat, target);
+          });
+        }
+      }
+    }
+  );
+  animations.push(statsAnim);
 
   // Where cards animation
-  gsap.to('.where-content', {
-    opacity: 1,
-    y: 0,
-    duration: 0.6,
-    stagger: 0.15,
-    ease: 'power2.out',
-    scrollTrigger: {
-      trigger: '#where',
-      start: 'top center',
-      toggleActions: 'play none none reverse'
+  const whereAnim = gsap.fromTo('.where-content',
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.15,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '#where',
+        start: 'top center',
+        toggleActions: 'play none none reverse'
+      }
     }
-  });
+  );
+  animations.push(whereAnim);
 
-  // Compare table animation
-  gsap.from('.compare-table', {
-    y: 50,
-    opacity: 0,
-    duration: 0.8,
-    ease: 'power2.out',
-    scrollTrigger: {
-      trigger: '#compare',
-      start: 'top center',
-      toggleActions: 'play none none reverse'
+  // Compare table animation - FIXED: Use fromTo instead of from
+  const tableAnim = gsap.fromTo('.compare-table',
+    { opacity: 0, y: 50 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '#compare',
+        start: 'top center',
+        toggleActions: 'play none none reverse'
+      }
     }
-  });
+  );
+  animations.push(tableAnim);
 }
 
 enterBtn.addEventListener('click',forward);
@@ -1489,7 +1560,9 @@ window.addEventListener('scroll',()=>{
   if(state==='main'){
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
-      if(window.scrollY<=0){reverse();}
+      if(window.scrollY<=0 && !transitioning){  // Added check for transitioning
+        reverse();
+      }
     }, 100);
   }
 });
@@ -1497,6 +1570,10 @@ window.addEventListener('scroll',()=>{
 function reverse(){
  if(transitioning||state==='hero')return;
  transitioning=true;
+ 
+ // Clean up animations before leaving
+ cleanupAnimations();
+ 
  fade.style.transition='opacity 0.5s';
  fade.style.opacity='1';
  fade.style.pointerEvents='auto';
@@ -1507,6 +1584,9 @@ function reverse(){
   hero.style.display='flex';
   document.documentElement.style.overflowY='hidden';
   window.scrollTo(0,0);
+  
+  // Reset elements for next entry
+  resetAllElements();
  },700);
 
  setTimeout(()=>{
