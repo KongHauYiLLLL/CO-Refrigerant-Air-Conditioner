@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CO₂ Refrigerant Air Conditioner | BIICC 2026</title>
-<meta name="description" content="Sustainable CO₂ refrigerant air conditioning technology optimized for tropical climates. GWP1: The New Standard.">
+<meta name="description" content="Sustainable CO₂ refrigerant air conditioning technology optimized for cooler climates with heat recovery applications. GWP1: The New Standard.">
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;900&display=swap" rel="stylesheet">
 <script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -21,7 +21,7 @@
   --bg-darker:#011b21;
   --text:#F0EDCC;
   --text-muted:#d0d0d0;
-  --text-subtle:#a0a0a0;
+  --text-subtle:#bdbdbd;
 }
 
 /* Reduced motion support */
@@ -178,7 +178,7 @@ p { font-size: clamp(0.9rem, 1.8vw, 1.3rem); }
   #how .section-text p { font-size: clamp(18px,5vw,22px); line-height: 1.6; }
 
   .compare-section { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0; }
-  .compare-table { min-width: 600px; font-size: 14px; width: 100%; }
+  .compare-table { min-width: clamp(320px, 95vw, 1000px); font-size: 14px; width: 100%; }
   .compare-table th { font-size: clamp(16px,4vw,20px); padding: 12px 10px; }
   .compare-table td { font-size: clamp(14px,4vw,18px); padding: 12px 10px; }
 
@@ -331,6 +331,26 @@ body.main-active .main-site{display:block;}
   flex-direction:column;
   text-align:center;
   scroll-snap-align:start;
+}
+
+/* Shared heading styling (replaces inline styles). */
+.snap-section-heading{
+  font-size:3.5vw;
+  margin-bottom:5vh;
+}
+
+.technical-note{
+  width:100%;
+  max-width:900px;
+  margin-top:2.2rem;
+  padding: 1.4rem 1.6rem;
+  border-radius: 16px;
+  background: rgba(2,52,62,0.25);
+  border: 1px solid rgba(110,231,183,0.15);
+  color: var(--text-subtle);
+  text-align:left;
+  line-height:1.7;
+  font-size: clamp(14px, 1.3vw, 18px);
 }
 
 .intro img{width:18vw;margin-bottom:2vh;opacity:0;transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);}
@@ -688,8 +708,8 @@ body.main-active .main-site{display:block;}
 }
 
 .compare-table{
-  width:90%;
-  max-width:1200px;
+  width: clamp(360px, 96vw, 1400px);
+  max-width:1400px;
   border-collapse:collapse;
   background:rgba(17,17,17,0.8);
   border-radius:1vw;
@@ -897,7 +917,7 @@ footer::before {
 <div class="main-site" id="mainSite">
 
 <section id="why" class="snap-card" aria-labelledby="why-heading">
-<h2 id="why-heading" style="margin-bottom:5vh;font-size:3.5vw;">Why CO₂ Refrigerant?</h2>
+<h2 id="why-heading" class="snap-section-heading">Why CO₂ Refrigerant?</h2>
 <div class="cards-container">
 <div class="card">
   <div class="card-icon" aria-hidden="true">🌍</div>
@@ -944,7 +964,7 @@ footer::before {
 </section>
 
 <section id="phase1" class="snap-card" aria-labelledby="challenges-heading">
-<h2 id="challenges-heading" style="margin-bottom:5vh;font-size:3.5vw;">Engineering Challenges</h2>
+<h2 id="challenges-heading" class="snap-section-heading">Engineering Challenges</h2>
 <div class="engineering-grid">
 <div class="engineering-card">
 <div class="engineering-card-icon" aria-hidden="true">⚙️</div>
@@ -962,16 +982,21 @@ footer::before {
 <p>Slightly higher upfront cost, but long-term environmental savings are substantial.</p>
 </div>
 </div>
+
+<p class="technical-note">
+  <strong>Technical note:</strong> CO₂ systems operate transcritically near the critical point at <strong>31.1°C</strong>. Above this threshold, heat rejection/gas-cooling conditions can make efficiency harder to maintain unless the system is designed with heat recovery in mind.
+</p>
+
 </section>
 
 <!-- Impact Section with Animated Stats -->
 <section id="impact" class="snap-card" aria-labelledby="impact-heading">
-<h2 id="impact-heading" style="margin-bottom:5vh;font-size:3.5vw;">Environmental Impact</h2>
+<h2 id="impact-heading" class="snap-section-heading">Environmental Impact</h2>
 <div class="stats-grid">
   <div class="stat-card">
     <span class="stat-number" data-target="99.9">0</span>
-    <span class="stat-label">% GWP Reduction</span>
-    <p class="stat-context">Compared to R-134a refrigerant</p>
+    <span class="stat-label">% GWP Reduction (vs R-134a)</span>
+    <p class="stat-context">Compared to R-134a refrigerant (conventional)</p>
   </div>
   <div class="stat-card">
     <span class="stat-number" data-target="0">0</span>
@@ -979,7 +1004,7 @@ footer::before {
     <p class="stat-context">Zero ODP (Ozone Depletion Potential)</p>
   </div>
   <div class="stat-card">
-    <span class="stat-number" data-target="50">0</span>
+    <span class="stat-number stat-number-fixed">15-25</span>
     <span class="stat-label">Year Lifespan</span>
     <p class="stat-context">Sustainable long-term solution</p>
   </div>
@@ -995,13 +1020,14 @@ footer::before {
     <li>IPCC Sixth Assessment Report (2021) - Global Warming Potential values</li>
     <li>UNEP OzonAction - Refrigerant transition guidelines</li>
     <li>ASHRAE Handbook - HVAC Systems and Equipment (2020)</li>
+    <li>Shecco 2024: CO₂ transcritical systems show efficiency challenges above 31°C critical point</li>
     <li><a href="https://www.iea.org/reports/the-future-of-cooling" target="_blank" rel="noopener noreferrer">IEA Future of Cooling Report 2018</a></li>
   </ul>
 </div>
 </section>
 
 <section id="why-now" class="snap-card" aria-labelledby="why-now-heading">
-<h2 id="why-now-heading" style="margin-bottom:5vh;font-size:3.5vw;">Why Now?</h2>
+<h2 id="why-now-heading" class="snap-section-heading">Why Now?</h2>
 <div class="cards-container">
 <div class="card">
   <div class="card-icon" aria-hidden="true">🌡️</div>
@@ -1018,7 +1044,7 @@ footer::before {
 </section>
 
 <section id="where" class="snap-card" aria-labelledby="where-heading">
-  <h2 id="where-heading" style="margin-bottom:5vh;font-size:3.5vw;">Where?</h2>
+  <h2 id="where-heading" class="snap-section-heading">Where?</h2>
   <div class="cards-container">
     <div class="where-content">
       <div class="card-icon" aria-hidden="true">🏢</div>
@@ -1041,9 +1067,9 @@ footer::before {
 </section>
 
 <section id="compare" class="snap-card compare-section" aria-labelledby="compare-heading">
-<h2 id="compare-heading" style="margin-bottom:5vh;font-size:3.5vw;">CO₂ vs Conventional Systems</h2>
+<h2 id="compare-heading" class="snap-section-heading">CO₂ vs Conventional Systems</h2>
 
-<div id="table-view" class="compare-content active" role="tabpanel" aria-labelledby="tab-table">
+<div id="table-view" class="compare-content active" role="tabpanel">
 <table class="compare-table">
 <thead>
 <tr><th scope="col">Category</th><th scope="col">Conventional Refrigerants</th><th scope="col">CO₂ (R744)</th></tr>
@@ -1088,13 +1114,16 @@ footer::before {
 </table>
 </div>
 
+</section>
+
 </div>
 
 <footer role="contentinfo">
   <div class="footer-content">
     <p>CO₂ Refrigerant Air Conditioner</p>
-    <p>A sustainable cooling solution optimized for tropical climates</p>
+    <p>A sustainable cooling solution optimized for colder climates</p>
     <p style="margin-top: 1.5rem; font-size: clamp(12px, 1rem, 16px); color: #999;">Kong Hau Yi, Shui Wen Qi & Jordan | BIICC 2026</p>
+    <p style="margin-top: 0.8rem; font-size: clamp(12px, 0.95rem, 15px); color: #999;">Transparency note: Shui Wen Qi's mockup was submitted later than planned due to revision timing.</p>
   </div>
 </footer>
 
@@ -1102,18 +1131,31 @@ footer::before {
 // Particle System - Reduced particles & opacity, no glow
 class ParticleSystem {
   constructor(canvas) {
+    if (!canvas) return;
+
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.particles = [];
+    this.rafId = null;
+    this.visible = true;
+    this.shouldAnimate = true;
+
+    // Respect reduced motion / low-power devices.
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const deviceMemory = navigator && typeof navigator.deviceMemory === 'number' ? navigator.deviceMemory : null;
+    const hardwareConcurrency = navigator && typeof navigator.hardwareConcurrency === 'number' ? navigator.hardwareConcurrency : null;
+    const lowPower = (deviceMemory !== null && deviceMemory < 2) || (hardwareConcurrency !== null && hardwareConcurrency <= 4);
+
+    if (prefersReduced || lowPower) {
+      this.shouldAnimate = false;
+      this.canvas.style.display = 'none';
+      return;
+    }
+
     this.resize();
     this.init();
     this.animate();
     window.addEventListener('resize', () => this.resize());
-    
-    // Respect reduced motion preference
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
   }
 
   resize() {
@@ -1136,8 +1178,23 @@ class ParticleSystem {
     }
   }
 
+  setActive(active) {
+    if (!this.shouldAnimate) return;
+    this.visible = !!active;
+
+    if (!this.visible && this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+
+    if (this.visible) {
+      // Restart animation when coming back on-screen.
+      if (!this.rafId) this.animate();
+    }
+  }
+
   animate() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!this.shouldAnimate || !this.visible) return;
     
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -1159,12 +1216,24 @@ class ParticleSystem {
       this.ctx.fill();
     });
 
-    requestAnimationFrame(() => this.animate());
+    this.rafId = requestAnimationFrame(() => this.animate());
   }
 }
 
 const particleCanvas = document.getElementById('particle-canvas');
-if (particleCanvas) new ParticleSystem(particleCanvas);
+const particleSystem = particleCanvas ? new ParticleSystem(particleCanvas) : null;
+
+// Pause particle animation when off-screen for performance.
+const heroSection = document.getElementById('hero');
+if (particleSystem && heroSection && 'IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      particleSystem.setActive(entry.isIntersecting);
+    });
+  }, { threshold: 0.1 });
+
+  observer.observe(heroSection);
+}
 
 // Progress Bar
 function updateProgressBar() {
@@ -1218,10 +1287,9 @@ window.addEventListener('scroll', updateActiveDot);
 // Smooth scroll function
 function scrollToSection(id) {
   const element = document.getElementById(id);
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' });
-    history.pushState(null, null, `#${id}`);
-  }
+  if (!element) return;
+  element.scrollIntoView({ behavior: 'smooth' });
+  history.pushState(null, null, `#${id}`);
 }
 
 // Keyboard navigation
@@ -1263,7 +1331,7 @@ function animateCounter(element, target, duration = 2000) {
 }
 
 // Comparison Tab Switcher
-function switchCompare(view) {
+function switchCompare(view, clickedTab) {
   const tabs = document.querySelectorAll('.compare-tab');
   const contents = document.querySelectorAll('.compare-content');
   
@@ -1277,10 +1345,13 @@ function switchCompare(view) {
     content.hidden = true;
   });
   
-  event.target.classList.add('active');
-  event.target.setAttribute('aria-selected', 'true');
+  if (clickedTab) {
+    clickedTab.classList.add('active');
+    clickedTab.setAttribute('aria-selected', 'true');
+  }
   
   const selectedContent = document.getElementById(`${view}-view`);
+  if (!selectedContent) return;
   selectedContent.classList.add('active');
   selectedContent.hidden = false;
 }
@@ -1313,7 +1384,8 @@ function resetAllElements() {
   
   // Reset stat numbers
   document.querySelectorAll('.stat-number').forEach(stat => {
-    stat.textContent = '0';
+    // Keep fixed range text (e.g., lifespan) intact.
+    if (stat.hasAttribute('data-target')) stat.textContent = '0';
   });
 }
 
@@ -1487,7 +1559,10 @@ function initAnimations(){
         toggleActions: 'play none none reverse',
         onEnter: () => {
           document.querySelectorAll('.stat-number').forEach(stat => {
-            const target = parseFloat(stat.getAttribute('data-target'));
+            const targetAttr = stat.getAttribute('data-target');
+            if (targetAttr === null) return;
+            const target = parseFloat(targetAttr);
+            if (!Number.isFinite(target)) return;
             animateCounter(stat, target);
           });
         }
