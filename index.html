@@ -1101,11 +1101,6 @@ footer::before {
 <td>High (5×) <span class="compare-icon" aria-label="Warning">⚠️</span></td>
 </tr>
 <tr>
-<td>Climate Suitability</td>
-<td>Moderate <span class="compare-icon" aria-label="Warning">⚠️</span></td>
-<td>Excellent <span class="compare-icon" aria-label="Good">✅</span></td>
-</tr>
-<tr>
 <td>Regulatory Future</td>
 <td>Being phased down <span class="compare-icon" aria-label="Warning">⚠️</span></td>
 <td>Future-proof <span class="compare-icon" aria-label="Good">✅</span></td>
@@ -1235,7 +1230,6 @@ if (particleSystem && heroSection && 'IntersectionObserver' in window) {
   observer.observe(heroSection);
 }
 
-// Progress Bar
 function updateProgressBar() {
   const scrollTop = window.scrollY;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -1247,7 +1241,7 @@ function updateProgressBar() {
 
 window.addEventListener('scroll', updateProgressBar);
 
-// Section Dots Navigation
+
 const sections = ['why', 'how', 'phase1', 'impact', 'why-now', 'where', 'compare'];
 const dots = document.querySelectorAll('.dot');
 
