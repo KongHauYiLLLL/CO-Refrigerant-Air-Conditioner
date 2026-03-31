@@ -7,6 +7,7 @@
 <meta name="description" content="Sustainable CO₂ refrigerant air conditioning technology optimized for cooler climates with heat recovery applications. GWP1: The New Standard.">
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;900&display=swap" rel="stylesheet">
 <script>
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -72,7 +73,7 @@ body{
   color:var(--text);
   line-height:1.6;
   overflow-x:hidden;
-  padding-top:calc(var(--banner-height) + 6vh);
+  padding-top:calc(var(--banner-height) + 36px + 6vh);
   position: relative;
 }
 
@@ -90,16 +91,129 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
+/* Beige Slide Intro */
+.beige-slide {
+  position: fixed;
+  inset: 0;
+  background: #F0EBD8;
+  z-index: 15000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.beige-slide.slide-up {
+  transform: translateY(-100%);
+}
+
+.beige-slide-text {
+  font-family: 'Raleway', sans-serif;
+  font-size: clamp(1.4rem, 3.5vw, 2.5rem);
+  font-weight: 900;
+  color: #3a3529;
+  letter-spacing: 0.08em;
+}
+
+/* Fun Facts Banner */
+.fun-facts-banner {
+  position: fixed;
+  top: var(--banner-height);
+  left: 0;
+  width: 100%;
+  height: 36px;
+  background: rgba(2, 52, 63, 0.95);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  z-index: 1099;
+  border-bottom: 1px solid rgba(110, 231, 183, 0.15);
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+}
+
+.fun-facts-banner.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fun-facts-banner {
+  flex-direction: row-reverse;
+}
+
+.fun-facts-close {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.2s, transform 0.2s;
+  font-weight: 700;
+}
+
+.fun-facts-close:hover {
+  color: var(--accent);
+  transform: scale(1.2);
+}
+
+.fun-facts-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fun-fact-item {
+  position: absolute;
+  width: 100%;
+  white-space: nowrap;
+  font-size: clamp(11px, 2.5vw, 14px);
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.3px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  text-align: center;
+}
+
+.fun-fact-item.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fun-fact-item.exit {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
 /* Progress bar without glow */
 .progress-bar{
   position:fixed;
-  top:var(--banner-height);
+  top:calc(var(--banner-height) + 36px);
   left:0;
   width:0%;
   height:3px;
   background:linear-gradient(90deg,var(--accent),#00ffe1);
   z-index:9999;
   transition:width 0.1s linear;
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.main-active .progress-bar{
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Skip link improvement */
@@ -133,7 +247,10 @@ p { font-size: clamp(0.9rem, 1.8vw, 1.3rem); }
     padding:0 3vw;
     line-height:1.3;
   }
-  body { padding-top: calc(var(--banner-height) + 4vh); }
+  .fun-facts-banner { height: 30px; }
+  .fun-facts-close { width: 30px; height: 30px; font-size: 14px; }
+  .progress-bar { top: calc(var(--banner-height) + 30px); }
+  body { padding-top: calc(var(--banner-height) + 30px + 4vh); }
   .card-icon, .engineering-card-icon, .cycle-icon { display: none !important; }
 
   .card-title::before, .card-title::after { content: attr(data-emoji); margin: 0 0.4em; font-size: 1.1em; }
@@ -272,7 +389,7 @@ body.main-active .section-dots {
   opacity: 1;
 }
 
-nav{position:fixed;top:var(--banner-height);width:100%;display:flex;justify-content:center;backdrop-filter:blur(20px);background:rgba(17,17,17,0.8);padding:1.5vh 3vw;z-index:1000;border-bottom:1px solid rgba(240,237,204,0.1);opacity:0;pointer-events:none;transition:0.4s;}
+nav{position:fixed;top:calc(var(--banner-height) + 36px);width:100%;display:flex;justify-content:center;backdrop-filter:blur(20px);background:rgba(17,17,17,0.8);padding:1.5vh 3vw;z-index:1000;border-bottom:1px solid rgba(240,237,204,0.1);opacity:0;pointer-events:none;transition:0.4s;}
 body.main-active nav{opacity:1;pointer-events:auto;}
 nav ul{display:flex;gap:4vw;list-style:none;font-size:1.8vw;font-weight:700;flex-wrap:wrap;justify-content:center;}
 nav ul li{cursor:pointer;transition:all 0.3s cubic-bezier(0.23, 1, 0.320, 1);position:relative;padding: 4px 0;}
@@ -324,7 +441,7 @@ body.main-active .main-site{display:block;}
 
 .snap-card{
   min-height:100vh;
-  padding: calc(12vh + var(--banner-height)) 5vw 12vh 5vw;
+  padding: calc(12vh + var(--banner-height) + 36px) 5vw 12vh 5vw;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -851,7 +968,7 @@ footer::before {
   .hero h1 { font-size:6vw; }
   .hero p { font-size:3.5vw; }
   .intro img { width:70vw; margin-bottom:1vh; }
-  .snap-card { padding: calc(6vh + var(--banner-height)) 5vw 6vh 5vw; }
+  .snap-card { padding: calc(6vh + var(--banner-height) + 30px) 5vw 6vh 5vw; }
   .compare-table th,.compare-table td{font-size:1.2vw;padding:1vh 1vw;}
   .cycle-diagram { height: 250px; max-width: 90vw; }
   .cycle-node { width: 50px; height: 50px; font-size: 1.2rem; }
@@ -866,18 +983,27 @@ footer::before {
   .hero h1 { font-size:5vw; }
   .hero p { font-size:3vw; }
   .intro img { width:50vw; }
-  .snap-card { padding: calc(8vh + var(--banner-height)) 5vw 8vh 5vw; }
+  .snap-card { padding: calc(8vh + var(--banner-height) + 36px) 5vw 8vh 5vw; }
 }
 </style>
 <base target="_blank">
 </head>
 <body>
 
-<a href="#main-content" class="skip-link">Skip to main content</a>
+<!-- Beige Slide Intro -->
+<div class="beige-slide" id="beigeSlide" aria-hidden="true">
+  <span class="beige-slide-text">[BIICC2026]</span>
+</div>
 
 <div class="progress-bar" id="progressBar" role="progressbar" aria-label="Reading progress"></div>
 
 <div class="top-banner" role="banner">🍌 BIICC 2026!!! CO₂ Refrigerant Air Conditioner: Kong Hau Yi, Shui Wen Qi & Jordan 🍌</div>
+
+<!-- Fun Facts Banner -->
+<div class="fun-facts-banner" id="funFactsBanner" role="complementary" aria-label="Fun facts about CO₂ refrigeration">
+  <button class="fun-facts-close" id="funFactsClose" aria-label="Close fun facts banner">✕</button>
+  <div class="fun-facts-content" id="funFactsContent"></div>
+</div>
 
 <!-- Section Navigation Dots - HIDDEN IN HERO, VISIBLE AFTER -->
 <div class="section-dots" role="navigation" aria-label="Section navigation">
@@ -1123,7 +1249,63 @@ footer::before {
 </footer>
 
 <script>
-// Particle System - Reduced particles & opacity, no glow
+// Beige Slide - slide up after 1 second
+const beigeSlide = document.getElementById('beigeSlide');
+setTimeout(() => {
+  if (beigeSlide) beigeSlide.classList.add('slide-up');
+}, 1000);
+
+// Fun Facts Banner
+const funFacts = [
+  "CO₂ has been used as a refrigerant since the 1800s!",
+  "CO₂ refrigerant is also known as R-744 in the industry.",
+  "CO₂ systems can operate at pressures up to 130 bar!",
+  "Norway was one of the first countries to adopt CO₂ refrigeration widely.",
+  "CO₂ is naturally occurring — it's all around us in the air we breathe.",
+  "CO₂ refrigeration systems are used in major supermarket chains worldwide.",
+  "The critical temperature of CO₂ is just 31.1°C — that's why it's called 'transcritical' operation.",
+  "CO₂ has zero Ozone Depletion Potential (ODP).",
+  "CO₂ refrigerant systems can achieve heat recovery efficiency of up to 90%.",
+  "The global CO₂ refrigeration market is growing at over 10% per year."
+];
+let funFactIndex = 0;
+const funFactsContent = document.getElementById('funFactsContent');
+const funFactsBanner = document.getElementById('funFactsBanner');
+const funFactsClose = document.getElementById('funFactsClose');
+
+function createFactElements() {
+  funFacts.forEach((fact, i) => {
+    const el = document.createElement('div');
+    el.className = 'fun-fact-item' + (i === 0 ? ' active' : '');
+    el.textContent = '💡 ' + fact;
+    funFactsContent.appendChild(el);
+  });
+}
+
+function shuffleFunFact() {
+  const items = funFactsContent.querySelectorAll('.fun-fact-item');
+  const current = items[funFactIndex];
+  funFactIndex = (funFactIndex + 1) % funFacts.length;
+  const next = items[funFactIndex];
+
+  current.classList.remove('active');
+  current.classList.add('exit');
+
+  setTimeout(() => {
+    current.classList.remove('exit');
+  }, 400);
+
+  next.classList.add('active');
+}
+
+createFactElements();
+setInterval(shuffleFunFact, 4500);
+
+funFactsClose.addEventListener('click', () => {
+  funFactsBanner.classList.add('hidden');
+});
+
+// Particle System with mouse repulsion and button brightness boost
 class ParticleSystem {
   constructor(canvas) {
     if (!canvas) return;
@@ -1134,6 +1316,9 @@ class ParticleSystem {
     this.rafId = null;
     this.visible = true;
     this.shouldAnimate = true;
+    this.mouseX = -1000;
+    this.mouseY = -1000;
+    this.boostBrightness = false;
 
     // Respect reduced motion / low-power devices.
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1150,7 +1335,44 @@ class ParticleSystem {
     this.resize();
     this.init();
     this.animate();
+
     window.addEventListener('resize', () => this.resize());
+
+    // Track mouse position relative to canvas
+    const heroEl = document.getElementById('hero');
+    if (heroEl) {
+      heroEl.addEventListener('mousemove', (e) => {
+        const rect = this.canvas.getBoundingClientRect();
+        this.mouseX = e.clientX - rect.left;
+        this.mouseY = e.clientY - rect.top;
+      });
+      heroEl.addEventListener('mouseleave', () => {
+        this.mouseX = -1000;
+        this.mouseY = -1000;
+      });
+    }
+
+    // Track touch position for mobile
+    if (heroEl) {
+      heroEl.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 0) {
+          const rect = this.canvas.getBoundingClientRect();
+          this.mouseX = e.touches[0].clientX - rect.left;
+          this.mouseY = e.touches[0].clientY - rect.top;
+        }
+      }, { passive: true });
+      heroEl.addEventListener('touchend', () => {
+        this.mouseX = -1000;
+        this.mouseY = -1000;
+      });
+    }
+
+    // Boost brightness when hovering over enter button
+    const enterBtn = document.getElementById('enter');
+    if (enterBtn) {
+      enterBtn.addEventListener('mouseenter', () => { this.boostBrightness = true; });
+      enterBtn.addEventListener('mouseleave', () => { this.boostBrightness = false; });
+    }
   }
 
   resize() {
@@ -1159,17 +1381,23 @@ class ParticleSystem {
   }
 
   init() {
-    const particleCount = window.innerWidth < 768 ? 15 : 30;
+    const particleCount = window.innerWidth < 768 ? 20 : 40;
     for (let i = 0; i < particleCount; i++) {
       this.particles.push({
         x: Math.random() * this.canvas.width,
         y: Math.random() * this.canvas.height,
-        size: Math.random() * 4 + 2,
-        speedX: (Math.random() - 0.5) * 0.3,
-        speedY: (Math.random() - 0.5) * 0.3,
-        opacity: (Math.random() * 0.2 + 0.1) * 0.5,
-        pulse: Math.random() * Math.PI * 2
+        homeX: 0,
+        homeY: 0,
+        size: Math.random() * 3 + 1.5,
+        speedX: (Math.random() - 0.5) * 0.4,
+        speedY: (Math.random() - 0.5) * 0.4,
+        baseOpacity: Math.random() * 0.2 + 0.08,
+        pulse: Math.random() * Math.PI * 2,
+        displacementX: 0,
+        displacementY: 0
       });
+      this.particles[i].homeX = this.particles[i].x;
+      this.particles[i].homeY = this.particles[i].y;
     }
   }
 
@@ -1183,7 +1411,6 @@ class ParticleSystem {
     }
 
     if (this.visible) {
-      // Restart animation when coming back on-screen.
       if (!this.rafId) this.animate();
     }
   }
@@ -1193,21 +1420,48 @@ class ParticleSystem {
     
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    const repelRadius = 150;
+    const repelStrength = 15;
+    const returnStrength = 0.04;
+    const dampening = 0.92;
+    const brightnessBoost = this.boostBrightness ? 1.3 : 1.0;
+
     this.particles.forEach(p => {
-      p.x += p.speedX;
-      p.y += p.speedY;
       p.pulse += 0.02;
 
+      // Mouse repulsion
+      const dx = p.x - this.mouseX;
+      const dy = p.y - this.mouseY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < repelRadius && dist > 0) {
+        const force = (1 - dist / repelRadius) * repelStrength;
+        p.displacementX += (dx / dist) * force * 0.1;
+        p.displacementY += (dy / dist) * force * 0.1;
+      }
+
+      // Return to home position with spring
+      p.displacementX *= dampening;
+      p.displacementY *= dampening;
+      p.displacementX -= p.displacementX * returnStrength;
+      p.displacementY -= p.displacementY * returnStrength;
+
+      // Update position with drift + displacement
+      p.x += p.speedX + p.displacementX;
+      p.y += p.speedY + p.displacementY;
+
+      // Wrap around
       if (p.x < -10) p.x = this.canvas.width + 10;
       if (p.x > this.canvas.width + 10) p.x = -10;
       if (p.y < -10) p.y = this.canvas.height + 10;
       if (p.y > this.canvas.height + 10) p.y = -10;
 
-      const pulseOpacity = (p.opacity + Math.sin(p.pulse) * 0.05) * 0.5;
+      const pulseOpacity = p.baseOpacity + Math.sin(p.pulse) * 0.03;
+      const finalOpacity = Math.max(0.04, Math.min(0.5, pulseOpacity * brightnessBoost));
 
       this.ctx.beginPath();
       this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      this.ctx.fillStyle = `rgba(110, 231, 183, ${Math.max(0.05, pulseOpacity)})`;
+      this.ctx.fillStyle = `rgba(110, 231, 183, ${finalOpacity})`;
       this.ctx.fill();
     });
 
@@ -1630,7 +1884,8 @@ function reverse(){
   document.body.classList.remove('main-active');
   main.style.display='none';
   hero.style.display='flex';
-  document.documentElement.style.overflowY='hidden';
+document.documentElement.style.overflowY='hidden';
+window.scrollTo(0, 0);
   window.scrollTo(0,0);
   
   // Reset elements for next entry
