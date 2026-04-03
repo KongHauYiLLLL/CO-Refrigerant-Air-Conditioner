@@ -36,7 +36,7 @@
     scroll-behavior: auto;
     scroll-snap-type: none;
   }
-  .particle-system {
+  .particle-system, .molecule, .cursor-glow {
     display: none !important;
   }
 }
@@ -89,6 +89,27 @@ body::before {
   z-index: 9998;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Custom cursor glow - REMOVED, not used */
+
+/* Ambient floating molecules */
+.molecule {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(110,231,183,0.08);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatMolecule linear infinite;
+}
+
+@keyframes floatMolecule {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
 }
 
 /* Beige Slide Intro */
@@ -335,7 +356,7 @@ p { font-size: clamp(0.9rem, 1.8vw, 1.3rem); }
   z-index: 1001;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s;
@@ -346,20 +367,44 @@ body.main-active .section-dots {
   pointer-events: auto;
 }
 
+/* Connecting line between dots */
+.section-dots::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(240,237,204,0.1);
+  transform: translateX(-50%);
+  z-index: -1;
+}
+
 .dot {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: rgba(240,237,204,0.3);
+  background: rgba(240,237,204,0.25);
   border: 2px solid transparent;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  position: relative;
 }
 
 .dot:hover, .dot.active {
   background: var(--accent);
   border-color: var(--text);
-  transform: scale(1.2);
+  transform: scale(1.3);
+  box-shadow: 0 0 12px rgba(110,231,183,0.4);
+}
+
+.dot.active {
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(110,231,183,0.3); }
+  50% { box-shadow: 0 0 16px rgba(110,231,183,0.6); }
 }
 
 .dot[aria-label] {
@@ -397,7 +442,35 @@ nav ul li:hover{color:#00ffe1;transform:scale(1.1);}
 nav ul li::after{content:'';position:absolute;bottom:-4px;left:50%;width:0;height:2px;background:#00ffe1;transform:translateX(-50%);transition:width 0.3s cubic-bezier(0.23, 1, 0.320, 1);}
 nav ul li:hover::after{width:100%;}
 
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;position:relative;}
+/* Hero section - original dark background */
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  flex-direction:column;
+  position:relative;
+  overflow: hidden;
+}
+
+/* Floating data points in hero */
+.hero-data-point {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(110,231,183,0.3);
+  border-radius: 50%;
+  z-index: 0;
+  animation: floatDataPoint linear infinite;
+}
+
+@keyframes floatDataPoint {
+  0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: translateY(-100vh) translateX(20px) scale(0.5); opacity: 0; }
+}
 
 #particle-canvas{
   position:absolute;
@@ -414,6 +487,23 @@ nav ul li:hover::after{width:100%;}
 .hero h1{font-size: clamp(28px, 6vw, 48px);font-weight:900;margin-bottom:2vh;letter-spacing:-0.02em;}
 .hero p{font-size: clamp(16px, 2vw, 28px);margin-bottom:6vh;font-weight:300;letter-spacing:0.5px;}
 
+/* Typing cursor for subtitle */
+.hero-subtitle-typed {
+  border-right: 2px solid var(--accent);
+  animation: blink 0.8s step-end infinite;
+  padding-right: 4px;
+}
+
+.hero-subtitle-typed.done {
+  border-right-color: transparent;
+  animation: none;
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+/* Portal button with pulsing glow ring */
 .portal-btn{
   width:90px;
   height:90px;
@@ -427,10 +517,37 @@ nav ul li:hover::after{width:100%;}
   font-weight:700;
   box-shadow: 0 8px 24px rgba(240,237,204,0.3);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  z-index: 1;
+}
+
+/* Pulsing glow ring */
+.portal-btn::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(110,231,183,0.4);
+  animation: portalPulse 2s ease-in-out infinite;
+}
+
+.portal-btn::after {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 1px solid rgba(110,231,183,0.2);
+  animation: portalPulse 2s ease-in-out infinite 0.5s;
+}
+
+@keyframes portalPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.3; }
 }
 
 .portal-btn:hover{transform:scale(1.15);box-shadow: 0 12px 32px rgba(240,237,204,0.5);}
+.portal-btn:hover::before { border-color: rgba(110,231,183,0.7); }
+.portal-btn:hover::after { border-color: rgba(110,231,183,0.4); }
 .portal-btn:active {transform: scale(1.08);transition-duration: 0.1s;}
 .portal-btn:focus {outline: 3px solid var(--accent);outline-offset: 4px;}
 
@@ -448,12 +565,31 @@ body.main-active .main-site{display:block;}
   flex-direction:column;
   text-align:center;
   scroll-snap-align:start;
+  position: relative;
+}
+
+/* Section background color shifts */
+.snap-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(110,231,183,0.03) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.6s;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.snap-card.is-visible::before {
+  opacity: 1;
 }
 
 /* Shared heading styling (replaces inline styles). */
 .snap-section-heading{
   font-size:3.5vw;
   margin-bottom:5vh;
+  position: relative;
+  z-index: 1;
 }
 
 .technical-note{
@@ -468,16 +604,19 @@ body.main-active .main-site{display:block;}
   text-align:left;
   line-height:1.7;
   font-size: clamp(14px, 1.3vw, 18px);
+  position: relative;
+  z-index: 1;
 }
 
 .intro img{width:18vw;margin-bottom:2vh;opacity:0;transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);}
 .intro h1{font-size:4vw;margin:0.5vh 0;opacity:0;transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);letter-spacing: -0.02em;}
 .intro p{font-size:1.8vw;margin-top:2vh;opacity:0;transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);letter-spacing: 0.3px;}
 
-.cards-container{display:flex;gap:3vw;flex-wrap:wrap;justify-content:center;width:100%;max-width:1400px;}
+.cards-container{display:flex;gap:3vw;flex-wrap:wrap;justify-content:center;width:100%;max-width:1400px;position: relative; z-index: 1;}
 
 #why .cards-container,#why-now .cards-container{gap:4vw;}
 
+/* Enhanced card with glassmorphism and cursor-following light */
 .card {
   background: linear-gradient(135deg, rgba(2,52,62,0.4) 0%, rgba(1,27,33,0.4) 100%);
   border: 1px solid rgba(110,231,183,0.2);
@@ -495,17 +634,48 @@ body.main-active .main-site{display:block;}
   opacity: 0;
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
   position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
+/* Cursor-following light effect - only visible on hover, only inside card */
 .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle 150px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(110,231,183,0.12) 0%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Glassmorphism border highlight */
+.card::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 16px;
-  background: radial-gradient(circle at 50% 0%, rgba(110,231,183,0.15) 0%, transparent 70%);
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(110,231,183,0.4) 0%, transparent 50%, rgba(110,231,183,0.2) 100%) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  transition: opacity 0.3s;
   pointer-events: none;
+  z-index: 3;
+}
+
+.card:hover::after {
+  opacity: 1;
 }
 
 .card:hover {
@@ -515,8 +685,7 @@ body.main-active .main-site{display:block;}
   box-shadow: 0 16px 48px rgba(110,231,183,0.15);
 }
 
-.card:hover::before { opacity: 1; }
-
+/* Animated icon entrance */
 .card-icon {
   font-size: 3.5vw;
   margin-bottom: 1.5vh;
@@ -525,10 +694,19 @@ body.main-active .main-site{display:block;}
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  transform: scale(0.3) rotate(-20deg);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.card-title { font-weight: 700; font-size: clamp(18px, 1.5vw, 24px); color: var(--text); margin-bottom: 1vh; }
-.card-info { font-size: clamp(14px, 1.1vw, 18px); line-height: 1.6; color: var(--text-subtle); }
+.card.is-visible .card-icon,
+.where-content .card-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.card-title { font-weight: 700; font-size: clamp(18px, 1.5vw, 24px); color: var(--text); margin-bottom: 1vh; position: relative; z-index: 1; }
+.card-info { font-size: clamp(14px, 1.1vw, 18px); line-height: 1.6; color: var(--text-subtle); position: relative; z-index: 1; }
 
 #how .section-text{max-width:70vw;text-align:center;opacity:0;}
 #how .section-text h2{font-size:3.5vw;margin-bottom:2vh;}
@@ -538,8 +716,8 @@ body.main-active .main-site{display:block;}
 .cycle-diagram {
   width: 100%;
   max-width: 600px;
-  height: 350px;
-  margin: 4vh auto 0;
+  height: auto;
+  margin: 2vh auto 0;
   position: relative;
 }
 
@@ -589,6 +767,171 @@ body.main-active .main-site{display:block;}
   padding: 4px 12px;
   border-radius: 20px;
   border: 1px solid rgba(110,231,183,0.3);
+  transition: all 0.3s ease;
+}
+
+.cycle-label-diagram.highlight {
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(110,231,183,0.4);
+}
+
+.cycle-node {
+  transition: all 0.3s ease;
+}
+
+.cycle-node.highlight {
+  box-shadow: 0 0 25px rgba(110,231,183,0.6);
+  border-color: #fff;
+  transform: translateX(-50%) scale(1.1) !important;
+}
+
+.cycle-node.highlight-right,
+.cycle-node.highlight-left {
+  transform: translateY(-50%) scale(1.1) !important;
+}
+
+/* SVG-based cycle diagram styles */
+.cycle-node-svg {
+  transition: all 0.3s ease;
+}
+
+.cycle-node-svg.highlight {
+  stroke: #fff !important;
+  stroke-width: 3 !important;
+  filter: drop-shadow(0 0 12px rgba(110,231,183,0.6));
+}
+
+.cycle-label-svg {
+  fill: var(--text);
+  transition: all 0.3s ease;
+}
+
+.cycle-label-svg.highlight {
+  fill: var(--accent) !important;
+}
+
+.label-bg {
+  transition: all 0.3s ease;
+}
+
+.label-bg.highlight {
+  stroke: rgba(110,231,183,0.6) !important;
+  stroke-width: 2 !important;
+}
+
+.node-emoji {
+  pointer-events: none;
+}
+
+.cycle-path-step {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.cycle-path-step.active {
+  stroke-dashoffset: 0;
+  filter: drop-shadow(0 0 8px rgba(110,231,183,0.6));
+}
+
+.cycle-path-step.completed {
+  stroke-dashoffset: 0;
+  opacity: 0.5;
+  filter: none;
+}
+
+.cycle-diagram-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2vh;
+}
+
+.step-indicator {
+  display: flex;
+  gap: 8px;
+  margin-top: 1vh;
+}
+
+.step-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(110,231,183,0.2);
+  border: 1px solid rgba(110,231,183,0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.step-dot.active {
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(110,231,183,0.5);
+  transform: scale(1.2);
+}
+
+.step-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.step-btn {
+  background: rgba(2,52,62,0.6);
+  color: var(--text);
+  border: 1px solid rgba(110,231,183,0.3);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: clamp(12px, 1.1vw, 15px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.step-btn:hover {
+  border-color: var(--accent);
+  background: rgba(110,231,183,0.1);
+}
+
+.step-btn.active {
+  background: var(--accent);
+  color: #02343e;
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(110,231,183,0.4);
+}
+
+.step-description {
+  text-align: center;
+  max-width: 500px;
+  padding: 16px 24px;
+  background: rgba(2,52,62,0.4);
+  border: 1px solid rgba(110,231,183,0.2);
+  border-radius: 12px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.step-title {
+  font-size: clamp(14px, 1.3vw, 18px);
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 6px 0;
+}
+
+.step-text {
+  font-size: clamp(12px, 1vw, 15px);
+  color: var(--text);
+  margin: 0;
+  line-height: 1.4;
+  opacity: 0.9;
 }
 
 #phase1{background:transparent;color:var(--text);}
@@ -600,8 +943,11 @@ body.main-active .main-site{display:block;}
   width:90%;
   max-width:1200px;
   margin:0 auto;
+  position: relative;
+  z-index: 1;
 }
 
+/* Enhanced engineering card */
 .engineering-card{
   background:linear-gradient(135deg, rgba(2,52,62,0.4) 0%, rgba(1,27,33,0.4) 100%);
   border: 1px solid rgba(110,231,183,0.2);
@@ -616,18 +962,46 @@ body.main-active .main-site{display:block;}
   opacity:0;
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
   position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .engineering-card::before {
   content: '';
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle 150px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(110,231,183,0.12) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.engineering-card:hover::before {
+  opacity: 1;
+}
+
+.engineering-card::after {
+  content: '';
+  position: absolute;
   inset: 0;
   border-radius: 1.5vw;
-  background: radial-gradient(circle at 50% 0%, rgba(110,231,183,0.15) 0%, transparent 70%);
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(110,231,183,0.4) 0%, transparent 50%, rgba(110,231,183,0.2) 100%) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  transition: opacity 0.3s;
   pointer-events: none;
+  z-index: 3;
 }
+
+.engineering-card:hover::after { opacity: 1; }
 
 .engineering-card:hover{
   transform:translateY(-12px);
@@ -636,8 +1010,7 @@ body.main-active .main-site{display:block;}
   background:linear-gradient(135deg, rgba(2,52,62,0.6) 0%, rgba(1,27,33,0.6) 100%);
 }
 
-.engineering-card:hover::before { opacity: 1; }
-
+/* Animated icon for engineering cards */
 .engineering-card-icon{
   font-size:4vw;
   margin-bottom:2vh;
@@ -646,63 +1019,185 @@ body.main-active .main-site{display:block;}
   display:flex;
   align-items:center;
   justify-content:center;
+  opacity: 0;
+  transform: scale(0.3) rotate(-20deg);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.engineering-card h3{font-size: clamp(18px, 1.8vw, 28px);margin-bottom:1.5vh;font-weight:700;}
-.engineering-card p{font-size: clamp(14px, 1.3vw, 18px);line-height:1.6;color:var(--text-subtle);}
+.engineering-card.is-visible .engineering-card-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
 
-/* Impact Section */
+.engineering-card h3{font-size: clamp(18px, 1.8vw, 28px);margin-bottom:1.5vh;font-weight:700;position: relative; z-index: 1;}
+.engineering-card p{font-size: clamp(14px, 1.3vw, 18px);line-height:1.6;color:var(--text-subtle);position: relative; z-index: 1;}
+
+/* Impact Section - Complete Overhaul */
 #impact {
   background: transparent;
   color: var(--text);
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 3vw;
+/* Horizontal stats row - replaces stat cards */
+.impact-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
   width: 90%;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.stat-card {
-  background: linear-gradient(135deg, rgba(2,52,62,0.4) 0%, rgba(1,27,33,0.4) 100%);
-  border: 1px solid rgba(110,231,183,0.2);
-  border-radius: 16px;
-  padding: 2.5vw;
-  text-align: center;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  max-width: 900px;
+  margin: 0 auto 4vh;
+  position: relative;
+  z-index: 1;
   opacity: 0;
   transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
-.stat-card:hover {
-  border-color: rgba(110,231,183,0.5);
-  transform: translateY(-8px);
-  box-shadow: 0 16px 48px rgba(110,231,183,0.15);
+#impact.is-visible .impact-stats-row {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.stat-number {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+.impact-stat {
+  text-align: center;
+  flex: 1;
+  padding: 0 1vw;
+}
+
+.impact-stat-number {
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
   font-weight: 900;
-  color: var(--accent);
-  display: block;
+  background: linear-gradient(135deg, var(--accent) 0%, #00ffe1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   line-height: 1;
-  margin-bottom: 1vh;
 }
 
-.stat-label {
-  font-size: clamp(14px, 1.2vw, 18px);
-  color: var(--text-subtle);
-  font-weight: 600;
+.impact-stat-suffix {
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent) 0%, #00ffe1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.stat-context {
-  font-size: clamp(12px, 1vw, 14px);
+.impact-stat-fixed {
+  background: linear-gradient(135deg, var(--accent) 0%, #00ffe1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.impact-stat-label {
+  display: block;
+  font-size: clamp(11px, 1vw, 14px);
   color: var(--text-muted);
-  margin-top: 0.5vh;
+  font-weight: 600;
+  margin-top: 0.8vh;
+  letter-spacing: 0.3px;
+}
+
+.impact-divider {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(180deg, transparent 0%, rgba(110,231,183,0.3) 50%, transparent 100%);
+  flex-shrink: 0;
+}
+
+/* GWP Visual Scale */
+.gwp-scale {
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto 4vh;
+  position: relative;
+  z-index: 1;
+}
+
+.gwp-scale-title {
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-weight: 700;
+  margin-bottom: 1.5vh;
+  color: var(--text);
+}
+
+.gwp-scale-note {
+  font-size: clamp(11px, 1vw, 13px);
+  color: var(--text-muted);
+  margin-bottom: 2vh;
+  line-height: 1.6;
+  max-width: 800px;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.gwp-bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+}
+
+.gwp-bar {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+}
+
+.gwp-bar-label {
+  min-width: 100px;
+  text-align: right;
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.gwp-bar-value {
+  min-width: 120px;
+  font-size: clamp(11px, 0.9vw, 13px);
+  color: var(--text-muted);
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.gwp-bar-track {
+  flex: 1;
+  height: 24px;
+  background: rgba(2,52,62,0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.gwp-bar-fill {
+  height: 100%;
+  border-radius: 12px;
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.23, 1, 0.320, 1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(0,0,0,0.7);
+}
+
+.gwp-bar-fill.co2 {
+  background: linear-gradient(90deg, var(--accent), #00ffe1);
+}
+
+.gwp-bar-fill.r134a {
+  background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+}
+
+.gwp-bar-fill.r410a {
+  background: linear-gradient(90deg, #ffa502, #ff6348);
+}
+
+.gwp-bar-fill.r22 {
+  background: linear-gradient(90deg, #ff4757, #c0392b);
 }
 
 #where {
@@ -736,18 +1231,42 @@ body.main-active .main-site{display:block;}
   transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
   position: relative;
+  overflow: hidden;
 }
 
 .where-content::before {
   content: '';
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle 150px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(110,231,183,0.12) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.where-content:hover::before { opacity: 1; }
+
+.where-content::after {
+  content: '';
+  position: absolute;
   inset: 0;
   border-radius: 16px;
-  background: radial-gradient(circle at 50% 0%, rgba(110,231,183,0.15) 0%, transparent 70%);
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(110,231,183,0.4) 0%, transparent 50%, rgba(110,231,183,0.2) 100%) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  transition: opacity 0.3s;
   pointer-events: none;
+  z-index: 3;
 }
+
+.where-content:hover::after { opacity: 1; }
 
 .where-content:hover {
   border-color: rgba(110,231,183,0.5);
@@ -755,8 +1274,6 @@ body.main-active .main-site{display:block;}
   background: linear-gradient(135deg, rgba(2,52,62,0.6) 0%, rgba(1,27,33,0.6) 100%);
   box-shadow: 0 16px 48px rgba(110,231,183,0.15);
 }
-
-.where-content:hover::before { opacity: 1; }
 
 .where-content img{
   width:80px;
@@ -860,6 +1377,37 @@ body.main-active .main-site{display:block;}
 
 .compare-icon { font-size: 1.2em; margin-left: 0.5em; }
 
+/* Visual indicator bars in comparison table */
+.compare-bar {
+  display: inline-block;
+  height: 6px;
+  border-radius: 3px;
+  margin-left: 8px;
+  vertical-align: middle;
+  transition: width 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.compare-bar.good {
+  background: linear-gradient(90deg, var(--accent), #00ffe1);
+}
+
+.compare-bar.bad {
+  background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+}
+
+.compare-note {
+  margin-top: 2vh;
+  padding: 1.5vh 2vw;
+  font-size: clamp(12px, 1.2vw, 15px);
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
 .flash-text{
   position:fixed;
   top:50%;
@@ -960,8 +1508,9 @@ footer::before {
  .engineering-card-icon{font-size:3vw;}
  .engineering-card h3{font-size:2vw;}
  .engineering-card p{font-size:1.5vw;}
- .cycle-diagram { height: 300px; }
- .cycle-node { width: 60px; height: 60px; font-size: 1.5rem; }
+  .cycle-diagram { max-height: 28vh; }
+  .cycle-node { width: 60px; height: 60px; font-size: 1.5rem; }
+  .step-btn { font-size: 13px; padding: 6px 12px; }
 }
 
 @media(max-width:768px){
@@ -970,13 +1519,18 @@ footer::before {
   .intro img { width:70vw; margin-bottom:1vh; }
   .snap-card { padding: calc(6vh + var(--banner-height) + 30px) 5vw 6vh 5vw; }
   .compare-table th,.compare-table td{font-size:1.2vw;padding:1vh 1vw;}
-  .cycle-diagram { height: 250px; max-width: 90vw; }
+  .cycle-diagram { max-height: 28vh; }
   .cycle-node { width: 50px; height: 50px; font-size: 1.2rem; }
   .cycle-label-diagram { font-size: 11px; padding: 2px 8px; }
+  .step-buttons { gap: 6px; }
+  .step-btn { font-size: 11px; padding: 5px 10px; }
+  .step-description { padding: 12px 16px; }
   .stats-grid { grid-template-columns: 1fr; gap: 4vw; }
   .stat-card { padding: 5vw; }
   .compare-tabs { flex-direction: column; align-items: center; }
   .compare-tab { width: 80%; text-align: center; }
+  .gwp-bar-label { min-width: 70px; font-size: 11px; }
+  .gwp-bar-track { height: 18px; }
 }
 
 @media(max-width:900px) and (min-width:769px){
@@ -989,6 +1543,9 @@ footer::before {
 <base target="_blank">
 </head>
 <body>
+
+<!-- Ambient molecules container -->
+<div id="moleculeContainer" aria-hidden="true"></div>
 
 <!-- Beige Slide Intro -->
 <div class="beige-slide" id="beigeSlide" aria-hidden="true">
@@ -1007,12 +1564,13 @@ footer::before {
 
 <!-- Section Navigation Dots - HIDDEN IN HERO, VISIBLE AFTER -->
 <div class="section-dots" role="navigation" aria-label="Section navigation">
-  <div class="dot active" data-section="why" data-label="Why?" role="button" tabindex="0" aria-label="Go to Why section"></div>
-  <div class="dot" data-section="how" data-label="How?" role="button" tabindex="0" aria-label="Go to How section"></div>
+  <div class="dot active" data-section="why" data-label="Why" role="button" tabindex="0" aria-label="Go to Why section"></div>
   <div class="dot" data-section="phase1" data-label="Challenges" role="button" tabindex="0" aria-label="Go to Challenges section"></div>
+  <div class="dot" data-section="solutions" data-label="Solutions" role="button" tabindex="0" aria-label="Go to Solutions section"></div>
+  <div class="dot" data-section="how" data-label="How" role="button" tabindex="0" aria-label="Go to How section"></div>
   <div class="dot" data-section="impact" data-label="Impact" role="button" tabindex="0" aria-label="Go to Impact section"></div>
-  <div class="dot" data-section="why-now" data-label="Why Now?" role="button" tabindex="0" aria-label="Go to Why Now section"></div>
-  <div class="dot" data-section="where" data-label="Where?" role="button" tabindex="0" aria-label="Go to Where section"></div>
+  <div class="dot" data-section="why-now" data-label="Why Now" role="button" tabindex="0" aria-label="Go to Why Now section"></div>
+  <div class="dot" data-section="where" data-label="Where" role="button" tabindex="0" aria-label="Go to Where section"></div>
   <div class="dot" data-section="compare" data-label="Compare" role="button" tabindex="0" aria-label="Go to Compare section"></div>
 </div>
 
@@ -1021,12 +1579,13 @@ footer::before {
 
 <nav role="navigation" aria-label="Main navigation">
 <ul>
-<li onclick="scrollToSection('why')" tabindex="0" role="button">Why?</li>
-<li onclick="scrollToSection('how')" tabindex="0" role="button">How?</li>
+<li onclick="scrollToSection('why')" tabindex="0" role="button">Why</li>
 <li onclick="scrollToSection('phase1')" tabindex="0" role="button">Challenges</li>
+<li onclick="scrollToSection('solutions')" tabindex="0" role="button">Solutions</li>
+<li onclick="scrollToSection('how')" tabindex="0" role="button">How</li>
 <li onclick="scrollToSection('impact')" tabindex="0" role="button">Impact</li>
-<li onclick="scrollToSection('why-now')" tabindex="0" role="button">Why Now?</li>
-<li onclick="scrollToSection('where')" tabindex="0" role="button">Where?</li>
+<li onclick="scrollToSection('why-now')" tabindex="0" role="button">Why Now</li>
+<li onclick="scrollToSection('where')" tabindex="0" role="button">Where</li>
 <li onclick="scrollToSection('compare')" tabindex="0" role="button">Compare</li>
 </ul>
 </nav>
@@ -1035,7 +1594,7 @@ footer::before {
 <canvas id="particle-canvas" class="particle-system" aria-hidden="true"></canvas>
 <div class="hero-content">
 <h1>CO₂ Refrigerant Air Conditioner</h1>
-<p>GWP1: The New Standard</p>
+<p id="heroSubtitle">GWP1: The New Standard</p>
 <button class="portal-btn" id="enter" aria-label="Enter presentation">❄</button>
 </div>
 </section>
@@ -1043,49 +1602,25 @@ footer::before {
 <div class="main-site" id="mainSite">
 
 <section id="why" class="snap-card" aria-labelledby="why-heading">
-<h2 id="why-heading" class="snap-section-heading">Why CO₂ Refrigerant?</h2>
+<h2 id="why-heading" class="snap-section-heading">Why</h2>
 <div class="cards-container">
 <div class="card">
   <div class="card-icon" aria-hidden="true">🌍</div>
-  <h2 class="card-title" data-emoji="🌍">Protect Nature</h2>
-  <p class="card-info">CO₂ (R744) has a Global Warming Potential (GWP) of 1, compared to up to 2,000 for common refrigerants.</p>
+  <h2 class="card-title" data-emoji="🌍">The Cost of Inaction</h2>
+  <p class="card-info">Every year, synthetic refrigerants leak into the atmosphere — each kilogram carrying the warming impact of up to 2,000 kg of CO₂. A single commercial AC unit can lose 10-30% of its refrigerant charge annually through micro-leaks. The old standard is actively accelerating the problem it was meant to solve.</p>
 </div>
 
 <div class="card">
   <div class="card-icon" aria-hidden="true">⚡</div>
-  <h2 class="card-title" data-emoji="⚡">Optimized for Heat Recovery and Colder Climates</h2>
-  <p class="card-info">Optimized for Colder Climates, and excellent for Heat Recovery in Industrialization & Commercialization.</p>
+  <h2 class="card-title" data-emoji="⚡">Energy Demands Are Outpacing Supply</h2>
+  <p class="card-info">Cooling demand is exploding globally, and the grid can't keep up. CO₂ systems recover waste heat instead of wasting it — turning a growing problem into usable energy. In practice, heat recovery can offset 30-50% of water heating costs in commercial buildings, making the system pay for part of its own operation.</p>
 </div>
 
 <div class="card">
   <div class="card-icon" aria-hidden="true">🛡️</div>
-  <h2 class="card-title" data-emoji="🛡️">Safe Refrigerant</h2>
-  <p class="card-info">CO₂ is non-toxic and non-flammable, making it a safer alternative to traditional refrigerants.</p>
+  <h2 class="card-title" data-emoji="🛡️">Safety Isn't Optional</h2>
+  <p class="card-info">Traditional refrigerants carry real risks — toxicity, flammability, and regulatory liability. CO₂ is classified as A1 (non-toxic, non-flammable) under ASHRAE Standard 34, the highest safety rating. It's naturally occurring, odorless, and has been used in fire suppression systems for decades. The safest choice is no longer a compromise.</p>
 </div>
-</div>
-</section>
-
-<section id="how" class="snap-card" aria-labelledby="how-heading">
-<div class="section-text">
-<h2 id="how-heading">How it Works</h2>
-<p id="howText"></p>
-</div>
-<div class="cycle-diagram" id="cycleDiagram" role="img" aria-label="Refrigeration cycle diagram showing compression, cooling, expansion, and heat absorption">
-  <svg class="cycle-svg" viewBox="0 0 600 350">
-    <path class="cycle-path" d="M 300 80 Q 480 80 480 175 Q 480 270 300 270 Q 120 270 120 175 Q 120 80 300 80" />
-    <path class="cycle-path-active" id="cyclePathActive" d="M 300 80 Q 480 80 480 175 Q 480 270 300 270 Q 120 270 120 175 Q 120 80 300 80" />
-  </svg>
-  <div class="cycle-node" style="top: 45px; left: 50%; transform: translateX(-50%);" aria-hidden="true">🔧</div>
-  <div class="cycle-label-diagram" style="top: 5px; left: 50%; transform: translateX(-50%);">Compress</div>
-
-  <div class="cycle-node" style="top: 50%; right: 25px; transform: translateY(-50%);" aria-hidden="true">❄️</div>
-  <div class="cycle-label-diagram" style="top: 50%; right: -50px; transform: translateY(-50%);">Cool</div>
-
-  <div class="cycle-node" style="bottom: 45px; left: 50%; transform: translateX(-50%);" aria-hidden="true">💨</div>
-  <div class="cycle-label-diagram" style="bottom: 5px; left: 50%; transform: translateX(-50%);">Expand</div>
-
-  <div class="cycle-node" style="top: 50%; left: 25px; transform: translateY(-50%);" aria-hidden="true">🌡️</div>
-  <div class="cycle-label-diagram" style="top: 50%; left: -70px; transform: translateY(-50%);">Absorb</div>
 </div>
 </section>
 
@@ -1095,17 +1630,17 @@ footer::before {
 <div class="engineering-card">
 <div class="engineering-card-icon" aria-hidden="true">⚙️</div>
 <h3 class="card-title" data-emoji="⚙️">High Pressure</h3>
-<p>Operates at up to 5× the pressure of conventional systems, requiring reinforced components.</p>
+<p>Operates at 80-130 bar — up to 5× the pressure of R-410A systems (~25 bar). This demands reinforced piping, specialized compressors, and pressure-rated heat exchangers designed for transcritical operation.</p>
 </div>
 <div class="engineering-card">
 <div class="engineering-card-icon" aria-hidden="true">📐</div>
 <h3 class="card-title" data-emoji="📐">Complex Design</h3>
-<p>Requires careful engineering and precise thermal management for optimal performance.</p>
+<p>CO₂'s critical point at 31.1°C means the system switches between subcritical and transcritical modes depending on ambient temperature. Managing this transition requires precise electronic expansion valves and real-time pressure control.</p>
 </div>
 <div class="engineering-card">
 <div class="engineering-card-icon" aria-hidden="true">💰</div>
-<h3 class="card-title" data-emoji="💰">Higher Cost</h3>
-<p>Slightly higher upfront cost, but long-term environmental savings are substantial.</p>
+<h3 class="card-title" data-emoji="💰">Higher Upfront Cost</h3>
+<p>Component costs run 10-25% higher than conventional systems due to high-pressure ratings and specialized parts. However, zero refrigerant phase-out costs, lower energy consumption in temperate climates, and heat recovery ROI typically offset this within 3-7 years.</p>
 </div>
 </div>
 
@@ -1115,31 +1650,246 @@ footer::before {
 
 </section>
 
+<section id="solutions" class="snap-card" aria-labelledby="solutions-heading">
+<h2 id="solutions-heading" class="snap-section-heading">Solutions</h2>
+<div class="engineering-grid">
+<div class="engineering-card">
+<div class="engineering-card-icon" aria-hidden="true">🔩</div>
+<h3 class="card-title" data-emoji="🔩">Reinforced Components</h3>
+<p>High-pressure rated compressors, forged steel valves, and microchannel heat exchangers engineered specifically for CO₂'s operating range up to 130 bar. Components are tested to ASME pressure vessel standards.</p>
+</div>
+<div class="engineering-card">
+<div class="engineering-card-icon" aria-hidden="true">🔄</div>
+<h3 class="card-title" data-emoji="🔄">Transcritical Cycle Design</h3>
+<p>Unlike conventional condensers, CO₂ systems use a gas cooler that operates above the critical point (31.1°C), rejecting heat without phase change. An internal heat exchanger (IHX) subcools the liquid and superheats the suction gas, recovering 5-15% efficiency.</p>
+</div>
+<div class="engineering-card">
+<div class="engineering-card-icon" aria-hidden="true">♻️</div>
+<h3 class="card-title" data-emoji="♻️">Heat Recovery Integration</h3>
+<p>Waste heat from the gas cooler (typically 80-120°C) is captured via a desuperheater and reused for domestic hot water or space heating. In commercial buildings, this can offset 30-50% of water heating energy — turning the system's biggest challenge into its biggest advantage.</p>
+</div>
+</div>
+</section>
+
+<section id="how" class="snap-card" aria-labelledby="how-heading">
+<div class="section-text">
+<h2 id="how-heading">How it Works</h2>
+<p id="howText"></p>
+</div>
+<div class="cycle-diagram-wrapper">
+  <div class="cycle-diagram" id="cycleDiagram" role="img" aria-label="CO₂ transcritical refrigeration cycle schematic">
+    <svg width="100%" viewBox="0 0 860 420" style="display:block; max-height: 38vh;">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <filter id="glowFilter">
+          <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- ── PIPE NETWORK ── -->
+      <!-- Top pipe: Compressor → Gas Cooler -->
+      <path id="pipe1" d="M 240 100 L 560 100" fill="none" stroke="rgba(110,231,183,0.18)" stroke-width="14" stroke-linecap="round"/>
+      <path id="flow1" d="M 240 100 L 560 100" fill="none" stroke="#6ee7b7" stroke-width="4" stroke-linecap="round"
+            stroke-dasharray="18 12" stroke-dashoffset="0" opacity="0.7">
+        <animate attributeName="stroke-dashoffset" from="0" to="-90" dur="2s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Right pipe: Gas Cooler → Expansion Valve -->
+      <path id="pipe2" d="M 650 145 L 650 255" fill="none" stroke="rgba(110,231,183,0.18)" stroke-width="14" stroke-linecap="round"/>
+      <path id="flow2" d="M 650 145 L 650 255" fill="none" stroke="#6ee7b7" stroke-width="4" stroke-linecap="round"
+            stroke-dasharray="18 12" stroke-dashoffset="0" opacity="0.7">
+        <animate attributeName="stroke-dashoffset" from="0" to="-90" dur="2s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Bottom pipe: Expansion Valve → Evaporator -->
+      <path id="pipe3" d="M 560 300 L 240 300" fill="none" stroke="rgba(110,231,183,0.18)" stroke-width="14" stroke-linecap="round"/>
+      <path id="flow3" d="M 560 300 L 240 300" fill="none" stroke="#6ee7b7" stroke-width="4" stroke-linecap="round"
+            stroke-dasharray="18 12" stroke-dashoffset="0" opacity="0.7">
+        <animate attributeName="stroke-dashoffset" from="0" to="-90" dur="2s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Left pipe: Evaporator → Compressor -->
+      <path id="pipe4" d="M 150 255 L 150 145" fill="none" stroke="rgba(110,231,183,0.18)" stroke-width="14" stroke-linecap="round"/>
+      <path id="flow4" d="M 150 255 L 150 145" fill="none" stroke="#6ee7b7" stroke-width="4" stroke-linecap="round"
+            stroke-dasharray="18 12" stroke-dashoffset="0" opacity="0.7">
+        <animate attributeName="stroke-dashoffset" from="0" to="-90" dur="2s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- ── COMPONENTS (all 180×70, same size) ── -->
+
+      <!-- 1. Compressor (top-left) -->
+      <g id="comp-node">
+        <rect x="60" y="65" width="180" height="70" rx="8"
+              fill="rgba(2,52,62,0.85)" stroke="rgba(110,231,183,0.35)" stroke-width="1.5"/>
+        <polygon points="80,80 80,116 100,98" fill="rgba(110,231,183,0.5)" stroke="#6ee7b7" stroke-width="1"/>
+        <polygon points="100,80 100,116 120,98" fill="rgba(110,231,183,0.25)" stroke="#6ee7b7" stroke-width="1"/>
+        <text x="150" y="86" fill="#F0EDCC" font-family="Raleway,sans-serif" font-weight="700" font-size="13" text-anchor="middle">Compressor</text>
+        <text x="150" y="103" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">80–130 bar</text>
+        <text x="150" y="120" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">100–150 °C</text>
+      </g>
+
+      <!-- 2. Gas Cooler (top-right) -->
+      <g id="gascooler-node">
+        <rect x="560" y="65" width="180" height="70" rx="8"
+              fill="rgba(2,52,62,0.85)" stroke="rgba(110,231,183,0.35)" stroke-width="1.5"/>
+        <path d="M 578 82 Q 588 74 598 82 Q 608 90 618 82 Q 628 74 638 82" fill="none" stroke="#6ee7b7" stroke-width="1.5"/>
+        <path d="M 578 96 Q 588 88 598 96 Q 608 104 618 96 Q 628 88 638 96" fill="none" stroke="rgba(110,231,183,0.5)" stroke-width="1.5"/>
+        <path d="M 578 110 Q 588 102 598 110 Q 608 118 618 110 Q 628 102 638 110" fill="none" stroke="rgba(110,231,183,0.25)" stroke-width="1.5"/>
+        <text x="650" y="86" fill="#F0EDCC" font-family="Raleway,sans-serif" font-weight="700" font-size="13" text-anchor="middle">Gas Cooler</text>
+        <text x="650" y="103" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">Heat rejected</text>
+        <text x="650" y="120" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">35–40 °C out</text>
+      </g>
+
+      <!-- 3. Expansion Valve (bottom-right) -->
+      <g id="exp-node">
+        <rect x="560" y="265" width="180" height="70" rx="8"
+              fill="rgba(2,52,62,0.85)" stroke="rgba(110,231,183,0.35)" stroke-width="1.5"/>
+        <polygon points="578,280 598,296 578,312" fill="rgba(110,231,183,0.4)" stroke="#6ee7b7" stroke-width="1"/>
+        <polygon points="598,280 598,312 618,296" fill="rgba(110,231,183,0.15)" stroke="#6ee7b7" stroke-width="1"/>
+        <line x1="598" y1="296" x2="618" y2="296" stroke="#6ee7b7" stroke-width="1.5"/>
+        <text x="650" y="286" fill="#F0EDCC" font-family="Raleway,sans-serif" font-weight="700" font-size="13" text-anchor="middle">Exp. Valve</text>
+        <text x="650" y="303" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">90 → 30 bar</text>
+        <text x="650" y="320" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">Flash-cooling</text>
+      </g>
+
+      <!-- 4. Evaporator (bottom-left) -->
+      <g id="evap-node">
+        <rect x="60" y="265" width="180" height="70" rx="8"
+              fill="rgba(2,52,62,0.85)" stroke="rgba(110,231,183,0.35)" stroke-width="1.5"/>
+        <path d="M 78 282 Q 88 274 98 282 Q 108 290 118 282 Q 128 274 138 282" fill="none" stroke="#6ee7b7" stroke-width="1.5"/>
+        <path d="M 78 296 Q 88 288 98 296 Q 108 304 118 296 Q 128 288 138 296" fill="none" stroke="rgba(110,231,183,0.5)" stroke-width="1.5"/>
+        <path d="M 78 310 Q 88 302 98 310 Q 108 318 118 310 Q 128 302 138 310" fill="none" stroke="rgba(110,231,183,0.25)" stroke-width="1.5"/>
+        <text x="150" y="286" fill="#F0EDCC" font-family="Raleway,sans-serif" font-weight="700" font-size="13" text-anchor="middle">Evaporator</text>
+        <text x="150" y="303" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">Absorbs heat</text>
+        <text x="150" y="320" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">5–15 °C out</text>
+      </g>
+
+      <!-- ── ACTIVE SEGMENT HIGHLIGHTS (toggled by JS) ── -->
+      <path id="segHighlight1" d="M 240 100 L 560 100" fill="none" stroke="#6ee7b7" stroke-width="6" stroke-linecap="round" opacity="0" filter="url(#glowFilter)"/>
+      <path id="segHighlight2" d="M 650 145 L 650 255" fill="none" stroke="#6ee7b7" stroke-width="6" stroke-linecap="round" opacity="0" filter="url(#glowFilter)"/>
+      <path id="segHighlight3" d="M 560 300 L 240 300" fill="none" stroke="#6ee7b7" stroke-width="6" stroke-linecap="round" opacity="0" filter="url(#glowFilter)"/>
+      <path id="segHighlight4" d="M 150 255 L 150 145" fill="none" stroke="#6ee7b7" stroke-width="6" stroke-linecap="round" opacity="0" filter="url(#glowFilter)"/>
+
+      <!-- ── STATE LABELS ── -->
+      <rect x="320" y="80" width="140" height="20" rx="10" fill="rgba(2,52,62,0.7)" stroke="rgba(110,231,183,0.3)" stroke-width="1"/>
+      <text x="390" y="94" fill="#6ee7b7" font-family="Raleway,sans-serif" font-size="11" font-weight="700" text-anchor="middle">SUPERCRITICAL FLUID</text>
+
+      <rect x="320" y="312" width="130" height="20" rx="10" fill="rgba(2,52,62,0.7)" stroke="rgba(110,231,183,0.3)" stroke-width="1"/>
+      <text x="385" y="326" fill="#6ee7b7" font-family="Raleway,sans-serif" font-size="11" font-weight="700" text-anchor="middle">TWO-PHASE / GAS</text>
+
+      <!-- Pressure annotation (right side) -->
+      <text x="780" y="108" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">HIGH</text>
+      <text x="780" y="120" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">PRESSURE</text>
+      <line x1="780" y1="125" x2="780" y2="270" stroke="rgba(110,231,183,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="780" y="285" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">LOW</text>
+      <text x="780" y="297" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">PRESSURE</text>
+
+      <!-- Heat rejection arrow -->
+      <line x1="750" y1="145" x2="750" y2="50" stroke="#ff8c69" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr)" opacity="0.7"/>
+      <text x="765" y="90" fill="#ff8c69" font-family="Raleway,sans-serif" font-size="11" text-anchor="start">Q out</text>
+
+      <!-- Heat absorption arrow -->
+      <line x1="32" y1="340" x2="32" y2="270" stroke="#69c0ff" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr)" opacity="0.7"/>
+      <text x="12" y="315" fill="#69c0ff" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">Q in</text>
+
+      <!-- Flow direction arrows -->
+      <path d="M 370 92 L 390 92" fill="none" stroke="#6ee7b7" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
+      <path d="M 658 195 L 658 215" fill="none" stroke="#6ee7b7" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
+      <path d="M 430 308 L 410 308" fill="none" stroke="#6ee7b7" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
+      <path d="M 142 205 L 142 185" fill="none" stroke="#6ee7b7" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
+    </svg>
+  </div>
+
+  <div class="step-indicator" id="stepIndicator">
+    <span class="step-dot active" data-step="1"></span>
+    <span class="step-dot" data-step="2"></span>
+    <span class="step-dot" data-step="3"></span>
+    <span class="step-dot" data-step="4"></span>
+  </div>
+
+  <div class="step-buttons" id="stepButtons">
+    <button class="step-btn active" data-step="1">Compression</button>
+    <button class="step-btn" data-step="2">Heat Rejection</button>
+    <button class="step-btn" data-step="3">Expansion</button>
+    <button class="step-btn" data-step="4">Evaporation</button>
+  </div>
+
+  <div class="step-description" id="stepDescription">
+    <p class="step-title" id="stepTitle">1. Compression</p>
+    <p class="step-text" id="stepText">Low-pressure CO₂ gas (30–45 bar, ~15°C) enters the compressor. It is compressed to 80–130 bar, raising temperature to 100–150°C. The CO₂ crosses its critical point (31.1°C / 73.8 bar) and becomes a supercritical fluid — behaving like neither a liquid nor a gas.</p>
+  </div>
+</div>
+</section>
+
 <!-- Impact Section with Animated Stats -->
 <section id="impact" class="snap-card" aria-labelledby="impact-heading">
 <h2 id="impact-heading" class="snap-section-heading">Environmental Impact</h2>
-<div class="stats-grid">
-  <div class="stat-card">
-    <span class="stat-number" data-target="99.9">0</span>
-    <span class="stat-label">% GWP Reduction (vs R-134a)</span>
-    <p class="stat-context">Compared to R-134a refrigerant (conventional)</p>
+
+<!-- Horizontal stats row -->
+<div class="impact-stats-row" id="impactStatsRow">
+  <div class="impact-stat">
+    <span class="impact-stat-number" data-target="99.9">0</span><span class="impact-stat-suffix">%</span>
+    <span class="impact-stat-label">GWP Reduction vs R-134a</span>
   </div>
-  <div class="stat-card">
-    <span class="stat-number" data-target="0">0</span>
-    <span class="stat-label">Ozone Depletion</span>
-    <p class="stat-context">Zero ODP (Ozone Depletion Potential)</p>
+  <div class="impact-divider"></div>
+  <div class="impact-stat">
+    <span class="impact-stat-number" data-target="0">0</span>
+    <span class="impact-stat-label">Ozone Depletion (ODP)</span>
   </div>
-  <div class="stat-card">
-    <span class="stat-number stat-number-fixed">15-25</span>
-    <span class="stat-label">Year Lifespan</span>
-    <p class="stat-context">Sustainable long-term solution</p>
+  <div class="impact-divider"></div>
+  <div class="impact-stat">
+    <span class="impact-stat-number impact-stat-fixed">15–25</span>
+    <span class="impact-stat-label">Year Lifespan</span>
   </div>
-  <div class="stat-card">
-    <span class="stat-number" data-target="2050">0</span>
-    <span class="stat-label">Net Zero Target</span>
-    <p class="stat-context">Aligned with global climate goals</p>
+  <div class="impact-divider"></div>
+  <div class="impact-stat">
+    <span class="impact-stat-number" data-target="2050">0</span>
+    <span class="impact-stat-label">Net Zero Target</span>
   </div>
 </div>
+
+<!-- GWP Visual Scale -->
+<div class="gwp-scale" id="gwpScale">
+  <h3 class="gwp-scale-title">GWP Comparison Scale</h3>
+  <p class="gwp-scale-note">GWP measured over a 100-year time horizon (AR5). CO₂ (R744) is the baseline at 1. Scale uses logarithmic projection to accurately represent ratios spanning three orders of magnitude.</p>
+  <div class="gwp-bar-container">
+    <div class="gwp-bar">
+      <span class="gwp-bar-label">CO₂ (R744)</span>
+      <div class="gwp-bar-track">
+        <div class="gwp-bar-fill co2" data-gwp="1">1</div>
+      </div>
+      <span class="gwp-bar-value">GWP: 1</span>
+    </div>
+    <div class="gwp-bar">
+      <span class="gwp-bar-label">R-134a</span>
+      <div class="gwp-bar-track">
+        <div class="gwp-bar-fill r134a" data-gwp="1430">1,430</div>
+      </div>
+      <span class="gwp-bar-value">GWP: 1,430</span>
+    </div>
+    <div class="gwp-bar">
+      <span class="gwp-bar-label">R-410A</span>
+      <div class="gwp-bar-track">
+        <div class="gwp-bar-fill r410a" data-gwp="2088">2,088</div>
+      </div>
+      <span class="gwp-bar-value">GWP: 2,088</span>
+    </div>
+    <div class="gwp-bar">
+      <span class="gwp-bar-label">R-22</span>
+      <div class="gwp-bar-track">
+        <div class="gwp-bar-fill r22" data-gwp="1810">1,810</div>
+      </div>
+      <span class="gwp-bar-value">GWP: 1,810</span>
+    </div>
+  </div>
+</div>
+
 <div class="sources">
   <h4>Sources & References</h4>
   <ul>
@@ -1153,41 +1903,47 @@ footer::before {
 </section>
 
 <section id="why-now" class="snap-card" aria-labelledby="why-now-heading">
-<h2 id="why-now-heading" class="snap-section-heading">Why Now?</h2>
+<h2 id="why-now-heading" class="snap-section-heading">Why Now</h2>
 <div class="cards-container">
 <div class="card">
-  <div class="card-icon" aria-hidden="true">🌡️</div>
-  <h2 class="card-title" data-emoji="🌡️">Global Cooling Demand Rising</h2>
-  <p class="card-info">Cooling demand is rapidly increasing due to urbanization and rising temperatures worldwide.</p>
+  <div class="card-icon" aria-hidden="true">📜</div>
+  <h2 class="card-title" data-emoji="📜">Regulations Are Tightening</h2>
+  <p class="card-info">The Kigali Amendment mandates an 80% global phasedown of HFCs by 2047. The EU F-Gas Regulation already cut quotas by 60% since 2015, and the US AIM Act follows a similar trajectory. This isn't a suggestion — it's a legally binding deadline. The shift to CO₂ is happening whether the industry is ready or not.</p>
 </div>
 
 <div class="card">
-  <div class="card-icon" aria-hidden="true">🔥</div>
-  <h2 class="card-title" data-emoji="🔥">Heat Waves Increasing</h2>
-  <p class="card-info">Extreme heat events are becoming more frequent, increasing the need for sustainable cooling solutions.</p>
+  <div class="card-icon" aria-hidden="true">🌡️</div>
+  <h2 class="card-title" data-emoji="🌡️">Cooling Demand Is Outpacing Infrastructure</h2>
+  <p class="card-info">Global cooling energy demand will triple by 2050 (IEA), driven by rising temperatures and expanding middle-class access in developing nations. Cities, data centers, and industrial facilities are already hitting capacity limits. The question isn't if we need a new standard — it's whether we'll adopt it before we're forced to.</p>
+</div>
+
+<div class="card">
+  <div class="card-icon" aria-hidden="true">⏳</div>
+  <h2 class="card-title" data-emoji="⏳">Early Adopters Are Already Building the Lead</h2>
+  <p class="card-info">Over 30,000 CO₂ refrigeration systems are installed in European supermarkets alone (Shecco 2024). Data centers in Scandinavia, industrial facilities in Japan, and major airport ground cooling systems have deployed CO₂ at scale. The gap between early adopters and late movers is widening — and it won't close on its own.</p>
 </div>
 </div>
 </section>
 
 <section id="where" class="snap-card" aria-labelledby="where-heading">
-  <h2 id="where-heading" class="snap-section-heading">Where?</h2>
+  <h2 id="where-heading" class="snap-section-heading">Where</h2>
   <div class="cards-container">
     <div class="where-content">
       <div class="card-icon" aria-hidden="true">🏢</div>
       <h2 class="card-title" data-emoji="🏢">High-rise Buildings</h2>
-      <p>Efficient centralized cooling for dense urban environments.</p>
+      <p>Already deployed in centralized cooling systems across dense urban environments — reducing energy load while maintaining consistent temperatures at scale. CO₂'s compact piping (smaller diameter due to high density) makes it ideal for vertical installations where space is at a premium.</p>
     </div>
 
     <div class="where-content" data-index="1">
       <div class="card-icon" aria-hidden="true">🖥️</div>
       <h2 class="card-title" data-emoji="🖥️">Data Centers</h2>
-      <p>Reliable high-performance cooling for energy-intensive computing infrastructure.</p>
+      <p>Rapidly expanding in server farms and cloud infrastructure — where uptime is non-negotiable and heat recovery offsets operational costs. Scandinavian data centers already use CO₂ systems to capture server waste heat and redirect it to district heating networks, achieving PUE ratings below 1.1.</p>
     </div>
 
     <div class="where-content" data-index="2">
       <div class="card-icon" aria-hidden="true">✈️</div>
       <h2 class="card-title" data-emoji="✈️">Aircraft Ground Cooling</h2>
-      <p>Sustainable cooling systems for aircraft during ground operations.</p>
+      <p>Actively replacing synthetic refrigerant systems at major airports — delivering sustainable pre-flight cooling without the environmental liability. Ground support equipment is a concentrated emission source; switching to CO₂ eliminates the refrigerant footprint entirely while maintaining the same cooling capacity.</p>
     </div>
   </div>
 </section>
@@ -1203,36 +1959,47 @@ footer::before {
 <tbody>
 <tr>
 <td>Global Warming Potential</td>
-<td>1300–2000+ <span class="compare-icon" aria-label="Warning">⚠️</span></td>
-<td>1 <span class="compare-icon" aria-label="Good">✅</span></td>
+<td>1300–2000+ <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:80px"></span></td>
+<td>1 <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:8px"></span></td>
 </tr>
 <tr>
 <td>Environmental Impact</td>
-<td>High if leaked <span class="compare-icon" aria-label="Warning">⚠️</span></td>
-<td>Minimal <span class="compare-icon" aria-label="Good">✅</span></td>
+<td>High if leaked <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:70px"></span></td>
+<td>Minimal <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:12px"></span></td>
 </tr>
 <tr>
 <td>Flammability</td>
-<td>Can be flammable <span class="compare-icon" aria-label="Warning">⚠️</span></td>
-<td>Non-flammable <span class="compare-icon" aria-label="Good">✅</span></td>
-</tr>
-<tr>
-<td>Toxicity</td>
-<td>Mild toxicity <span class="compare-icon" aria-label="Warning">⚠️</span></td>
-<td>Non-toxic <span class="compare-icon" aria-label="Good">✅</span></td>
+<td>Varies (R-32: mildly flammable, R-290: highly flammable) <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:60px"></span></td>
+<td>Non-flammable (A1 safety class) <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:8px"></span></td>
 </tr>
 <tr>
 <td>Operating Pressure</td>
-<td>Moderate <span class="compare-icon" aria-label="Good">✅</span></td>
-<td>High (5×) <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>Moderate (15-25 bar) <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:30px"></span></td>
+<td>High (80-130 bar, ~5×) <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:90px"></span></td>
+</tr>
+<tr>
+<td>Upfront Cost</td>
+<td>Lower — mature supply chain <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:25px"></span></td>
+<td>10-25% higher — specialized components <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:75px"></span></td>
+</tr>
+<tr>
+<td>Efficiency (COP)</td>
+<td>Consistent across climates <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:50px"></span></td>
+<td>Excellent in temperate climates; drops above 35°C ambient without heat recovery <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:65px"></span></td>
 </tr>
 <tr>
 <td>Regulatory Future</td>
-<td>Being phased down <span class="compare-icon" aria-label="Warning">⚠️</span></td>
-<td>Future-proof <span class="compare-icon" aria-label="Good">✅</span></td>
+<td>Being phased down under Kigali Amendment <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:75px"></span></td>
+<td>Exempt from phase-down — future-proof <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:8px"></span></td>
+</tr>
+<tr>
+<td>Technician Expertise</td>
+<td>Widely understood — standard training <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:20px"></span></td>
+<td>Specialized knowledge required — smaller talent pool <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:70px"></span></td>
 </tr>
 </tbody>
 </table>
+<p class="compare-note">Each solution has trade-offs depending on use case. CO₂ excels in environmental impact and regulatory certainty but requires higher upfront investment and specialized expertise. The right choice depends on your climate, application, and timeline.</p>
 </div>
 
 </section>
@@ -1244,7 +2011,6 @@ footer::before {
     <p>CO₂ Refrigerant Air Conditioner</p>
     <p>A sustainable cooling solution optimized for colder climates</p>
     <p style="margin-top: 1.5rem; font-size: clamp(12px, 1rem, 16px); color: #999;">Kong Hau Yi, Shui Wen Qi & Jordan | BIICC 2026</p>
-    <p style="margin-top: 0.8rem; font-size: clamp(12px, 0.95rem, 15px); color: #999;">Transparency note: Shui Wen Qi's mockup was submitted later than planned due to revision timing.</p>
   </div>
 </footer>
 
@@ -1254,6 +2020,43 @@ const beigeSlide = document.getElementById('beigeSlide');
 setTimeout(() => {
   if (beigeSlide) beigeSlide.classList.add('slide-up');
 }, 1000);
+
+// Ambient floating molecules
+function createMolecules() {
+  const container = document.getElementById('moleculeContainer');
+  if (!container || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  
+  const count = window.innerWidth < 768 ? 6 : 12;
+  for (let i = 0; i < count; i++) {
+    const mol = document.createElement('div');
+    mol.className = 'molecule';
+    mol.style.left = Math.random() * 100 + '%';
+    mol.style.animationDuration = (15 + Math.random() * 20) + 's';
+    mol.style.animationDelay = Math.random() * 15 + 's';
+    mol.style.width = (4 + Math.random() * 4) + 'px';
+    mol.style.height = mol.style.width;
+    container.appendChild(mol);
+  }
+}
+createMolecules();
+
+// Floating data points in hero
+function createHeroDataPoints() {
+  const hero = document.getElementById('hero');
+  if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  
+  const count = window.innerWidth < 768 ? 8 : 15;
+  for (let i = 0; i < count; i++) {
+    const point = document.createElement('div');
+    point.className = 'hero-data-point';
+    point.style.left = Math.random() * 100 + '%';
+    point.style.top = (50 + Math.random() * 50) + '%';
+    point.style.animationDuration = (8 + Math.random() * 12) + 's';
+    point.style.animationDelay = Math.random() * 8 + 's';
+    hero.appendChild(point);
+  }
+}
+createHeroDataPoints();
 
 // Fun Facts Banner
 const funFacts = [
@@ -1320,7 +2123,6 @@ class ParticleSystem {
     this.mouseY = -1000;
     this.boostBrightness = false;
 
-    // Respect reduced motion / low-power devices.
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const deviceMemory = navigator && typeof navigator.deviceMemory === 'number' ? navigator.deviceMemory : null;
     const hardwareConcurrency = navigator && typeof navigator.hardwareConcurrency === 'number' ? navigator.hardwareConcurrency : null;
@@ -1338,7 +2140,6 @@ class ParticleSystem {
 
     window.addEventListener('resize', () => this.resize());
 
-    // Track mouse position relative to canvas
     const heroEl = document.getElementById('hero');
     if (heroEl) {
       heroEl.addEventListener('mousemove', (e) => {
@@ -1352,7 +2153,6 @@ class ParticleSystem {
       });
     }
 
-    // Track touch position for mobile
     if (heroEl) {
       heroEl.addEventListener('touchmove', (e) => {
         if (e.touches.length > 0) {
@@ -1367,7 +2167,6 @@ class ParticleSystem {
       });
     }
 
-    // Boost brightness when hovering over enter button
     const enterBtn = document.getElementById('enter');
     if (enterBtn) {
       enterBtn.addEventListener('mouseenter', () => { this.boostBrightness = true; });
@@ -1429,7 +2228,6 @@ class ParticleSystem {
     this.particles.forEach(p => {
       p.pulse += 0.02;
 
-      // Mouse repulsion
       const dx = p.x - this.mouseX;
       const dy = p.y - this.mouseY;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -1440,17 +2238,14 @@ class ParticleSystem {
         p.displacementY += (dy / dist) * force * 0.1;
       }
 
-      // Return to home position with spring
       p.displacementX *= dampening;
       p.displacementY *= dampening;
       p.displacementX -= p.displacementX * returnStrength;
       p.displacementY -= p.displacementY * returnStrength;
 
-      // Update position with drift + displacement
       p.x += p.speedX + p.displacementX;
       p.y += p.speedY + p.displacementY;
 
-      // Wrap around
       if (p.x < -10) p.x = this.canvas.width + 10;
       if (p.x > this.canvas.width + 10) p.x = -10;
       if (p.y < -10) p.y = this.canvas.height + 10;
@@ -1472,7 +2267,6 @@ class ParticleSystem {
 const particleCanvas = document.getElementById('particle-canvas');
 const particleSystem = particleCanvas ? new ParticleSystem(particleCanvas) : null;
 
-// Pause particle animation when off-screen for performance.
 const heroSection = document.getElementById('hero');
 if (particleSystem && heroSection && 'IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
@@ -1496,7 +2290,7 @@ function updateProgressBar() {
 window.addEventListener('scroll', updateProgressBar);
 
 
-const sections = ['why', 'how', 'phase1', 'impact', 'why-now', 'where', 'compare'];
+const sections = ['why', 'phase1', 'solutions', 'how', 'impact', 'why-now', 'where', 'compare'];
 const dots = document.querySelectorAll('.dot');
 
 function updateActiveDot() {
@@ -1532,7 +2326,6 @@ dots.forEach((dot, index) => {
 
 window.addEventListener('scroll', updateActiveDot);
 
-// Smooth scroll function
 function scrollToSection(id) {
   const element = document.getElementById(id);
   if (!element) return;
@@ -1540,7 +2333,6 @@ function scrollToSection(id) {
   history.pushState(null, null, `#${id}`);
 }
 
-// Keyboard navigation
 document.addEventListener('keydown', (e) => {
   if (state !== 'main') return;
 
@@ -1576,6 +2368,71 @@ function animateCounter(element, target, duration = 2000) {
   }
   
   update();
+}
+
+// Cursor-following light effect on cards
+function initCursorLight() {
+  const cards = document.querySelectorAll('.card, .engineering-card, .stat-card, .where-content');
+  
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--mouse-x', x + '%');
+      card.style.setProperty('--mouse-y', y + '%');
+    });
+  });
+}
+
+// Section visibility for icon animations and background shifts
+function initSectionVisibility() {
+  const snapCards = document.querySelectorAll('.snap-card');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        
+        // Trigger icon animations for child cards
+        const cards = entry.target.querySelectorAll('.card, .engineering-card');
+        cards.forEach((card, i) => {
+          setTimeout(() => {
+            card.classList.add('is-visible');
+          }, i * 150);
+        });
+        
+        // Animate GWP bars when impact section is visible
+        if (entry.target.id === 'impact') {
+          const bars = entry.target.querySelectorAll('.gwp-bar-fill');
+          // Logarithmic scale: log10(GWP+1) / log10(maxGWP+1) * 100
+          // This accurately represents ratios spanning 3+ orders of magnitude
+          // while keeping the CO₂ baseline visible. Scale is explicitly labeled.
+          const maxGWP = 2088;
+          const logMax = Math.log10(maxGWP + 1);
+          bars.forEach((bar, i) => {
+            const gwp = parseInt(bar.getAttribute('data-gwp'));
+            const logWidth = (Math.log10(gwp + 1) / logMax) * 100;
+            setTimeout(() => {
+              bar.style.width = Math.max(logWidth, 2) + '%';
+            }, i * 200 + 300);
+          });
+        }
+      } else {
+        entry.target.classList.remove('is-visible');
+        const cards = entry.target.querySelectorAll('.card, .engineering-card');
+        cards.forEach(card => card.classList.remove('is-visible'));
+        
+        // Reset GWP bars
+        if (entry.target.id === 'impact') {
+          const bars = entry.target.querySelectorAll('.gwp-bar-fill');
+          bars.forEach(bar => { bar.style.width = '0'; });
+        }
+      }
+    });
+  }, { threshold: 0.2 });
+  
+  snapCards.forEach(card => observer.observe(card));
 }
 
 // Comparison Tab Switcher
@@ -1616,11 +2473,9 @@ let transitioning=false;
 
 document.documentElement.style.overflowY='hidden';
 
-// Store references to animations for cleanup
 let animations = [];
 
 function resetAllElements() {
-  // Reset all animated elements to visible state
   gsap.set('.card', { opacity: 1, clearProps: 'all' });
   gsap.set('.section-text', { opacity: 1, clearProps: 'all' });
   gsap.set('.word', { opacity: 1, clearProps: 'all' });
@@ -1629,23 +2484,22 @@ function resetAllElements() {
   gsap.set('.where-content', { opacity: 1, y: 0, clearProps: 'all' });
   gsap.set('.compare-table', { opacity: 1, y: 0, clearProps: 'all' });
   gsap.set('#cyclePathActive', { strokeDashoffset: 1000 });
+  gsap.set('.cycle-path-step', { strokeDashoffset: 500 });
+  gsap.set('.cycle-path-step', { clearProps: 'class' });
+  document.querySelectorAll('.cycle-path-step').forEach(p => p.classList.remove('active', 'completed'));
+  document.querySelectorAll('.cycle-node').forEach(n => n.classList.remove('highlight', 'highlight-right', 'highlight-left'));
+  document.querySelectorAll('.cycle-label-diagram').forEach(l => l.classList.remove('highlight'));
+  gsap.set('#glowOrb', { opacity: 0 });
   
-  // Reset stat numbers
   document.querySelectorAll('.stat-number').forEach(stat => {
-    // Keep fixed range text (e.g., lifespan) intact.
     if (stat.hasAttribute('data-target')) stat.textContent = '0';
   });
 }
 
 function cleanupAnimations() {
-  // Kill all ScrollTrigger instances
   ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-  
-  // Kill all GSAP animations
   animations.forEach(anim => anim.kill());
   animations = [];
-  
-  // Clear global timeline
   gsap.globalTimeline.clear();
 }
 
@@ -1674,16 +2528,11 @@ function forward(){
   document.documentElement.style.overflowY='scroll';
   fade.style.background='var(--bg-dark)';
   
-  // Clean up any existing animations first
   cleanupAnimations();
-  
-  // Reset elements before initializing new animations
   resetAllElements();
-  
-  // Initialize animations
   initAnimations();
-  
-  // Refresh ScrollTrigger after DOM is updated
+  initCursorLight();
+  initSectionVisibility();
   ScrollTrigger.refresh();
  },1000);
 
@@ -1703,7 +2552,6 @@ function initAnimations(){
     ScrollTrigger.config({ autoRefreshEvents: "visibilitychange,DOMContentLoaded,load" });
   }
 
-  // Cards animation
   const cardsAnim = gsap.fromTo('.card', 
     { opacity: 0, y: 30 },
     {
@@ -1721,14 +2569,7 @@ function initAnimations(){
   );
   animations.push(cardsAnim);
 
-  // How it works text animation
-  const text = "A CO₂ air conditioner uses carbon dioxide as the refrigerant instead of traditional synthetic gases. The CO₂ circulates in a closed high-pressure loop where it is compressed, cooled in a gas cooler, expanded through a valve, and then absorbs indoor heat before repeating the cycle.";
-  const words = text.split(' ');
-  const container = document.getElementById('howText');
-
-  container.innerHTML = words.map(word => `<span class="word">${word}</span> `).join('');
-
-  const sectionTextAnim = gsap.fromTo('.section-text',
+  const sectionTextAnim = gsap.fromTo('#how .section-text',
     { opacity: 0 },
     {
       opacity: 1,
@@ -1743,7 +2584,13 @@ function initAnimations(){
   );
   animations.push(sectionTextAnim);
 
-  const wordsAnim = gsap.fromTo('.word',
+  const text = "CO₂ refrigeration works on a closed transcritical cycle — fundamentally different from conventional AC. Instead of condensing into a liquid, CO₂ stays above its critical point (31.1°C) and releases heat as a supercritical fluid. This single difference is what makes the system both more complex and far more efficient when designed correctly.";
+  const words = text.split(' ');
+  const container = document.getElementById('howText');
+
+  container.innerHTML = words.map(word => `<span class="word">${word}</span> `).join('');
+
+  const wordsAnim = gsap.fromTo('#how .word',
     { opacity: 0 },
     {
       opacity: 1,
@@ -1760,21 +2607,91 @@ function initAnimations(){
   );
   animations.push(wordsAnim);
 
-  // Cycle diagram animation
-  const cycleAnim = gsap.to('#cyclePathActive', {
-    strokeDashoffset: 0,
-    duration: 3,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#how',
-      start: 'top center',
-      end: 'bottom center',
-      scrub: 1
+  const stepData = [
+    {
+      title: '1. Compression',
+      text: 'Low-pressure CO₂ gas (30–45 bar, ~15°C) enters the compressor. It is compressed to 80–130 bar, raising temperature to 100–150°C. The CO₂ crosses its critical point (31.1°C / 73.8 bar) and becomes a supercritical fluid — behaving like neither a liquid nor a gas.',
+      highlight: 'segHighlight1',
+      nodeId: 'comp-node'
+    },
+    {
+      title: '2. Heat Rejection (Gas Cooler)',
+      text: 'The supercritical CO₂ flows through the gas cooler. Unlike a condenser, there is no phase change — heat is rejected continuously as a supercritical fluid. Temperature drops from ~120°C to 35–40°C. This rejected heat can be recovered for domestic hot water (80–120°C output).',
+      highlight: 'segHighlight2',
+      nodeId: 'gascooler-node'
+    },
+    {
+      title: '3. Expansion',
+      text: 'The high-pressure CO₂ (~90 bar, 35°C) passes through an electronic expansion valve (EEV). Pressure drops to 25–35 bar in milliseconds — a flash-cooling effect that drops the temperature to –5°C to +5°C. The CO₂ becomes a two-phase liquid–gas mixture.',
+      highlight: 'segHighlight3',
+      nodeId: 'exp-node'
+    },
+    {
+      title: '4. Evaporation',
+      text: 'The cold CO₂ mixture enters the evaporator. It absorbs heat from the indoor air and fully evaporates at constant temperature and pressure. CO₂ exits as a low-pressure gas at 5–15°C, 30–45 bar — ready to return to the compressor and repeat the cycle.',
+      highlight: 'segHighlight4',
+      nodeId: 'evap-node'
     }
-  });
-  animations.push(cycleAnim);
+  ];
 
-  // Engineering cards
+  let currentStep = 0;
+  let glowTween = null;
+
+  function setStep(step) {
+    if (step < 1 || step > 4) return;
+    currentStep = step;
+    const data = stepData[step - 1];
+
+    // Update buttons and dots
+    document.querySelectorAll('.step-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === step - 1);
+    });
+    document.querySelectorAll('.step-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === step - 1);
+    });
+
+    // Hide all highlights and dim all nodes
+    ['segHighlight1','segHighlight2','segHighlight3','segHighlight4'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.setAttribute('opacity', '0');
+    });
+    ['comp-node','gascooler-node','exp-node','evap-node'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        const rect = el.querySelector('rect');
+        if (rect) rect.setAttribute('stroke', 'rgba(110,231,183,0.2)');
+      }
+    });
+
+    // Activate current segment highlight
+    const hl = document.getElementById(data.highlight);
+    if (hl) hl.setAttribute('opacity', '0.7');
+
+    // Highlight current node
+    const activeNode = document.getElementById(data.nodeId);
+    if (activeNode) {
+      const rect = activeNode.querySelector('rect');
+      if (rect) rect.setAttribute('stroke', '#6ee7b7');
+    }
+
+    // Update description
+    document.getElementById('stepTitle').textContent = data.title;
+    const stepTextEl = document.getElementById('stepText');
+    if (window.gsap) {
+      gsap.fromTo(stepTextEl, { opacity: 0, y: 8 }, { opacity: 0.9, y: 0, duration: 0.3, ease: 'power2.out' });
+    }
+    stepTextEl.textContent = data.text;
+  }
+
+  document.querySelectorAll('.step-btn, .step-dot').forEach(el => {
+    el.addEventListener('click', function() {
+      const step = parseInt(this.getAttribute('data-step'));
+      setStep(step);
+    });
+  });
+
+  setStep(1);
+
   const engAnim = gsap.fromTo('.engineering-card',
     { opacity: 0, y: 30 },
     {
@@ -1792,7 +2709,23 @@ function initAnimations(){
   );
   animations.push(engAnim);
 
-  // Stats animation
+  const solAnim = gsap.fromTo('#solutions .engineering-card',
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.2,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '#solutions',
+        start: 'top center',
+        toggleActions: 'play none none reverse'
+      }
+    }
+  );
+  animations.push(solAnim);
+
   const statsAnim = gsap.fromTo('.stat-card',
     { opacity: 0, y: 20 },
     {
@@ -1819,7 +2752,6 @@ function initAnimations(){
   );
   animations.push(statsAnim);
 
-  // Where cards animation
   const whereAnim = gsap.fromTo('.where-content',
     { opacity: 0, y: 30 },
     {
@@ -1837,7 +2769,6 @@ function initAnimations(){
   );
   animations.push(whereAnim);
 
-  // Compare table animation - FIXED: Use fromTo instead of from
   const tableAnim = gsap.fromTo('.compare-table',
     { opacity: 0, y: 50 },
     {
@@ -1862,7 +2793,7 @@ window.addEventListener('scroll',()=>{
   if(state==='main'){
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
-      if(window.scrollY<=0 && !transitioning){  // Added check for transitioning
+      if(window.scrollY<=0 && !transitioning){
         reverse();
       }
     }, 100);
@@ -1873,7 +2804,6 @@ function reverse(){
  if(transitioning||state==='hero')return;
  transitioning=true;
  
- // Clean up animations before leaving
  cleanupAnimations();
  
  fade.style.transition='opacity 0.5s';
@@ -1884,11 +2814,9 @@ function reverse(){
   document.body.classList.remove('main-active');
   main.style.display='none';
   hero.style.display='flex';
-document.documentElement.style.overflowY='hidden';
-window.scrollTo(0, 0);
-  window.scrollTo(0,0);
+  document.documentElement.style.overflowY='hidden';
+  window.scrollTo(0, 0);
   
-  // Reset elements for next entry
   resetAllElements();
  },700);
 
@@ -1911,7 +2839,6 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// Initialize dots on load
 updateActiveDot();
 </script>
 
