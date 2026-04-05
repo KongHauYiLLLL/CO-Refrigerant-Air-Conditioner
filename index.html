@@ -716,8 +716,8 @@ body.main-active .main-site{display:block;}
 .cycle-diagram {
   width: 100%;
   max-width: 600px;
-  height: auto;
-  margin: 2vh auto 0;
+  height: 350px;
+  margin: 4vh auto 0;
   position: relative;
 }
 
@@ -789,39 +789,6 @@ body.main-active .main-site{display:block;}
 .cycle-node.highlight-right,
 .cycle-node.highlight-left {
   transform: translateY(-50%) scale(1.1) !important;
-}
-
-/* SVG-based cycle diagram styles */
-.cycle-node-svg {
-  transition: all 0.3s ease;
-}
-
-.cycle-node-svg.highlight {
-  stroke: #fff !important;
-  stroke-width: 3 !important;
-  filter: drop-shadow(0 0 12px rgba(110,231,183,0.6));
-}
-
-.cycle-label-svg {
-  fill: var(--text);
-  transition: all 0.3s ease;
-}
-
-.cycle-label-svg.highlight {
-  fill: var(--accent) !important;
-}
-
-.label-bg {
-  transition: all 0.3s ease;
-}
-
-.label-bg.highlight {
-  stroke: rgba(110,231,183,0.6) !important;
-  stroke-width: 2 !important;
-}
-
-.node-emoji {
-  pointer-events: none;
 }
 
 .cycle-path-step {
@@ -1377,37 +1344,6 @@ body.main-active .main-site{display:block;}
 
 .compare-icon { font-size: 1.2em; margin-left: 0.5em; }
 
-/* Visual indicator bars in comparison table */
-.compare-bar {
-  display: inline-block;
-  height: 6px;
-  border-radius: 3px;
-  margin-left: 8px;
-  vertical-align: middle;
-  transition: width 0.8s cubic-bezier(0.23, 1, 0.320, 1);
-}
-
-.compare-bar.good {
-  background: linear-gradient(90deg, var(--accent), #00ffe1);
-}
-
-.compare-bar.bad {
-  background: linear-gradient(90deg, #ff6b6b, #ee5a24);
-}
-
-.compare-note {
-  margin-top: 2vh;
-  padding: 1.5vh 2vw;
-  font-size: clamp(12px, 1.2vw, 15px);
-  color: var(--text-muted);
-  font-style: italic;
-  text-align: center;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
-}
-
 .flash-text{
   position:fixed;
   top:50%;
@@ -1676,13 +1612,18 @@ footer::before {
 <h2 id="how-heading">How it Works</h2>
 <p id="howText"></p>
 </div>
-<div class="cycle-diagram-wrapper">
-  <div class="cycle-diagram" id="cycleDiagram" role="img" aria-label="CO₂ transcritical refrigeration cycle schematic">
-    <svg width="100%" viewBox="0 0 860 420" style="display:block; max-height: 38vh;">
+  <div class="cycle-diagram-wrapper">
+  <div class="cycle-diagram" id="cycleDiagram" role="img" aria-label="Refrigeration cycle diagram showing compression, cooling, expansion, and heat absorption">
+    <svg class="cycle-svg" viewBox="0 0 600 350">
+      <path class="cycle-path" d="M 300 80 Q 480 80 480 175 Q 480 270 300 270 Q 120 270 120 175 Q 120 80 300 80" />
+      <path class="cycle-path-step" id="stepPath1" d="M 300 80 Q 480 80 480 175" />
+      <path class="cycle-path-step" id="stepPath2" d="M 480 175 Q 480 270 300 270" />
+      <path class="cycle-path-step" id="stepPath3" d="M 300 270 Q 120 270 120 175" />
+      <path class="cycle-path-step" id="stepPath4" d="M 120 175 Q 120 80 300 80" />
+      <circle id="glowOrb" cx="300" cy="80" r="12" fill="#6ee7b7" opacity="0" filter="url(#glowFilter)">
+        <animate attributeName="r" values="10;14;10" dur="2s" repeatCount="indefinite"/>
+      </circle>
       <defs>
-        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </marker>
         <filter id="glowFilter">
           <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
           <feMerge>
@@ -1691,119 +1632,18 @@ footer::before {
           </feMerge>
         </filter>
       </defs>
-
-      <!-- ── PIPE NETWORK ── -->
-      <!-- Top pipe: Compressor → Gas Cooler -->
-      <path id="pipe1" d="M 240 100 L 560 100" fill="none" stroke="rgba(110,231,183,0.18)" stroke-width="14" stroke-linecap="round"/>
-      <path id="flow1" d="M 240 100 L 560 100" fill="none" stroke="#6ee7b7" stroke-width="4" stroke-linecap="round"
-            stroke-dasharray="18 12" stroke-dashoffset="0" opacity="0.7">
-        <animate attributeName="stroke-dashoffset" from="0" to="-90" dur="2s" repeatCount="indefinite"/>
-      </path>
-
-      <!-- Right pipe: Gas Cooler → Expansion Valve -->
-      <path id="pipe2" d="M 650 145 L 650 255" fill="none" stroke="rgba(110,231,183,0.18)" stroke-width="14" stroke-linecap="round"/>
-      <path id="flow2" d="M 650 145 L 650 255" fill="none" stroke="#6ee7b7" stroke-width="4" stroke-linecap="round"
-            stroke-dasharray="18 12" stroke-dashoffset="0" opacity="0.7">
-        <animate attributeName="stroke-dashoffset" from="0" to="-90" dur="2s" repeatCount="indefinite"/>
-      </path>
-
-      <!-- Bottom pipe: Expansion Valve → Evaporator -->
-      <path id="pipe3" d="M 560 300 L 240 300" fill="none" stroke="rgba(110,231,183,0.18)" stroke-width="14" stroke-linecap="round"/>
-      <path id="flow3" d="M 560 300 L 240 300" fill="none" stroke="#6ee7b7" stroke-width="4" stroke-linecap="round"
-            stroke-dasharray="18 12" stroke-dashoffset="0" opacity="0.7">
-        <animate attributeName="stroke-dashoffset" from="0" to="-90" dur="2s" repeatCount="indefinite"/>
-      </path>
-
-      <!-- Left pipe: Evaporator → Compressor -->
-      <path id="pipe4" d="M 150 255 L 150 145" fill="none" stroke="rgba(110,231,183,0.18)" stroke-width="14" stroke-linecap="round"/>
-      <path id="flow4" d="M 150 255 L 150 145" fill="none" stroke="#6ee7b7" stroke-width="4" stroke-linecap="round"
-            stroke-dasharray="18 12" stroke-dashoffset="0" opacity="0.7">
-        <animate attributeName="stroke-dashoffset" from="0" to="-90" dur="2s" repeatCount="indefinite"/>
-      </path>
-
-      <!-- ── COMPONENTS (all 180×70, same size) ── -->
-
-      <!-- 1. Compressor (top-left) -->
-      <g id="comp-node">
-        <rect x="60" y="65" width="180" height="70" rx="8"
-              fill="rgba(2,52,62,0.85)" stroke="rgba(110,231,183,0.35)" stroke-width="1.5"/>
-        <polygon points="80,80 80,116 100,98" fill="rgba(110,231,183,0.5)" stroke="#6ee7b7" stroke-width="1"/>
-        <polygon points="100,80 100,116 120,98" fill="rgba(110,231,183,0.25)" stroke="#6ee7b7" stroke-width="1"/>
-        <text x="150" y="86" fill="#F0EDCC" font-family="Raleway,sans-serif" font-weight="700" font-size="13" text-anchor="middle">Compressor</text>
-        <text x="150" y="103" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">80–130 bar</text>
-        <text x="150" y="120" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">100–150 °C</text>
-      </g>
-
-      <!-- 2. Gas Cooler (top-right) -->
-      <g id="gascooler-node">
-        <rect x="560" y="65" width="180" height="70" rx="8"
-              fill="rgba(2,52,62,0.85)" stroke="rgba(110,231,183,0.35)" stroke-width="1.5"/>
-        <path d="M 578 82 Q 588 74 598 82 Q 608 90 618 82 Q 628 74 638 82" fill="none" stroke="#6ee7b7" stroke-width="1.5"/>
-        <path d="M 578 96 Q 588 88 598 96 Q 608 104 618 96 Q 628 88 638 96" fill="none" stroke="rgba(110,231,183,0.5)" stroke-width="1.5"/>
-        <path d="M 578 110 Q 588 102 598 110 Q 608 118 618 110 Q 628 102 638 110" fill="none" stroke="rgba(110,231,183,0.25)" stroke-width="1.5"/>
-        <text x="650" y="86" fill="#F0EDCC" font-family="Raleway,sans-serif" font-weight="700" font-size="13" text-anchor="middle">Gas Cooler</text>
-        <text x="650" y="103" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">Heat rejected</text>
-        <text x="650" y="120" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">35–40 °C out</text>
-      </g>
-
-      <!-- 3. Expansion Valve (bottom-right) -->
-      <g id="exp-node">
-        <rect x="560" y="265" width="180" height="70" rx="8"
-              fill="rgba(2,52,62,0.85)" stroke="rgba(110,231,183,0.35)" stroke-width="1.5"/>
-        <polygon points="578,280 598,296 578,312" fill="rgba(110,231,183,0.4)" stroke="#6ee7b7" stroke-width="1"/>
-        <polygon points="598,280 598,312 618,296" fill="rgba(110,231,183,0.15)" stroke="#6ee7b7" stroke-width="1"/>
-        <line x1="598" y1="296" x2="618" y2="296" stroke="#6ee7b7" stroke-width="1.5"/>
-        <text x="650" y="286" fill="#F0EDCC" font-family="Raleway,sans-serif" font-weight="700" font-size="13" text-anchor="middle">Exp. Valve</text>
-        <text x="650" y="303" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">90 → 30 bar</text>
-        <text x="650" y="320" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">Flash-cooling</text>
-      </g>
-
-      <!-- 4. Evaporator (bottom-left) -->
-      <g id="evap-node">
-        <rect x="60" y="265" width="180" height="70" rx="8"
-              fill="rgba(2,52,62,0.85)" stroke="rgba(110,231,183,0.35)" stroke-width="1.5"/>
-        <path d="M 78 282 Q 88 274 98 282 Q 108 290 118 282 Q 128 274 138 282" fill="none" stroke="#6ee7b7" stroke-width="1.5"/>
-        <path d="M 78 296 Q 88 288 98 296 Q 108 304 118 296 Q 128 288 138 296" fill="none" stroke="rgba(110,231,183,0.5)" stroke-width="1.5"/>
-        <path d="M 78 310 Q 88 302 98 310 Q 108 318 118 310 Q 128 302 138 310" fill="none" stroke="rgba(110,231,183,0.25)" stroke-width="1.5"/>
-        <text x="150" y="286" fill="#F0EDCC" font-family="Raleway,sans-serif" font-weight="700" font-size="13" text-anchor="middle">Evaporator</text>
-        <text x="150" y="303" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">Absorbs heat</text>
-        <text x="150" y="320" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">5–15 °C out</text>
-      </g>
-
-      <!-- ── ACTIVE SEGMENT HIGHLIGHTS (toggled by JS) ── -->
-      <path id="segHighlight1" d="M 240 100 L 560 100" fill="none" stroke="#6ee7b7" stroke-width="6" stroke-linecap="round" opacity="0" filter="url(#glowFilter)"/>
-      <path id="segHighlight2" d="M 650 145 L 650 255" fill="none" stroke="#6ee7b7" stroke-width="6" stroke-linecap="round" opacity="0" filter="url(#glowFilter)"/>
-      <path id="segHighlight3" d="M 560 300 L 240 300" fill="none" stroke="#6ee7b7" stroke-width="6" stroke-linecap="round" opacity="0" filter="url(#glowFilter)"/>
-      <path id="segHighlight4" d="M 150 255 L 150 145" fill="none" stroke="#6ee7b7" stroke-width="6" stroke-linecap="round" opacity="0" filter="url(#glowFilter)"/>
-
-      <!-- ── STATE LABELS ── -->
-      <rect x="320" y="80" width="140" height="20" rx="10" fill="rgba(2,52,62,0.7)" stroke="rgba(110,231,183,0.3)" stroke-width="1"/>
-      <text x="390" y="94" fill="#6ee7b7" font-family="Raleway,sans-serif" font-size="11" font-weight="700" text-anchor="middle">SUPERCRITICAL FLUID</text>
-
-      <rect x="320" y="312" width="130" height="20" rx="10" fill="rgba(2,52,62,0.7)" stroke="rgba(110,231,183,0.3)" stroke-width="1"/>
-      <text x="385" y="326" fill="#6ee7b7" font-family="Raleway,sans-serif" font-size="11" font-weight="700" text-anchor="middle">TWO-PHASE / GAS</text>
-
-      <!-- Pressure annotation (right side) -->
-      <text x="780" y="108" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">HIGH</text>
-      <text x="780" y="120" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">PRESSURE</text>
-      <line x1="780" y1="125" x2="780" y2="270" stroke="rgba(110,231,183,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
-      <text x="780" y="285" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">LOW</text>
-      <text x="780" y="297" fill="#bdbdbd" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">PRESSURE</text>
-
-      <!-- Heat rejection arrow -->
-      <line x1="750" y1="145" x2="750" y2="50" stroke="#ff8c69" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr)" opacity="0.7"/>
-      <text x="765" y="90" fill="#ff8c69" font-family="Raleway,sans-serif" font-size="11" text-anchor="start">Q out</text>
-
-      <!-- Heat absorption arrow -->
-      <line x1="32" y1="340" x2="32" y2="270" stroke="#69c0ff" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr)" opacity="0.7"/>
-      <text x="12" y="315" fill="#69c0ff" font-family="Raleway,sans-serif" font-size="11" text-anchor="middle">Q in</text>
-
-      <!-- Flow direction arrows -->
-      <path d="M 370 92 L 390 92" fill="none" stroke="#6ee7b7" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
-      <path d="M 658 195 L 658 215" fill="none" stroke="#6ee7b7" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
-      <path d="M 430 308 L 410 308" fill="none" stroke="#6ee7b7" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
-      <path d="M 142 205 L 142 185" fill="none" stroke="#6ee7b7" stroke-width="2" marker-end="url(#arr)" opacity="0.6"/>
     </svg>
+    <div class="cycle-node" id="node1" style="top: 45px; left: 50%; transform: translateX(-50%);" aria-hidden="true">🔧</div>
+    <div class="cycle-label-diagram" id="label1" style="top: 5px; left: 50%; transform: translateX(-50%);">Compress</div>
+
+    <div class="cycle-node" id="node2" style="top: 50%; right: 25px; transform: translateY(-50%);" aria-hidden="true">❄️</div>
+    <div class="cycle-label-diagram" id="label2" style="top: 50%; right: -50px; transform: translateY(-50%);">Cool</div>
+
+    <div class="cycle-node" id="node3" style="bottom: 45px; left: 50%; transform: translateX(-50%);" aria-hidden="true">💨</div>
+    <div class="cycle-label-diagram" id="label3" style="bottom: 5px; left: 50%; transform: translateX(-50%);">Expand</div>
+
+    <div class="cycle-node" id="node4" style="top: 50%; left: 25px; transform: translateY(-50%);" aria-hidden="true">🌡️</div>
+    <div class="cycle-label-diagram" id="label4" style="top: 50%; left: -70px; transform: translateY(-50%);">Absorb</div>
   </div>
 
   <div class="step-indicator" id="stepIndicator">
@@ -1814,15 +1654,15 @@ footer::before {
   </div>
 
   <div class="step-buttons" id="stepButtons">
-    <button class="step-btn active" data-step="1">Compression</button>
-    <button class="step-btn" data-step="2">Heat Rejection</button>
-    <button class="step-btn" data-step="3">Expansion</button>
-    <button class="step-btn" data-step="4">Evaporation</button>
+    <button class="step-btn active" data-step="1">Compress ⚙️</button>
+    <button class="step-btn" data-step="2">Cool ❄️</button>
+    <button class="step-btn" data-step="3">Expand 🔽</button>
+    <button class="step-btn" data-step="4">Absorb 🌡️</button>
   </div>
 
   <div class="step-description" id="stepDescription">
-    <p class="step-title" id="stepTitle">1. Compression</p>
-    <p class="step-text" id="stepText">Low-pressure CO₂ gas (30–45 bar, ~15°C) enters the compressor. It is compressed to 80–130 bar, raising temperature to 100–150°C. The CO₂ crosses its critical point (31.1°C / 73.8 bar) and becomes a supercritical fluid — behaving like neither a liquid nor a gas.</p>
+    <p class="step-title" id="stepTitle">Compress ⚙️</p>
+    <p class="step-text" id="stepText">CO₂ gas is compressed, increasing pressure and temperature.</p>
   </div>
 </div>
 </section>
@@ -1959,38 +1799,38 @@ footer::before {
 <tbody>
 <tr>
 <td>Global Warming Potential</td>
-<td>1300–2000+ <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:80px"></span></td>
-<td>1 <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:8px"></span></td>
+<td>1300–2000+ <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>1 <span class="compare-icon" aria-label="Good">✅</span></td>
 </tr>
 <tr>
 <td>Environmental Impact</td>
-<td>High if leaked <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:70px"></span></td>
-<td>Minimal <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:12px"></span></td>
+<td>High if leaked <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>Minimal <span class="compare-icon" aria-label="Good">✅</span></td>
 </tr>
 <tr>
 <td>Flammability</td>
-<td>Varies (R-32: mildly flammable, R-290: highly flammable) <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:60px"></span></td>
-<td>Non-flammable (A1 safety class) <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:8px"></span></td>
+<td>Varies (R-32: mildly flammable, R-290: highly flammable) <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>Non-flammable (A1 safety class) <span class="compare-icon" aria-label="Good">✅</span></td>
 </tr>
 <tr>
 <td>Operating Pressure</td>
-<td>Moderate (15-25 bar) <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:30px"></span></td>
-<td>High (80-130 bar, ~5×) <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:90px"></span></td>
+<td>Moderate (15-25 bar) <span class="compare-icon" aria-label="Good">✅</span></td>
+<td>High (80-130 bar, ~5×) <span class="compare-icon" aria-label="Warning">⚠️</span></td>
 </tr>
 <tr>
 <td>Upfront Cost</td>
-<td>Lower — mature supply chain <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:25px"></span></td>
-<td>10-25% higher — specialized components <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:75px"></span></td>
+<td>Lower — mature supply chain <span class="compare-icon" aria-label="Good">✅</span></td>
+<td>10-25% higher — specialized components <span class="compare-icon" aria-label="Warning">⚠️</span></td>
 </tr>
 <tr>
 <td>Efficiency (COP)</td>
-<td>Consistent across climates <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:50px"></span></td>
-<td>Excellent in temperate climates; drops above 35°C ambient without heat recovery <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:65px"></span></td>
+<td>Consistent across climates <span class="compare-icon" aria-label="Good">✅</span></td>
+<td>Excellent in temperate climates; drops above 35°C ambient without heat recovery <span class="compare-icon" aria-label="Warning">⚠️</span></td>
 </tr>
 <tr>
 <td>Regulatory Future</td>
-<td>Being phased down under Kigali Amendment <span class="compare-icon" aria-label="Warning">⚠️</span><span class="compare-bar bad" style="width:75px"></span></td>
-<td>Exempt from phase-down — future-proof <span class="compare-icon" aria-label="Good">✅</span><span class="compare-bar good" style="width:8px"></span></td>
+<td>Being phased down under Kigali Amendment <span class="compare-icon" aria-label="Warning">⚠️</span></td>
+<td>Exempt from phase-down — future-proof <span class="compare-icon" aria-label="Good">✅</span></td>
 </tr>
 <tr>
 <td>Technician Expertise</td>
@@ -2608,30 +2448,10 @@ function initAnimations(){
   animations.push(wordsAnim);
 
   const stepData = [
-    {
-      title: '1. Compression',
-      text: 'Low-pressure CO₂ gas (30–45 bar, ~15°C) enters the compressor. It is compressed to 80–130 bar, raising temperature to 100–150°C. The CO₂ crosses its critical point (31.1°C / 73.8 bar) and becomes a supercritical fluid — behaving like neither a liquid nor a gas.',
-      highlight: 'segHighlight1',
-      nodeId: 'comp-node'
-    },
-    {
-      title: '2. Heat Rejection (Gas Cooler)',
-      text: 'The supercritical CO₂ flows through the gas cooler. Unlike a condenser, there is no phase change — heat is rejected continuously as a supercritical fluid. Temperature drops from ~120°C to 35–40°C. This rejected heat can be recovered for domestic hot water (80–120°C output).',
-      highlight: 'segHighlight2',
-      nodeId: 'gascooler-node'
-    },
-    {
-      title: '3. Expansion',
-      text: 'The high-pressure CO₂ (~90 bar, 35°C) passes through an electronic expansion valve (EEV). Pressure drops to 25–35 bar in milliseconds — a flash-cooling effect that drops the temperature to –5°C to +5°C. The CO₂ becomes a two-phase liquid–gas mixture.',
-      highlight: 'segHighlight3',
-      nodeId: 'exp-node'
-    },
-    {
-      title: '4. Evaporation',
-      text: 'The cold CO₂ mixture enters the evaporator. It absorbs heat from the indoor air and fully evaporates at constant temperature and pressure. CO₂ exits as a low-pressure gas at 5–15°C, 30–45 bar — ready to return to the compressor and repeat the cycle.',
-      highlight: 'segHighlight4',
-      nodeId: 'evap-node'
-    }
+    { title: 'Compress ⚙️', text: 'CO₂ gas is compressed, increasing pressure and temperature.', cx: 300, cy: 80 },
+    { title: 'Cool ❄️', text: 'Heat is released as CO₂ passes through the gas cooler.', cx: 480, cy: 175 },
+    { title: 'Expand 🔽', text: 'Pressure drops rapidly, cooling the refrigerant.', cx: 300, cy: 270 },
+    { title: 'Absorb 🌡️', text: 'CO₂ absorbs heat from the environment, completing the cycle.', cx: 120, cy: 175 }
   ];
 
   let currentStep = 0;
@@ -2642,44 +2462,46 @@ function initAnimations(){
     currentStep = step;
     const data = stepData[step - 1];
 
-    // Update buttons and dots
     document.querySelectorAll('.step-btn').forEach((btn, i) => {
       btn.classList.toggle('active', i === step - 1);
     });
+
     document.querySelectorAll('.step-dot').forEach((dot, i) => {
       dot.classList.toggle('active', i === step - 1);
     });
 
-    // Hide all highlights and dim all nodes
-    ['segHighlight1','segHighlight2','segHighlight3','segHighlight4'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.setAttribute('opacity', '0');
-    });
-    ['comp-node','gascooler-node','exp-node','evap-node'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        const rect = el.querySelector('rect');
-        if (rect) rect.setAttribute('stroke', 'rgba(110,231,183,0.2)');
-      }
+    document.querySelectorAll('.cycle-node').forEach((node, i) => {
+      node.classList.remove('highlight', 'highlight-right', 'highlight-left');
     });
 
-    // Activate current segment highlight
-    const hl = document.getElementById(data.highlight);
-    if (hl) hl.setAttribute('opacity', '0.7');
+    document.querySelectorAll('.cycle-label-diagram').forEach((label) => {
+      label.classList.remove('highlight');
+    });
 
-    // Highlight current node
-    const activeNode = document.getElementById(data.nodeId);
+    document.querySelectorAll('.cycle-path-step').forEach((path, i) => {
+      path.classList.remove('active', 'completed');
+      if (i < step - 1) path.classList.add('completed');
+      if (i === step - 1) path.classList.add('active');
+    });
+
+    const activeNode = document.getElementById('node' + step);
+    const activeLabel = document.getElementById('label' + step);
     if (activeNode) {
-      const rect = activeNode.querySelector('rect');
-      if (rect) rect.setAttribute('stroke', '#6ee7b7');
+      const isLeftRight = step === 2 || step === 4;
+      activeNode.classList.add(isLeftRight ? 'highlight-right' : 'highlight');
     }
+    if (activeLabel) activeLabel.classList.add('highlight');
 
-    // Update description
+    gsap.to('#glowOrb', {
+      attr: { cx: data.cx, cy: data.cy },
+      opacity: 1,
+      duration: 0.5,
+      ease: 'power2.out'
+    });
+
     document.getElementById('stepTitle').textContent = data.title;
     const stepTextEl = document.getElementById('stepText');
-    if (window.gsap) {
-      gsap.fromTo(stepTextEl, { opacity: 0, y: 8 }, { opacity: 0.9, y: 0, duration: 0.3, ease: 'power2.out' });
-    }
+    gsap.fromTo(stepTextEl, { opacity: 0, y: 8 }, { opacity: 0.9, y: 0, duration: 0.3, ease: 'power2.out' });
     stepTextEl.textContent = data.text;
   }
 
